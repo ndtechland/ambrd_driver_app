@@ -50,6 +50,24 @@ dev_dependencies:
   flutter_lints: ^2.0.0
   get_storage: ^2.0.3
   flutter_carousel_slider: ^1.0.8
+  google_fonts:
+  image_picker: ^0.8.6
+  lottie:
+  google_maps_flutter:
+  geolocator:
+  geocoding:
+  geocode:
+  location:
+  permission_handler:
+  flutter_polyline_points:
+  google_maps_flutter_web: ^0.4.0+3
+  firebase_core: ^2.15.1
+  firebase_messaging: ^14.6.6
+  #flutter_google_places_hoc081098: ^1.0.0-nullsafety.5
+  google_api_headers: ^1.1.1
+  flutter_google_places_hoc081098: ^1.0.0-nullsafety.5
+  google_maps_webservice: ^0.0.20-nullsafety.5
+
 
 
   flutter_native_splash:

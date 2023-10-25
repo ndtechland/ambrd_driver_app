@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import '../home_view/home_page.dart';
+import '../login_view_driver/login_page.dart';
 
 class SplashScreen extends StatefulWidget {
   @override
@@ -17,11 +17,12 @@ class _SplashScreenState extends State<SplashScreen> {
     Timer(
         Duration(seconds: 3),
         () => Navigator.pushReplacement(
-            context, MaterialPageRoute(builder: (context) => HomeScreen())));
+            context, MaterialPageRoute(builder: (context) => LoginScreen())));
   }
 
   @override
   Widget build(BuildContext context) {
+    ///todo:................................
     return Scaffold(
         body: Center(
       child: Container(

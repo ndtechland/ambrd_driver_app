@@ -1,3 +1,4 @@
+import 'package:ambrd_driver_app/views/drowerr_user/driver_drawer.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_carousel_slider/carousel_slider.dart';
@@ -7,6 +8,7 @@ import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 
+import '../../constantsss/app_theme/app_color.dart';
 import '../../controllers/home_controllers.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -117,8 +119,7 @@ class HomeScreen extends StatelessWidget {
       appBar: AppBar(
         elevation: 1,
         centerTitle: true,
-        backgroundColor: Colors.red,
-        // MyTheme.ambapp3,
+        backgroundColor: MyTheme.t22Iconcolor,
         automaticallyImplyLeading: false,
         title: Container(
           height: size.height * 0.1,
@@ -132,7 +133,7 @@ class HomeScreen extends StatelessWidget {
         actions: [
           Icon(
             Icons.person,
-            color: Colors.red,
+            color: Colors.white,
             //MyTheme.ambapp1,
           ),
           // PopupMenuButton(
@@ -172,17 +173,17 @@ class HomeScreen extends StatelessWidget {
             },
             child: Icon(
               Icons.menu,
-              color: Colors.red,
+              color: Colors.white,
             )),
       ),
 
-      ///drawer: MainAmbrbDrawer(),
+      drawer: MainAmbrbdriverDrawer(),
       //MainDrawer(),
       body: SafeArea(
         child: Container(
           height: size.height,
           width: size.width,
-          color: Colors.white,
+          color: MyTheme.ambapp3,
           child: SingleChildScrollView(
             child: Column(
               children: [
@@ -267,7 +268,7 @@ class HomeScreen extends StatelessWidget {
                             },
                             child: PhysicalModel(
                               borderRadius: BorderRadius.circular(5),
-                              color: Colors.white,
+                              color: MyTheme.ambapp2,
                               // _homePageController
                               //     .selectedIndex
                               //     .value ==
@@ -282,7 +283,7 @@ class HomeScreen extends StatelessWidget {
                                 width: size.width * 0.1,
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(5),
-                                  color: Colors.white12,
+                                  color: MyTheme.ambapp,
                                   // _homePageController
                                   //     .selectedIndex
                                   //     .value ==
@@ -341,17 +342,18 @@ class HomeScreen extends StatelessWidget {
                                           //     .toString()
                                           ,
                                           style: TextStyle(
-                                              fontWeight: FontWeight.w700,
-                                              fontSize: 10,
-                                              color: Colors.grey
-                                              //.ContainerUnSelectedColor
-                                              // _homePageController
-                                              //             .selectedIndex
-                                              //             .value ==
-                                              //         index
-                                              //     ? MyTheme.ThemeColors
-                                              //     : MyTheme.ThemeColors
-                                              ),
+                                            fontWeight: FontWeight.w700,
+                                            fontSize: 10,
+                                            color: Colors.white,
+
+                                            //.ContainerUnSelectedColor
+                                            // _homePageController
+                                            //             .selectedIndex
+                                            //             .value ==
+                                            //         index
+                                            //     ? MyTheme.ThemeColors
+                                            //     : MyTheme.ThemeColors
+                                          ),
                                         ),
                                       ),
                                     )),
@@ -418,7 +420,7 @@ class HomeScreen extends StatelessWidget {
                 //   ),
                 // ),
 
-                ///
+                ///.....
                 // Padding(
                 //   padding: EdgeInsets.symmetric(horizontal: 10, vertical: 3),
                 //   child: SizedBox(
@@ -848,7 +850,7 @@ class HomeScreen extends StatelessWidget {
                 //         }),
                 //   ),
                 // ),
-                ///
+                ///......
                 // SizedBox(
                 //   height: 2,
                 // ),
@@ -1037,6 +1039,8 @@ class Mycrusial extends StatelessWidget {
     Colors.indigo,
     Colors.purple,
   ];
+
+  ///....................................................................
   final List<String> images = [
     "https://images.unsplash.com/photo-1588321421727-f807ae7da8a9?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2067&q=80",
     "https://images.unsplash.com/photo-1590125234767-5aecaa98c228?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDl8fHxlbnwwfHx8fHw%3D&auto=format&fit=crop&w=600&q=60",
@@ -1046,6 +1050,8 @@ class Mycrusial extends StatelessWidget {
     //"https://images.unsplash.com/photo-1577801622187-9a1076d049da?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTh8fGFjJTIwcmVwYWlyfGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=500&q=60",
     //"https://images.unsplash.com/photo-1615870123253-f3de8aa89e24?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxjb2xsZWN0aW9uLXBhZ2V8OXxjVlFHYWlJSTI3OHx8ZW58MHx8fHw%3D&auto=format&fit=crop&w=500&q=60",
   ];
+
+  ///...............................................................
   final bool _isPlaying = true;
 
   //get _sliderKey => null;
