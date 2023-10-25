@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_instance/src/extension_instance.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:lottie/lottie.dart';
 
 import '../../constantsss/app_theme/app_color.dart';
 import '../../constantsss/widgets/button_custom.dart';
@@ -32,6 +33,8 @@ class OTPPhone extends StatelessWidget {
   FocusNode myFocusNode = new FocusNode();
   @override
   Widget build(BuildContext context) {
+    double height = MediaQuery.of(context).size.height;
+    double width = MediaQuery.of(context).size.width;
     Size size = MediaQuery.of(context).size;
     //bool value = false;
 
@@ -69,14 +72,22 @@ class OTPPhone extends StatelessWidget {
               child: Column(
                 children: [
                   SizedBox(
-                    height: 60,
+                    height: 0,
                   ),
-                  Image.asset(
-                    'assets/74569-two-factor-authentication.gif',
-                    //color: MyTheme.t1navbar1,
-                    // AppIcons.appLogo,
-                    height: size.height * 0.2,
+                  Lottie.asset(
+                    'assets/otpanimation.json',
+                    //'assets/phoneanimation2.gif',
+
+                    // 'assets/animation_lnk7o8on.zip',
+                    //height: height * 0.14
                   ),
+                  // Image.asset(
+                  //   'assets/otpppppage.gif',
+                  //   //  'assets/74569-two-factor-authentication.gif',
+                  //   //color: MyTheme.t1navbar1,
+                  //   // AppIcons.appLogo,
+                  //   height: size.height * 0.2,
+                  // ),
 
                   SizedBox(
                     height: size.height * 0.03,

@@ -61,100 +61,128 @@ class LoginScreen extends GetView<LoginMobileController> {
                                 fontWeight: FontWeight.bold,
                                 color: MyTheme.ambapp),
                           ),
-                          SizedBox(height: height * 0.06),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: TextFormField(
-                              controller: _loginMobileController.MobileOrEmail,
-                              //controller.emailController,
-                              obscureText: false,
-                              keyboardType: TextInputType.number,
-                              validator: (value) {
-                                return _loginMobileController
-                                    .validatePhone(value!);
-                              },
-                              decoration: InputDecoration(
-                                //border: InputBorder.none,
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(15.0),
-                                  borderSide:
-                                      BorderSide(color: Colors.red, width: 1),
-                                ),
-                                contentPadding: const EdgeInsets.only(
-                                    left: 14.0, bottom: 8.0, top: 13.0),
-                                focusedBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                    color: Colors.red,
-                                  ),
-                                  borderRadius: BorderRadius.circular(15.7),
-                                ),
-                                enabledBorder: UnderlineInputBorder(
-                                  borderSide:
-                                      BorderSide(color: Colors.transparent),
-                                  borderRadius: BorderRadius.circular(15.7),
-                                ),
-
-                                prefixIcon: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Image.asset(
-                                    "assets/pnone4.png",
-                                    color: MyTheme.ambapp1,
-                                    height: 10,
-                                    width: 10,
-                                  ),
-                                ),
-                                fillColor: MyTheme.drivrtextfield,
-                                filled: true,
-                                suffixIcon: null ?? const SizedBox(),
-                                hintText: "Enter Your Mobile",
-                                hintStyle: GoogleFonts.poppins(
-                                  fontSize: 14.0,
-                                  fontWeight: FontWeight.w400,
-                                ),
-                                // contentPadding:
-                                //const EdgeInsets.only(top: 16.0),
-                              ),
-                            ),
+                          SizedBox(height: height * 0.01),
+                          Text(
+                            "Sign In",
+                            style: GoogleFonts.poppins(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                                color: MyTheme.ambapp),
                           ),
-                          SizedBox(height: height * 0.0),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          SizedBox(height: height * 0.01),
+                          Container(
+                            height: height * 0.65,
+                            width: width,
+                            decoration: BoxDecoration(
+                              color: MyTheme.drivrbackgrnd,
+                              borderRadius: BorderRadius.only(
+                                  topRight: Radius.circular(20),
+                                  topLeft: Radius.circular(20)),
+                            ),
+                            child: Column(
                               children: [
-                                Text(
-                                  "You Not Registered?",
-                                  style: GoogleFonts.alegreyaSc(
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.w600,
-                                      color: MyTheme.ambapp2),
+                                SizedBox(height: height * 0.03),
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: TextFormField(
+                                    controller:
+                                        _loginMobileController.MobileOrEmail,
+                                    //controller.emailController,
+                                    obscureText: false,
+                                    keyboardType: TextInputType.number,
+                                    validator: (value) {
+                                      return _loginMobileController
+                                          .validatePhone(value!);
+                                    },
+                                    decoration: InputDecoration(
+                                      //border: InputBorder.none,
+                                      border: OutlineInputBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(15.0),
+                                        borderSide: BorderSide(
+                                            color: Colors.red, width: 1),
+                                      ),
+                                      contentPadding: const EdgeInsets.only(
+                                          left: 14.0, bottom: 8.0, top: 13.0),
+                                      focusedBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                          color: Colors.red,
+                                        ),
+                                        borderRadius:
+                                            BorderRadius.circular(15.7),
+                                      ),
+                                      enabledBorder: UnderlineInputBorder(
+                                        borderSide: BorderSide(
+                                            color: Colors.transparent),
+                                        borderRadius:
+                                            BorderRadius.circular(15.7),
+                                      ),
+
+                                      prefixIcon: Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Image.asset(
+                                          "assets/pnone4.png",
+                                          color: MyTheme.ambapp1,
+                                          height: 10,
+                                          width: 10,
+                                        ),
+                                      ),
+                                      fillColor: MyTheme.drivrtextfield,
+                                      filled: true,
+                                      suffixIcon: null ?? const SizedBox(),
+                                      hintText: "Enter Your Mobile",
+                                      hintStyle: GoogleFonts.poppins(
+                                        fontSize: 14.0,
+                                        fontWeight: FontWeight.w400,
+                                      ),
+                                      // contentPadding:
+                                      //const EdgeInsets.only(top: 16.0),
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(height: height * 0.0),
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                        "You Not Registered?",
+                                        style: GoogleFonts.alegreyaSc(
+                                            fontSize: 15,
+                                            fontWeight: FontWeight.w600,
+                                            color: MyTheme.ambapp2),
+                                      ),
+                                      SizedBox(height: height * 0.03),
+                                      InkWell(
+                                        onTap: () {
+                                          Get.to(() => SignUpPage());
+                                        },
+                                        child: Text(
+                                          "SIGNUP",
+                                          style: GoogleFonts.alegreyaSc(
+                                              fontSize: 20,
+                                              fontWeight: FontWeight.bold,
+                                              color: MyTheme.ambapp1),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                                 ),
                                 SizedBox(height: height * 0.05),
-                                InkWell(
+                                CustomButton(
                                   onTap: () {
-                                    Get.to(() => SignUpPage());
+                                    //SignUpPage
+                                    // _loginMobileController.checkMobileLogin();
+                                    Get.to(() => OTPPhone());
+                                    // Get.to(() => AddBanner());
+                                    // Get.to(() => HomePage());
                                   },
-                                  child: Text(
-                                    "SIGNUP",
-                                    style: GoogleFonts.alegreyaSc(
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.bold,
-                                        color: MyTheme.ambapp1),
-                                  ),
+                                  btnText: 'Verify',
                                 ),
                               ],
                             ),
-                          ),
-                          SizedBox(height: height * 0.05),
-                          CustomButton(
-                            onTap: () {
-                              //SignUpPage
-                              // _loginMobileController.checkMobileLogin();
-                              Get.to(() => OTPPhone());
-                              // Get.to(() => AddBanner());
-                              // Get.to(() => HomePage());
-                            },
-                            btnText: 'Verify',
                           ),
                         ],
                       ),

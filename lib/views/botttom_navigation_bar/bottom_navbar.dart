@@ -183,53 +183,53 @@ class BottomNavBar extends StatelessWidget {
                           ],
                         ),
                       ),
+                      // InkWell(
+                      //   onTap: () {
+                      //     print('call');
+                      //     _navController.changeTabIndex(3);
+                      //   },
+                      //   child: Column(
+                      //     mainAxisAlignment: MainAxisAlignment.center,
+                      //     crossAxisAlignment: CrossAxisAlignment.center,
+                      //     children: [
+                      //       Container(
+                      //         height: size.height * 0.05,
+                      //         width: size.width * 0.05,
+                      //         child: Icon(
+                      //           Icons.local_offer,
+                      //           size: 24,
+                      //           color: _navController.tabindex.value == 3
+                      //               ? MyTheme.ambapp1
+                      //               : MyTheme.ambapp,
+                      //         ),
+                      //
+                      //         // Image.asset(
+                      //         //   'lib/assets/home2.png',
+                      //         //   color: _bottomController.tabindex.value == 0
+                      //         //       ? Colors.black
+                      //         //       : Colors.grey.shade600,
+                      //         //   fit: BoxFit.fill,
+                      //         // ),
+                      //       ),
+                      //       // Text("Deals",
+                      //       //     style: GoogleFonts.poppins(
+                      //       //         color: _navController.tabindex.value == 3
+                      //       //             ? MyTheme.ambapp1
+                      //       //             : MyTheme.ambapp,
+                      //       //         fontSize: size.height * 0.012,
+                      //       //         fontWeight: FontWeight.w600)
+                      //       //     //style: TextStyle(color:_bottomController.tabindex.value==0?Colors.orange:Color(0xFF110d39),fontSize: 13)
+                      //       //     // TextStyles(12.sp, FontWeight.w400, TextDecoration.none,
+                      //       //     //     textcolor
+                      //       //     // ),
+                      //       //     ),
+                      //     ],
+                      //   ),
+                      // ),
                       InkWell(
                         onTap: () {
                           print('call');
                           _navController.changeTabIndex(3);
-                        },
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Container(
-                              height: size.height * 0.05,
-                              width: size.width * 0.05,
-                              child: Icon(
-                                Icons.local_offer,
-                                size: 24,
-                                color: _navController.tabindex.value == 3
-                                    ? MyTheme.ambapp1
-                                    : MyTheme.ambapp,
-                              ),
-
-                              // Image.asset(
-                              //   'lib/assets/home2.png',
-                              //   color: _bottomController.tabindex.value == 0
-                              //       ? Colors.black
-                              //       : Colors.grey.shade600,
-                              //   fit: BoxFit.fill,
-                              // ),
-                            ),
-                            Text("Deals",
-                                style: GoogleFonts.poppins(
-                                    color: _navController.tabindex.value == 3
-                                        ? MyTheme.ambapp1
-                                        : MyTheme.ambapp,
-                                    fontSize: size.height * 0.012,
-                                    fontWeight: FontWeight.w600)
-                                //style: TextStyle(color:_bottomController.tabindex.value==0?Colors.orange:Color(0xFF110d39),fontSize: 13)
-                                // TextStyles(12.sp, FontWeight.w400, TextDecoration.none,
-                                //     textcolor
-                                // ),
-                                ),
-                          ],
-                        ),
-                      ),
-                      InkWell(
-                        onTap: () {
-                          print('call');
-                          _navController.changeTabIndex(4);
                         },
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,

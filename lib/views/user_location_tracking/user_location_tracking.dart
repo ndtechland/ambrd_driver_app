@@ -117,9 +117,11 @@ class _tracking_usersState extends State<tracking_users> {
   final List<Marker> _markers = <Marker>[
     const Marker(
         markerId: MarkerId('1'),
-        position: LatLng(20.42796133580664, 75.885749655962),
+        position: LatLng(25.5941, 85.1376),
+        // flat: 14.4746,
+
         infoWindow: InfoWindow(
-          title: 'My Position',
+          title: 'User Position',
         )),
   ];
 
@@ -204,17 +206,22 @@ class _tracking_usersState extends State<tracking_users> {
         child: Stack(
           children: [
             Container(
-              height: size.height * 0.6,
+              height: size.height * 0.53,
               child: GoogleMap(
                 markers: Set<Marker>.of(_markers),
                 //Map widget from google_maps_flutter package
                 ///........................
-                zoomGesturesEnabled: true, //enable Zoom in, out on map
+                zoomGesturesEnabled: true,
+
+                ///...............................
+                ///enable Zoom in, out on map
                 initialCameraPosition: CameraPosition(
                   //innital position in map
                   target: startLocation, //initial position
                   zoom: 14.0, //initial zoom level
                 ),
+
+                ///todo:......................................................................
                 mapType: MapType.normal,
                 myLocationEnabled: true,
                 compassEnabled: true,
@@ -345,7 +352,7 @@ class _tracking_usersState extends State<tracking_users> {
                             height: size.height * 0.045,
                             width: size.width,
                             decoration: BoxDecoration(
-                              color: MyTheme.ambapp12,
+                              color: MyTheme.ambapp,
                             ),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.start,
@@ -363,6 +370,7 @@ class _tracking_usersState extends State<tracking_users> {
                                   'Start Point',
                                   style: GoogleFonts.poppins(
                                     fontSize: 14,
+                                    color: MyTheme.ambapp3,
                                   ),
                                 ),
                               ],
@@ -429,7 +437,7 @@ class _tracking_usersState extends State<tracking_users> {
                             height: size.height * 0.045,
                             width: size.width,
                             decoration: BoxDecoration(
-                              color: MyTheme.ambapp12,
+                              color: MyTheme.ambapp,
                             ),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.start,
@@ -447,6 +455,7 @@ class _tracking_usersState extends State<tracking_users> {
                                   'End Point',
                                   style: GoogleFonts.poppins(
                                     fontSize: 14,
+                                    color: MyTheme.ambapp3,
                                   ),
                                 ),
                               ],
@@ -513,7 +522,7 @@ class _tracking_usersState extends State<tracking_users> {
                             height: size.height * 0.045,
                             width: size.width,
                             decoration: BoxDecoration(
-                              color: MyTheme.ambapp12,
+                              color: MyTheme.ambapp,
                             ),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.start,
@@ -531,6 +540,7 @@ class _tracking_usersState extends State<tracking_users> {
                                   'Offer Amounts',
                                   style: GoogleFonts.poppins(
                                     fontSize: 14,
+                                    color: MyTheme.ambapp3,
                                   ),
                                 ),
                               ],
@@ -597,7 +607,7 @@ class _tracking_usersState extends State<tracking_users> {
                             height: size.height * 0.045,
                             width: size.width,
                             decoration: BoxDecoration(
-                              color: MyTheme.ambapp12,
+                              color: MyTheme.ambapp,
                             ),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.start,
@@ -615,6 +625,7 @@ class _tracking_usersState extends State<tracking_users> {
                                   '4 passenger',
                                   style: GoogleFonts.poppins(
                                     fontSize: 14,
+                                    color: MyTheme.ambapp3,
                                   ),
                                 ),
                               ],
@@ -684,7 +695,7 @@ class _tracking_usersState extends State<tracking_users> {
                             height: size.height * 0.065,
                             width: size.width,
                             decoration: BoxDecoration(
-                              color: MyTheme.ambapp12,
+                              color: MyTheme.ambapp,
                             ),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -715,6 +726,7 @@ class _tracking_usersState extends State<tracking_users> {
                                       'Current Fare',
                                       style: GoogleFonts.poppins(
                                         fontSize: 14,
+                                        color: MyTheme.ambapp3,
                                       ),
                                     ),
                                     Text(
@@ -722,10 +734,13 @@ class _tracking_usersState extends State<tracking_users> {
                                       style: GoogleFonts.poppins(
                                         fontSize: 14,
                                         fontWeight: FontWeight.bold,
+                                        color: MyTheme.ambapp3,
                                       ),
                                     ),
                                   ],
                                 ),
+
+                                ///..............................................
                                 Padding(
                                   padding: EdgeInsets.symmetric(
                                       horizontal: size.width * 0.03),
@@ -831,12 +846,12 @@ class _tracking_usersState extends State<tracking_users> {
                                   ),
                                 ),
                                 backgroundColor: MaterialStateProperty.all(
-                                    MyTheme.ambapptextfield),
+                                    MyTheme.containercolor12),
                                 padding: MaterialStateProperty.all(
                                     EdgeInsets.all(14)),
                               ),
                               child: Text(
-                                "Raise Fare",
+                                "Increase Fare",
                                 style: TextStyle(
                                     fontSize: 14, color: Colors.white),
                               ),
@@ -868,7 +883,6 @@ class _tracking_usersState extends State<tracking_users> {
 
                       ///
                       ///
-
                       Get.back();
 
                       ///todo .........................

@@ -14,6 +14,8 @@ class MyTheme {
   static Color t22Iconcolor = Color(0xff3E64FF);
   static Color drivrtextfield = Color(0xffFFEBEB);
 
+  static Color drivrbackgrnd = Color(0xff77aaff);
+
   //B2FCFF
 
   static var ambapp = Color(0xff11468F);

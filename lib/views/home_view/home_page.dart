@@ -11,8 +11,33 @@ import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import '../../constantsss/app_theme/app_color.dart';
 import '../../controllers/home_controllers.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   HomeScreen({Key? key}) : super(key: key);
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  bool isSwitched = false;
+
+  var textValue = 'You are offline';
+
+  void toggleSwitch(bool value) {
+    if (isSwitched == false) {
+      setState(() {
+        isSwitched = true;
+        textValue = 'ONLINE';
+      });
+      print('Switch Button is ON');
+    } else {
+      setState(() {
+        isSwitched = false;
+        textValue = 'OFFLINE';
+      });
+      print('Switch Button is OFF');
+    }
+  }
 
   final List<String> productname = [
     'Invoice',
@@ -60,53 +85,15 @@ class HomeScreen extends StatelessWidget {
     Icons.email_outlined,
     Icons.payment,
   ];
+
   final List<String> productname1 = [
     'Logout',
     'Voucher',
     'Feedback',
     'Support',
   ];
+
   // _launchURLBrowser() async {
-  //   var url = Uri.parse("tel:+91 7019380052");
-  //   if (await canLaunchUrl(url)) {
-  //     await launchUrl(url);
-  //   } else {
-  //     throw 'Could not launch $url';
-  //   }
-  // }
-
-  // //from here whats app...............
-  // _launchWhatsapp() async {
-  //   const url = "https://wa.me/?text=YourTextHere";
-  //   if (await canLaunch(url)) {
-  //     await launch(url);
-  //   } else {
-  //     throw 'Could not launch $url';
-  //   }
-  // }
-
-  // void whatsAppOpen() async {
-  //   bool whatsapp = await FlutterLaunch.hasApp(name: "whatsapp");
-  //
-  //   if (whatsapp) {
-  //     await FlutterLaunch.launchWhatsapp(
-  //         phone: "5534992016100", message: "Hello, flutter_launch");
-  //   } else {
-  //     print('error');
-  //   }
-  // }
-
-  // _launchURLEmail() async {
-  //   var url = Uri.parse(
-  //     //'https://protocoderspoint.com/'
-  //       "mailto:rajatrrpalankar@gmail.com?subject=This is Subject Title&body=This is Body of Email");
-  //   if (await canLaunchUrl(url)) {
-  //     await launchUrl(url);
-  //   } else {
-  //     throw 'Could not launch $url';
-  //   }
-  // }
-  //HomeController _homePageController = Get.put(HomeController());
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -131,34 +118,52 @@ class HomeScreen extends StatelessWidget {
           ),
         ),
         actions: [
-          Icon(
-            Icons.person,
-            color: Colors.white,
-            //MyTheme.ambapp1,
+          SizedBox(
+            height: 40,
+            // width: 30,
+            child:
+                Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+              Transform.scale(
+                  scale: 1,
+                  child: Switch(
+                    materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                    onChanged: toggleSwitch,
+                    value: isSwitched,
+                    activeColor: Colors.green.shade800,
+                    activeTrackColor: Colors.green,
+                    inactiveThumbColor: Colors.red,
+                    inactiveTrackColor: Colors.grey,
+                  )),
+              Text(
+                textValue,
+                style: TextStyle(fontSize: 10),
+              )
+            ]),
           ),
-          // PopupMenuButton(
-          //     icon: Icon(Icons.more_vert, color: Colors.black),
-          //     itemBuilder: (context) {
-          //       return [
-          //         const PopupMenuItem<int>(
-          //           value: 0,
-          //           child: Text("Add Banner"),
-          //         ),
-          //         const PopupMenuItem<int>(
-          //           value: 2,
-          //           child: Text("Logout"),
-          //         ),
-          //       ];
-          //     },
-          //     onSelected: (value) {
-          //       if (value == 0) {
-          //         Get.to(AddBanner());
-          //         print("My account menu is selected.");
-          //       } else if (value == 1) {
-          //         _homePageController.logout();
-          //         print("logout");
-          //       }
-          //     }),
+          PopupMenuButton(
+              color: MyTheme.ambapp3,
+              icon: Icon(Icons.more_vert, color: Colors.white),
+              itemBuilder: (context) {
+                return [
+                  const PopupMenuItem<int>(
+                    value: 0,
+                    child: Text("Complete Ride"),
+                  ),
+                  const PopupMenuItem<int>(
+                    value: 2,
+                    child: Text("Update Location"),
+                  ),
+                ];
+              },
+              onSelected: (value) {
+                if (value == 0) {
+                  // Get.to(AddBanner());
+                  print("My account menu is selected.");
+                } else if (value == 1) {
+                  // _homePageController.logout();
+                  print("logout");
+                }
+              }),
         ],
         // actions: [
         //   IconButton(onPressed: (){

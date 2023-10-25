@@ -1,4 +1,5 @@
 import 'package:ambrd_driver_app/constantsss/app_theme/app_color.dart';
+import 'package:ambrd_driver_app/views/botttom_navigation_bar/bottom_nav_bar_controller.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -18,6 +19,8 @@ class MainAmbrbdriverDrawer extends StatelessWidget {
 
     // WalletPostController _walletPostController = Get.put(WalletPostController());
     //_walletController.walletListssApi();
+
+    NavController _navcontroller = Get.put(NavController());
 
     Size size = MediaQuery.of(context).size;
     return SafeArea(
@@ -52,9 +55,9 @@ class MainAmbrbdriverDrawer extends StatelessWidget {
             ListTile(
               //horizontalTitleGap: 2.h,
               leading: Icon(
-                Icons.local_mall,
+                Icons.home,
                 color: Colors.black,
-                size: 14,
+                size: 20,
               ),
               trailing: Icon(
                 Icons.arrow_forward_ios_sharp,
@@ -65,8 +68,8 @@ class MainAmbrbdriverDrawer extends StatelessWidget {
               dense: true,
               // visualDensity: VisualDensity(horizontal: 0, vertical: -4),
               title: Text(
-                'Arb 1',
-                style: TextStyle(fontSize: 10, fontWeight: FontWeight.w600),
+                'Home',
+                style: TextStyle(fontSize: 11, fontWeight: FontWeight.w600),
               ),
               // tileColor: Get.currentRoute == '/AllProducts'
               //     ? Colors.grey[300]
@@ -74,7 +77,8 @@ class MainAmbrbdriverDrawer extends StatelessWidget {
               onTap: () {
                 print(Get.currentRoute);
                 Get.back();
-                //_navController.tabindex(1);
+                _navcontroller.tabindex(0);
+
                 ///Get.to(() => NavBar());
                 //Get.to(() => AllProducts());
                 Get.offNamed('/NavBar');
@@ -83,7 +87,7 @@ class MainAmbrbdriverDrawer extends StatelessWidget {
             ListTile(
               // horizontalTitleGap: 2.h,
               leading: Icon(
-                Icons.local_offer,
+                Icons.person,
                 color: Colors.black,
                 size: 14,
               ),
@@ -96,8 +100,8 @@ class MainAmbrbdriverDrawer extends StatelessWidget {
               dense: true,
               // visualDensity: VisualDensity(horizontal: 0, vertical: -1),
               title: Text(
-                'Arb 2',
-                style: TextStyle(fontSize: 10, fontWeight: FontWeight.w600),
+                'Profile',
+                style: TextStyle(fontSize: 11, fontWeight: FontWeight.w600),
               ),
               tileColor:
                   // Get.currentRoute == '/NavBar'
@@ -129,7 +133,7 @@ class MainAmbrbdriverDrawer extends StatelessWidget {
               dense: true,
               // visualDensity: VisualDensity(horizontal: 0, vertical: -1),
               title: Text(
-                'Arb 3',
+                'Update Profile',
                 //'Gift Boxes',
                 style: TextStyle(fontSize: 10, fontWeight: FontWeight.w600),
               ),
@@ -158,7 +162,7 @@ class MainAmbrbdriverDrawer extends StatelessWidget {
               dense: true,
               //visualDensity: VisualDensity(horizontal: 0, vertical: -1),
               title: Text(
-                'Arb 4',
+                'Payment History',
                 //'Our Story',
                 style: TextStyle(fontSize: 10, fontWeight: FontWeight.w600),
               ),
@@ -187,7 +191,7 @@ class MainAmbrbdriverDrawer extends StatelessWidget {
               dense: true,
               //visualDensity: VisualDensity(horizontal: 0, vertical: -1),
               title: Text(
-                'Arb 5',
+                'Payout History',
                 style: TextStyle(fontSize: 10, fontWeight: FontWeight.w600),
               ),
               tileColor:
@@ -216,7 +220,7 @@ class MainAmbrbdriverDrawer extends StatelessWidget {
               dense: true,
               //visualDensity: VisualDensity(horizontal: 0, vertical: -1),
               title: Text(
-                'Arb 6',
+                'Website',
                 style: TextStyle(fontSize: 10, fontWeight: FontWeight.w600),
               ),
               tileColor: Get.currentRoute == '/WhatsAppTrackOrder'
@@ -245,7 +249,7 @@ class MainAmbrbdriverDrawer extends StatelessWidget {
               dense: true,
               //visualDensity: VisualDensity(horizontal: 0, vertical: -1),
               title: Text(
-                'Arb 7',
+                'Contact Us',
                 style: TextStyle(fontSize: 10, fontWeight: FontWeight.w600),
               ),
               tileColor: Get.currentRoute == '/WebViewTracking'
@@ -278,7 +282,7 @@ class MainAmbrbdriverDrawer extends StatelessWidget {
               dense: true,
               //visualDensity: VisualDensity(horizontal: 0, vertical: -1),
               title: Text(
-                'Arb 9',
+                'Support',
                 style: TextStyle(fontSize: 10, fontWeight: FontWeight.w600),
               ),
               tileColor: Get.currentRoute == '/PersonalProfile'
@@ -297,83 +301,49 @@ class MainAmbrbdriverDrawer extends StatelessWidget {
                 Get.offNamed('/PersonalProfile');
               },
             ),
-            ListTile(
-              //horizontalTitleGap: 2.h,
-              leading: Icon(
-                Icons.local_shipping_rounded,
-                color: Colors.black,
-                size: 14,
-              ),
-              trailing: Icon(
-                Icons.arrow_forward_ios_sharp,
-                size: 11,
-                color: Colors.black,
-              ),
-              contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 10),
-              dense: true,
-              visualDensity: VisualDensity(horizontal: 0, vertical: -1),
-              title: Text(
-                'Arb 10',
-                style: TextStyle(fontSize: 10, fontWeight: FontWeight.w600),
-              ),
-              tileColor: Get.currentRoute == '/OrderConfirmationPage'
-                  ? Colors.grey[300]
-                  : null,
-              onTap: () {
-                print(Get.currentRoute);
-
-                Get.back();
-
-                ///.................................................28feb....................new
-                //_getProfileController.OrderHistoryApi();
-                //_getProfileController.update();
-                ///........................................................................................
-                // Get.to(() => OrderConfirmationPage());
-                Get.offNamed('/OrderConfirmationPage');
-              },
-            ),
 
             /// wallet
-            ListTile(
-              //horizontalTitleGap: 2.h,
-              leading: Icon(
-                Icons.money,
-                color: Colors.black,
-                size: 14,
-              ),
-              trailing: Icon(
-                Icons.arrow_forward_ios_sharp,
-                size: 11,
-                color: Colors.black,
-              ),
-              contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 10),
-              dense: true,
-              visualDensity: VisualDensity(horizontal: 0, vertical: -1),
-              title: Text(
-                'Arb 11',
-                style: TextStyle(fontSize: 10, fontWeight: FontWeight.w600),
-              ),
-              tileColor:
-                  Get.currentRoute == '/Wallet' ? Colors.grey[300] : null,
-              onTap: () {
-                print(Get.currentRoute);
-
-                //  Get.to(() => Wallet());
-                Get.offNamed('/Wallet');
-
-                ///.................................................28feb....................new
-                //_walletController.walletListssApi();
-                //  _walletController.update();
-                ///......................................................................................................
-                // tileColor: Get.currentRoute == '/OrderConfirmationPage'
-                //     ? Colors.grey[300]
-                //     : null,
-                // onTap: () {
-                //   print(Get.currentRoute);
-                //   Get.to(() => OrderConfirmationPage());
-                //   Get.offNamed('/OrderConfirmationPage');
-              },
-            ),
+            // ListTile(
+            //   //horizontalTitleGap: 2.h,
+            //   leading: Icon(
+            //     Icons.money,
+            //     color: Colors.black,
+            //     size: 14,
+            //   ),
+            //   trailing: Icon(
+            //     Icons.arrow_forward_ios_sharp,
+            //     size: 11,
+            //     color: Colors.black,
+            //   ),
+            //   contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 10),
+            //   dense: true,
+            //   visualDensity: VisualDensity(horizontal: 0, vertical: -1),
+            //   title: Text(
+            //     'Change Password',
+            //     style: TextStyle(fontSize: 10, fontWeight: FontWeight.w600),
+            //   ),
+            //   tileColor:
+            //       Get.currentRoute == '/Wallet' ? Colors.grey[300] : null,
+            //   onTap: () {
+            //     print(Get.currentRoute);
+            //
+            //     //  Get.to(() => Wallet());
+            //     Get.offNamed('/Wallet');
+            //
+            //     ///.................................................28feb....................new
+            //     //_walletController.walletListssApi();
+            //     //  _walletController.update();
+            //     ///......................................................................................................
+            //     // tileColor: Get.currentRoute == '/OrderConfirmationPage'
+            //     //     ? Colors.grey[300]
+            //     //     : null,
+            //     // onTap: () {
+            //     //   print(Get.currentRoute);
+            //     //   Get.to(() => OrderConfirmationPage());
+            //     //   Get.offNamed('/OrderConfirmationPage');
+            //   },
+            // ),
+            ///
             ListTile(
               // horizontalTitleGap: 2.h,
               leading: Icon(
