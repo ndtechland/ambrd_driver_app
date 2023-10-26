@@ -67,6 +67,13 @@ dev_dependencies:
   google_api_headers: ^1.1.1
   flutter_google_places_hoc081098: ^1.0.0-nullsafety.5
   google_maps_webservice: ^0.0.20-nullsafety.5
+  flutter_phone_direct_caller: ^2.1.1
+  flutter_inappwebview:
+  cached_network_image: ^3.2.3
+  webview_flutter: ^4.2.2
+  url_launcher:
+
+
 
 
 

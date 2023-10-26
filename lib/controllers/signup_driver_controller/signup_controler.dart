@@ -108,15 +108,24 @@ class SignUpController extends GetxController {
   }
 
   String? validatemobile(String value) {
-    if (value.length < 10) {
+    if (value.length != 10) {
       return "Provide valid Phone";
     }
     return null;
   }
+//
+//   String? validatemobile(String value) {
+// // Indian Mobile number are of 10 digit only
+//     if (value.length != 10) {
+//       return 'Mobile Number must be of 10 digit';
+//     } else {
+//       return null;
+//     }
+//   }
 
   String? validateShopname(String value) {
     if (value.length < 3) {
-      return "Provide valid Email";
+      return "Provide valid Account No";
     }
     return null;
   }
@@ -143,8 +152,8 @@ class SignUpController extends GetxController {
   }
 
   String? validateaadharcard(String value) {
-    if (value.length < 12) {
-      return "Provide valid aadhar";
+    if (value.length < 1) {
+      return "Provide valid Ifsc code";
     }
     return null;
   }

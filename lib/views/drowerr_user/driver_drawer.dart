@@ -1,5 +1,12 @@
 import 'package:ambrd_driver_app/constantsss/app_theme/app_color.dart';
 import 'package:ambrd_driver_app/views/botttom_navigation_bar/bottom_nav_bar_controller.dart';
+import 'package:ambrd_driver_app/views/drowerr_user/page_drower/about_us.dart';
+import 'package:ambrd_driver_app/views/drowerr_user/page_drower/edit_profile.dart';
+import 'package:ambrd_driver_app/views/drowerr_user/page_drower/privecy_policy.dart';
+import 'package:ambrd_driver_app/views/drowerr_user/page_drower/profile_page.dart';
+import 'package:ambrd_driver_app/views/drowerr_user/page_drower/support_page.dart';
+import 'package:ambrd_driver_app/views/drowerr_user/page_drower/update_bank.dart';
+import 'package:ambrd_driver_app/views/drowerr_user/page_drower/website_view.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -111,18 +118,19 @@ class MainAmbrbdriverDrawer extends StatelessWidget {
               onTap: () {
                 print(Get.currentRoute);
                 Get.back();
+                Get.to(ProfilePagess());
                 // _navController.tabindex(3);
                 /// Get.to(() => NavBar());
                 //Get.to(() => BestDeal());
-                Get.offNamed('/NavBar');
+                // Get.offNamed('/NavBar');
               },
             ),
             ListTile(
               //horizontalTitleGap: 2.h,
               leading: Icon(
-                Icons.card_giftcard_outlined,
+                Icons.edit,
                 color: Colors.black,
-                size: 14,
+                size: 16,
               ),
               trailing: Icon(
                 Icons.arrow_forward_ios_sharp,
@@ -137,13 +145,44 @@ class MainAmbrbdriverDrawer extends StatelessWidget {
                 //'Gift Boxes',
                 style: TextStyle(fontSize: 10, fontWeight: FontWeight.w600),
               ),
-              tileColor:
-                  Get.currentRoute == '/GiftBox' ? Colors.grey[300] : null,
+              tileColor: Get.currentRoute == '/EditProfilePage'
+                  ? Colors.grey[300]
+                  : null,
               onTap: () {
                 print(Get.currentRoute);
                 Get.back();
-                // Get.to(() => GiftBox());
-                Get.offNamed('/GiftBox');
+                Get.to(() => EditProfilePage());
+                //Get.offNamed('/GiftBox');
+              },
+            ),
+
+            ListTile(
+              //horizontalTitleGap: 2.h,
+              leading: Icon(
+                Icons.food_bank,
+                color: Colors.black,
+                size: 14,
+              ),
+              trailing: Icon(
+                Icons.arrow_forward_ios_sharp,
+                size: 11,
+                color: Colors.black,
+              ),
+              contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 10),
+              dense: true,
+              // visualDensity: VisualDensity(horizontal: 0, vertical: -1),
+              title: Text(
+                'Add your bank',
+                //'Gift Boxes',
+                style: TextStyle(fontSize: 10, fontWeight: FontWeight.w600),
+              ),
+              tileColor:
+                  Get.currentRoute == '/AddbankPage' ? Colors.grey[300] : null,
+              onTap: () {
+                print(Get.currentRoute);
+                Get.back();
+                Get.to(() => AddbankPage());
+                //Get.offNamed('/GiftBox');
               },
             ),
             ListTile(
@@ -229,39 +268,8 @@ class MainAmbrbdriverDrawer extends StatelessWidget {
               onTap: () {
                 print(Get.currentRoute);
                 Get.back();
-                // Get.to(() => WhatsAppTrackOrder());
-                Get.offNamed('/WhatsAppTrackOrder');
-              },
-            ),
-            ListTile(
-              // horizontalTitleGap: 2.h,
-              leading: Icon(
-                Icons.track_changes_sharp,
-                color: Colors.black,
-                size: 14,
-              ),
-              trailing: Icon(
-                Icons.arrow_forward_ios_sharp,
-                size: 11,
-                color: Colors.black,
-              ),
-              contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 10),
-              dense: true,
-              //visualDensity: VisualDensity(horizontal: 0, vertical: -1),
-              title: Text(
-                'Contact Us',
-                style: TextStyle(fontSize: 10, fontWeight: FontWeight.w600),
-              ),
-              tileColor: Get.currentRoute == '/WebViewTracking'
-                  ? Colors.grey[300]
-                  : null,
-              onTap: () {
-                print(Get.currentRoute);
-                Get.back();
-                // Get.to(() => WebViewTracking());
-                //WaveViewHomePage(title: appName));
-                //Tracking());
-                Get.offNamed('/WebViewTracking');
+                Get.to(() => WebViewPswebsite());
+                // Get.offNamed('/WhatsAppTrackOrder');
               },
             ),
 
@@ -297,7 +305,80 @@ class MainAmbrbdriverDrawer extends StatelessWidget {
                 // _getProfileController.update();
                 ///........................................................................................
 
-                //Get.to(() => PersonalProfile());
+                Get.to(() => SupportViewAmbrdComman());
+                Get.offNamed('/PersonalProfile');
+              },
+            ),
+
+            ///here from profileeee...............................
+            ListTile(
+              //horizontalTitleGap: 2.h,
+              leading: Icon(
+                Icons.business,
+                color: Colors.black,
+                size: 14,
+              ),
+              trailing: Icon(
+                Icons.arrow_forward_ios_sharp,
+                size: 11,
+                color: Colors.black,
+              ),
+              contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 10),
+              dense: true,
+              //visualDensity: VisualDensity(horizontal: 0, vertical: -1),
+              title: Text(
+                'About Us',
+                style: TextStyle(fontSize: 10, fontWeight: FontWeight.w600),
+              ),
+              tileColor: Get.currentRoute == '/UserAboutUsView'
+                  ? Colors.grey[300]
+                  : null,
+              onTap: () {
+                print(Get.currentRoute);
+                Get.back();
+
+                ///.................................................28feb....................new
+                //  _getProfileController.addressidApi();
+                // _getProfileController.update();
+                ///........................................................................................
+
+                Get.to(() => UserAboutUsView());
+                Get.offNamed('/UserAboutUsView');
+              },
+            ),
+
+            ///here from profileeee...............................
+            ListTile(
+              //horizontalTitleGap: 2.h,
+              leading: Icon(
+                Icons.policy,
+                color: Colors.black,
+                size: 14,
+              ),
+              trailing: Icon(
+                Icons.arrow_forward_ios_sharp,
+                size: 11,
+                color: Colors.black,
+              ),
+              contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 10),
+              dense: true,
+              //visualDensity: VisualDensity(horizontal: 0, vertical: -1),
+              title: Text(
+                'Privecy Policy',
+                style: TextStyle(fontSize: 10, fontWeight: FontWeight.w600),
+              ),
+              tileColor: Get.currentRoute == '/PersonalProfile'
+                  ? Colors.grey[300]
+                  : null,
+              onTap: () {
+                print(Get.currentRoute);
+                Get.back();
+
+                ///.......................................
+                //  _getProfileController.addressidApi();
+                // _getProfileController.update();
+                ///...........................................................
+                Get.to(() => privecy_policy());
                 Get.offNamed('/PersonalProfile');
               },
             ),

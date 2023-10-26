@@ -54,8 +54,8 @@ class LoginMobileController extends GetxController {
   }
 
   String? validatePhone(String value) {
-    if (value.length < 1) {
-      return "provide valid Id";
+    if (value.length != 10) {
+      return "Provide valid Phone number";
     }
     return null;
   }
@@ -66,7 +66,9 @@ class LoginMobileController extends GetxController {
     }
     MobileLoginFormKey.currentState!.save();
   }
-  //
+
+  ///...............................
+
   // login() {
   //   getStorage.write("id", 1);
   //   getStorage.write("name", "prince Kumar");

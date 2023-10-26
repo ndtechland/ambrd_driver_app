@@ -10,6 +10,7 @@ import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 
 import '../../constantsss/app_theme/app_color.dart';
 import '../../controllers/home_controllers.dart';
+import '../../controllers/swith_toogle_controller/toogle_switch_controller.dart';
 
 class HomeScreen extends StatefulWidget {
   HomeScreen({Key? key}) : super(key: key);
@@ -96,6 +97,9 @@ class _HomeScreenState extends State<HomeScreen> {
   // _launchURLBrowser() async {
   @override
   Widget build(BuildContext context) {
+    SwitchX tooglecontroller =
+        Get.put(SwitchX()); // Instantiate Get Controller, *in* build()
+
     Size size = MediaQuery.of(context).size;
     int pageIndex = 0;
     GlobalKey<ScaffoldState> _key = GlobalKey();
@@ -119,25 +123,40 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
         actions: [
           SizedBox(
-            height: 40,
+            height: 30,
             // width: 30,
             child:
                 Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-              Transform.scale(
-                  scale: 1,
+              Obx(() => Text('You are: ${tooglecontroller.on}')),
+              Obx(
+                () => Transform.scale(
+                  scale: 1.3,
                   child: Switch(
                     materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                    onChanged: toggleSwitch,
-                    value: isSwitched,
+                    onChanged: (val) => tooglecontroller.toggle(),
+                    value: tooglecontroller.on.value,
                     activeColor: Colors.green.shade800,
                     activeTrackColor: Colors.green,
                     inactiveThumbColor: Colors.red,
                     inactiveTrackColor: Colors.grey,
-                  )),
-              Text(
-                textValue,
-                style: TextStyle(fontSize: 10),
+                  ),
+                ),
               )
+              // Transform.scale(
+              //     scale: 1,
+              //     child: Switch(
+              //       materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+              //       onChanged: toggleSwitch,
+              //       value: isSwitched,
+              //       activeColor: Colors.green.shade800,
+              //       activeTrackColor: Colors.green,
+              //       inactiveThumbColor: Colors.red,
+              //       inactiveTrackColor: Colors.grey,
+              //     )),
+              // Text(
+              //   textValue,
+              //   style: TextStyle(fontSize: 10),
+              // )
             ]),
           ),
           PopupMenuButton(
