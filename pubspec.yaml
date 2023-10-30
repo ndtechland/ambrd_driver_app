@@ -72,6 +72,8 @@ dev_dependencies:
   cached_network_image: ^3.2.3
   webview_flutter: ^4.2.2
   url_launcher:
+  shared_preferences: ^2.0.15
+
 
 
 

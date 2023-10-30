@@ -1,4 +1,5 @@
 import 'package:ambrd_driver_app/constantsss/app_theme/app_color.dart';
+import 'package:ambrd_driver_app/views/home_view/booking_list.dart';
 import 'package:ambrd_driver_app/views/home_view/home_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -68,7 +69,7 @@ class BottomNavBar extends StatelessWidget {
                               // ),
                             ),
 
-                            ///...........
+                            ///.............
                             // Icon(
                             //   Icons.home,
                             //   color: _bottomController.tabindex.value == 0
@@ -153,7 +154,7 @@ class BottomNavBar extends StatelessWidget {
                               height: size.height * 0.05,
                               width: size.width * 0.05,
                               child: Icon(
-                                Icons.explore,
+                                Icons.run_circle_outlined,
                                 size: 24,
                                 color: _navController.tabindex.value == 2
                                     ? MyTheme.ambapp1
@@ -168,7 +169,7 @@ class BottomNavBar extends StatelessWidget {
                               //   fit: BoxFit.fill,
                               // ),
                             ),
-                            Text("Explore",
+                            Text("Ongoing",
                                 style: GoogleFonts.poppins(
                                     color: _navController.tabindex.value == 2
                                         ? MyTheme.ambapp1
@@ -226,49 +227,50 @@ class BottomNavBar extends StatelessWidget {
                       //     ],
                       //   ),
                       // ),
-                      InkWell(
-                        onTap: () {
-                          print('call');
-                          _navController.changeTabIndex(3);
-                        },
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Container(
-                              height: size.height * 0.05,
-                              width: size.width * 0.05,
-                              child: Icon(
-                                Icons.read_more_rounded,
-                                size: 24,
-                                color: _navController.tabindex.value == 4
-                                    ? MyTheme.ambapp1
-                                    : MyTheme.ambapp,
-                              ),
-
-                              // Image.asset(
-                              //   'lib/assets/home2.png',
-                              //   color: _bottomController.tabindex.value == 0
-                              //       ? Colors.black
-                              //       : Colors.grey.shade600,
-                              //   fit: BoxFit.fill,
-                              // ),
-                            ),
-                            Text("More",
-                                style: GoogleFonts.poppins(
-                                    color: _navController.tabindex.value == 4
-                                        ? MyTheme.ambapp1
-                                        : MyTheme.ambapp,
-                                    fontSize: size.height * 0.012,
-                                    fontWeight: FontWeight.w600)
-                                //style: TextStyle(color:_bottomController.tabindex.value==0?Colors.orange:Color(0xFF110d39),fontSize: 13)
-                                // TextStyles(12.sp, FontWeight.w400, TextDecoration.none,
-                                //     textcolor
-                                // ),
-                                ),
-                          ],
-                        ),
-                      ),
+                      ///
+                      // InkWell(
+                      //   onTap: () {
+                      //     print('call');
+                      //     _navController.changeTabIndex(3);
+                      //   },
+                      //   child: Column(
+                      //     mainAxisAlignment: MainAxisAlignment.center,
+                      //     crossAxisAlignment: CrossAxisAlignment.center,
+                      //     children: [
+                      //       Container(
+                      //         height: size.height * 0.05,
+                      //         width: size.width * 0.05,
+                      //         child: Icon(
+                      //           Icons.read_more_rounded,
+                      //           size: 24,
+                      //           color: _navController.tabindex.value == 4
+                      //               ? MyTheme.ambapp1
+                      //               : MyTheme.ambapp,
+                      //         ),
+                      //
+                      //         // Image.asset(
+                      //         //   'lib/assets/home2.png',
+                      //         //   color: _bottomController.tabindex.value == 0
+                      //         //       ? Colors.black
+                      //         //       : Colors.grey.shade600,
+                      //         //   fit: BoxFit.fill,
+                      //         // ),
+                      //       ),
+                      //       Text("More",
+                      //           style: GoogleFonts.poppins(
+                      //               color: _navController.tabindex.value == 4
+                      //                   ? MyTheme.ambapp1
+                      //                   : MyTheme.ambapp,
+                      //               fontSize: size.height * 0.012,
+                      //               fontWeight: FontWeight.w600)
+                      //           //style: TextStyle(color:_bottomController.tabindex.value==0?Colors.orange:Color(0xFF110d39),fontSize: 13)
+                      //           // TextStyles(12.sp, FontWeight.w400, TextDecoration.none,
+                      //           //     textcolor
+                      //           // ),
+                      //           ),
+                      //     ],
+                      //   ),
+                      // ),
                     ]),
               ),
             ),
@@ -280,6 +282,7 @@ class BottomNavBar extends StatelessWidget {
               index: _navController.tabindex.value,
               children: [
                 HomeScreen(),
+                BookingListUser(),
                 tracking_users(),
 
                 ///HomePagePractice(),

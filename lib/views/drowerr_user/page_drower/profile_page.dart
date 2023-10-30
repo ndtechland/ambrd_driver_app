@@ -231,9 +231,12 @@ class ProfilePagess extends StatelessWidget {
                     image: DecorationImage(
                         image: AssetImage('assets/LOGOammbpng.png')),
                     border: Border.all(color: Colors.blueAccent)),
-                // child: Image.asset('assets/LOGOammbpng.png'),
+
+                /// child: Image.asset('assets/LOGOammbpng.png'),...
               ),
             ),
+
+            ///.............................
             Positioned(
               left: 6,
               top: 3,
@@ -271,6 +274,8 @@ class ProfilePagess extends StatelessWidget {
                 ),
               ),
             ),
+
+            ///..............................
 
             Positioned(
               left: 6,

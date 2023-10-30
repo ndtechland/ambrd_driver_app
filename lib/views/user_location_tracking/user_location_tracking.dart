@@ -53,6 +53,7 @@ class _tracking_usersState extends State<tracking_users> {
       return Future.error(
           'Location permissions are permanently denied, we cannot request permissions.');
     }
+
     // When we reach here, permissions are granted and we can
     // continue accessing the position of the device.
     return await Geolocator.getCurrentPosition(
@@ -845,8 +846,8 @@ class _tracking_usersState extends State<tracking_users> {
                                     borderRadius: BorderRadius.circular(20),
                                   ),
                                 ),
-                                backgroundColor: MaterialStateProperty.all(
-                                    MyTheme.containercolor12),
+                                backgroundColor:
+                                    MaterialStateProperty.all(MyTheme.ambapp1),
                                 padding: MaterialStateProperty.all(
                                     EdgeInsets.all(14)),
                               ),

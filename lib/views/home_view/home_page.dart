@@ -1,4 +1,5 @@
 import 'package:ambrd_driver_app/views/drowerr_user/driver_drawer.dart';
+import 'package:ambrd_driver_app/views/home_view/update_locations.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_carousel_slider/carousel_slider.dart';
@@ -50,12 +51,12 @@ class _HomeScreenState extends State<HomeScreen> {
   ];
 
   final List<String> productname2 = [
-    'Product 1',
-    'Product 2',
-    'Product 3',
-    'Product 4',
-    'Product 5',
-    'Product 6',
+    'Booking List',
+    'Ongoing Ride',
+    'Payment History',
+    'Payout History',
+    'Booking History',
+    'Contact us',
   ];
 
   final List<String> productimage = [
@@ -127,7 +128,7 @@ class _HomeScreenState extends State<HomeScreen> {
             // width: 30,
             child:
                 Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-              Obx(() => Text('You are: ${tooglecontroller.on}')),
+              // Obx(() => Text('You are: ${tooglecontroller.on}')),
               Obx(
                 () => Transform.scale(
                   scale: 1.3,
@@ -135,9 +136,9 @@ class _HomeScreenState extends State<HomeScreen> {
                     materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                     onChanged: (val) => tooglecontroller.toggle(),
                     value: tooglecontroller.on.value,
-                    activeColor: Colors.green.shade800,
+                    activeColor: Colors.green.shade300,
                     activeTrackColor: Colors.green,
-                    inactiveThumbColor: Colors.red,
+                    inactiveThumbColor: Colors.grey.shade300,
                     inactiveTrackColor: Colors.grey,
                   ),
                 ),
@@ -176,8 +177,9 @@ class _HomeScreenState extends State<HomeScreen> {
               },
               onSelected: (value) {
                 if (value == 0) {
-                  // Get.to(AddBanner());
-                  print("My account menu is selected.");
+                  Get.to(MyLocation());
+
+                  ///print("My account menu is selected.");
                 } else if (value == 1) {
                   // _homePageController.logout();
                   print("logout");
@@ -224,11 +226,11 @@ class _HomeScreenState extends State<HomeScreen> {
                       shrinkWrap: true,
                       physics: NeverScrollableScrollPhysics(),
                       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 3,
+                          crossAxisCount: 2,
                           childAspectRatio: 5 / 2,
-                          mainAxisExtent: size.height * 0.15,
+                          mainAxisExtent: size.height * 0.186,
                           crossAxisSpacing: 2.5,
-                          mainAxisSpacing: 3),
+                          mainAxisSpacing: 2.5),
                       itemCount: 6,
                       // _homePageController
                       //     .getcatagartlist!.result!.length,
@@ -306,77 +308,99 @@ class _HomeScreenState extends State<HomeScreen> {
                                 height: size.height * 0.1,
                                 width: size.width * 0.1,
                                 decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(5),
-                                  color: MyTheme.ambapp,
-                                  // _homePageController
-                                  //     .selectedIndex
-                                  //     .value ==
-                                  //     index
-                                  //     ? Colors.white12
-                                  //     : Colors.white12,
-                                ),
+                                    borderRadius: BorderRadius.circular(5),
+                                    color: MyTheme.ambapp,
+                                    border: Border.all(color: Colors.red)
+                                    // _homePageController
+                                    //     .selectedIndex
+                                    //     .value ==
+                                    //     index
+                                    //     ? Colors.white12
+                                    //     : Colors.white12,
+                                    ),
                                 child: Column(
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceEvenly,
                                   children: [
-                                    Container(
-                                      height: size.height * 0.1,
-                                      width: size.width * 0.25,
-                                      decoration: BoxDecoration(
-                                          color: Colors.black,
-                                          border: Border.all(
-                                            color: Colors.white,
-                                          )),
-                                      child: Image.network(
-                                        "https://images.unsplash.com/photo-1502740479091-635887520276?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2069&q=80"
-                                        // base +
-                                        //'${_homePageController.getcatagartlist!.result![index].imageName.toString()}'
-                                        ,
-                                        fit: BoxFit.cover,
-                                        errorBuilder:
-                                            (context, error, stackTrace) {
-                                          //if image not comming in catagary then we have to purchase
+                                    PhysicalModel(
+                                      color: Colors.white,
+                                      borderRadius: BorderRadius.circular(10),
+                                      elevation: 10,
+                                      child: Container(
+                                        height: size.height * 0.14,
+                                        width: size.width * 0.30,
+                                        decoration: BoxDecoration(
+                                            color: Colors.black,
+                                            border: Border.all(
+                                              color: Colors.white,
+                                            ),
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                            image: DecorationImage(
+                                                image: NetworkImage(
+                                                  "https://images.unsplash.com/photo-1502740479091-635887520276?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2069&q=80",
+                                                ),
+                                                fit: BoxFit.fill)),
 
-                                          return Icon(
-                                            Icons.error,
-                                            color: Colors.grey,
-                                          );
-                                        },
-
-                                        height: size.height * 0.056,
-                                        width: size.width * 0.15,
-                                        // color: _homePageController
-                                        //             .selectedIndex
-                                        //             .value ==
-                                        //         index
-                                        //     ? Colors.white
-                                        //     : MyTheme.ThemeColors
+                                        ///todo:error....weight...
+                                        // child:
+                                        // Image.network(
+                                        //   "https://images.unsplash.com/photo-1502740479091-635887520276?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2069&q=80"
+                                        //   // base +
+                                        //   //'${_homePageController.getcatagartlist!.result![index].imageName.toString()}'
+                                        //   ,
+                                        //   fit: BoxFit.cover,
+                                        //   errorBuilder:
+                                        //       (context, error, stackTrace) {
+                                        //     //if image not comming in catagary then we have to purchase
+                                        //
+                                        //     return Icon(
+                                        //       Icons.error,
+                                        //       color: Colors.grey,
+                                        //     );
+                                        //   },
+                                        //
+                                        //   height: size.height * 0.056,
+                                        //   width: size.width * 0.15,
+                                        //   // color: _homePageController
+                                        //   //             .selectedIndex
+                                        //   //             .value ==
+                                        //   //         index
+                                        //   //     ? Colors.white
+                                        //   //     : MyTheme.ThemeColors
+                                        // ),
                                       ),
                                     ),
                                     Center(
                                         child: SizedBox(
-                                      width: size.width * 0.25,
+                                      //width: size.width * 0.25,
                                       child: Center(
-                                        child: Text(
-                                          productname2[index]
-                                          // _homePageController
-                                          //     .getcatagartlist!
-                                          //     .result![index]
-                                          //     .categoryName
-                                          //     .toString()
-                                          ,
-                                          style: TextStyle(
-                                            fontWeight: FontWeight.w700,
-                                            fontSize: 10,
-                                            color: Colors.white,
+                                        child: Container(
+                                          color: Colors.grey,
+                                          height: size.height * 0.03,
+                                          child: Center(
+                                            child: Text(
+                                              productname2[index]
+                                              // _homePageController
+                                              //     .getcatagartlist!
+                                              //     .result![index]
+                                              //     .categoryName
+                                              //     .toString()
+                                              ,
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.w700,
+                                                fontSize: 10,
+                                                color: Colors.white,
 
-                                            //.ContainerUnSelectedColor
-                                            // _homePageController
-                                            //             .selectedIndex
-                                            //             .value ==
-                                            //         index
-                                            //     ? MyTheme.ThemeColors
-                                            //     : MyTheme.ThemeColors
+                                                //.ContainerUnSelectedColor
+                                                // _homePageController
+                                                //             .selectedIndex
+                                                //             .value ==
+                                                //         index
+                                                //     ? MyTheme.ThemeColors
+                                                //     : MyTheme.ThemeColors
+                                              ),
+                                            ),
                                           ),
                                         ),
                                       ),

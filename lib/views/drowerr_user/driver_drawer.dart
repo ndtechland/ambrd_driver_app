@@ -2,6 +2,8 @@ import 'package:ambrd_driver_app/constantsss/app_theme/app_color.dart';
 import 'package:ambrd_driver_app/views/botttom_navigation_bar/bottom_nav_bar_controller.dart';
 import 'package:ambrd_driver_app/views/drowerr_user/page_drower/about_us.dart';
 import 'package:ambrd_driver_app/views/drowerr_user/page_drower/edit_profile.dart';
+import 'package:ambrd_driver_app/views/drowerr_user/page_drower/payment_history.dart';
+import 'package:ambrd_driver_app/views/drowerr_user/page_drower/payout_history.dart';
 import 'package:ambrd_driver_app/views/drowerr_user/page_drower/privecy_policy.dart';
 import 'package:ambrd_driver_app/views/drowerr_user/page_drower/profile_page.dart';
 import 'package:ambrd_driver_app/views/drowerr_user/page_drower/support_page.dart';
@@ -119,6 +121,8 @@ class MainAmbrbdriverDrawer extends StatelessWidget {
                 print(Get.currentRoute);
                 Get.back();
                 Get.to(ProfilePagess());
+
+                ///......
                 // _navController.tabindex(3);
                 /// Get.to(() => NavBar());
                 //Get.to(() => BestDeal());
@@ -205,13 +209,14 @@ class MainAmbrbdriverDrawer extends StatelessWidget {
                 //'Our Story',
                 style: TextStyle(fontSize: 10, fontWeight: FontWeight.w600),
               ),
-              tileColor:
-                  Get.currentRoute == '/OurStory' ? Colors.grey[300] : null,
+              tileColor: Get.currentRoute == '/DriverPaymentHistory'
+                  ? Colors.grey[300]
+                  : null,
               onTap: () {
                 print(Get.currentRoute);
                 Get.back();
-                //Get.to(() => OurStory());
-                Get.offNamed('/OurStory');
+                Get.to(() => DriverPaymentHistory());
+                //Get.offNamed('/OurStory');
               },
             ),
             ListTile(
@@ -233,13 +238,14 @@ class MainAmbrbdriverDrawer extends StatelessWidget {
                 'Payout History',
                 style: TextStyle(fontSize: 10, fontWeight: FontWeight.w600),
               ),
-              tileColor:
-                  Get.currentRoute == '/Blogss' ? Colors.grey[300] : null,
+              tileColor: Get.currentRoute == '/DriverPayoutHistory'
+                  ? Colors.grey[300]
+                  : null,
               onTap: () {
                 print(Get.currentRoute);
                 //Get.back();
-                // Get.to(() => Blogss());
-                Get.offNamed('/Blogss');
+                Get.to(() => DriverPayoutHistory());
+                Get.offNamed('/DriverPayoutHistory');
               },
               //
             ),
