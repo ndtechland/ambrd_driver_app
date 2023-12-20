@@ -19,7 +19,7 @@ class DriverPayoutHistory extends StatelessWidget {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Container(
-      color: MyTheme.ambapp6,
+      color: MyTheme.ambapp2,
       height: size.height,
       width: size.width,
       child: Scaffold(
@@ -36,23 +36,23 @@ class DriverPayoutHistory extends StatelessWidget {
             clipBehavior: Clip.none,
             children: [
               Positioned(
-                top: -size.height * 0.037,
+                top: size.height * 0.01,
                 //bottom: size.height * 0.64,
                 //left: -30,
-                right: -size.width * 0.124,
+                right: size.width * 0.0,
                 child: Padding(
                   padding: const EdgeInsets.all(2.0),
                   child: Container(
-                    height: size.height * 0.22,
-                    width: size.width * 0.55,
+                    height: size.height * 0.1,
+                    width: size.width * 0.30,
                     decoration: BoxDecoration(
-                        //color: Colors.,
+                        // color: Colors.blue,
                         borderRadius: BorderRadius.only(
                           topRight: Radius.circular(20),
                         ),
                         image: DecorationImage(
                             image: AssetImage(
-                              'lib/assets/background_stack_png/paymhis2.png',
+                              'lib/assets/ambrdcommanlogo.jpg',
                             ),
                             fit: BoxFit.cover)),
                   ),
@@ -75,7 +75,7 @@ class DriverPayoutHistory extends StatelessWidget {
                             width: size.width * 0.1,
                             decoration: BoxDecoration(
                               shape: BoxShape.circle,
-                              color: Colors.white70,
+                              color: Colors.pink.shade50,
                             ),
                             child: Icon(
                               Icons.arrow_back_ios_outlined,
@@ -90,9 +90,9 @@ class DriverPayoutHistory extends StatelessWidget {
                         Text(
                           'Driver\'s Payout History',
                           style: GoogleFonts.alatsi(
-                              fontSize: size.height * 0.032,
+                              fontSize: size.height * 0.023,
                               fontWeight: FontWeight.w600,
-                              color: Color(0xff023382)),
+                              color: Colors.white),
                         ),
                       ],
                     ),

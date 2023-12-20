@@ -20,6 +20,8 @@ class tracking_users extends StatefulWidget {
 
 bool _isAcceptTermsAndConditions = false;
 
+NavController _navcontroller = Get.put(NavController(), permanent: true);
+
 class _tracking_usersState extends State<tracking_users> {
   ///.....
   String location = 'Null, Press Button';
@@ -190,6 +192,8 @@ class _tracking_usersState extends State<tracking_users> {
         tilt: 59.440717697143555,
         zoom: 19.151926040649414);
     //tilecolorx tcx = get.put(tilecolorx());
+
+    bool shouldPop = false;
 
     return Scaffold(
       backgroundColor: MyTheme.ambapp3,
@@ -880,11 +884,11 @@ class _tracking_usersState extends State<tracking_users> {
                 child: InkWell(
                     onTap: () {
                       ///...................................
-                      _navController.tabindex(1);
+                      _navController.tabindex(0);
 
                       ///
                       ///
-                      Get.back();
+                      // Get.back();
 
                       ///todo .........................
                       //

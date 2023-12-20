@@ -1,4 +1,4 @@
-package com.example.ambrd_driver_app
+package com.ambrd.ambrddriverapp
 
 import io.flutter.embedding.android.FlutterActivity
 

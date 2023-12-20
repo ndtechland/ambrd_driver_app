@@ -1,3 +1,4 @@
+import 'package:ambrd_driver_app/views/drowerr_user/page_drower/website_view.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
@@ -26,7 +27,7 @@ final Uri emailLaunchUri = Uri.parse('https://www.google.com/');
 //launchUrl(emailLaunchUri);
 
 _launchWhatsapp() async {
-  var whatsapp = "+916350009581";
+  var whatsapp = "+918540040872";
   var whatsappAndroid =
       Uri.parse("whatsapp://send?phone=$whatsapp&text=Hi AMBRD");
   if (await canLaunchUrl(whatsappAndroid)) {
@@ -102,7 +103,8 @@ class SupportViewAmbrdComman extends StatelessWidget {
                       ),
                       image: DecorationImage(
                           image: AssetImage(
-                            'lib/assets/background_stack_png/contactus.png',
+                            '',
+                            //'lib/assets/background_stack_png/contactus.png',
                           ),
                           fit: BoxFit.cover)),
                 ),
@@ -179,9 +181,7 @@ class SupportViewAmbrdComman extends StatelessWidget {
                         height: size.height * 0.005,
                       ),
                       Text(
-                        '248B, 5Th FLOOR, LEERA RAM MARKET MASJID MOTH,'
-                        'SOUTH EX. PAPER-8, Masjid Moth Village, South Extension.'
-                        'III, New Delhi, Delhi 110029.',
+                        '2nd floor C53 noida UP near PriyaGold office nearest metro station noida sector 15',
                         style: GoogleFonts.roboto(
                             color: MyTheme.ambapp,
                             fontSize: size.width * 0.037,
@@ -201,65 +201,65 @@ class SupportViewAmbrdComman extends StatelessWidget {
                         height: size.height * 0.005,
                       ),
                       Text(
-                        'No. 220, 6st Floor, Humayunpur, safdasrjang Enclav,Humayupur, Safadrazganj Enclav, Humayupiur, safdarjung Enclav, New Delhi, Delhi 110009.',
+                        '2nd floor C53 noida UP near PriyaGold office nearest metro station noida sector 15,  201302',
                         style: GoogleFonts.roboto(
                             color: MyTheme.ambapp,
                             fontSize: size.width * 0.037,
                             fontWeight: FontWeight.w400),
                       ),
 
-                      SizedBox(
-                        height: size.height * 0.03,
-                      ),
-                      Text(
-                        'Noida:',
-                        style: GoogleFonts.poppins(
-                            color: MyTheme.ambapp,
-                            fontSize: size.width * 0.04,
-                            fontWeight: FontWeight.bold),
-                      ),
                       // SizedBox(
-                      //   height: size.height * 0.005,
+                      //   height: size.height * 0.03,
                       // ),
                       // Text(
-                      //   'No. 224, 1st Floor, Humayunpur, safdasrjang Enclav,Humayupur, Safadrazganj Enclav, Humayupiur, safdarjung Enclav, New Delhi, Delhi 110029.',
-                      //   style: GoogleFonts.raleway(
-                      //       color: MyTheme.blueww,
-                      //       fontSize: size.width * 0.033,
-                      //       fontWeight: FontWeight.w500),
+                      //   'Noida:',
+                      //   style: GoogleFonts.poppins(
+                      //       color: MyTheme.ambapp,
+                      //       fontSize: size.width * 0.04,
+                      //       fontWeight: FontWeight.bold),
                       // ),
-
-                      SizedBox(
-                        height: size.height * 0.03,
-                      ),
-                      Text(
-                        'Gurgaon:',
-                        style: GoogleFonts.poppins(
-                            color: MyTheme.ambapp,
-                            fontSize: size.width * 0.04,
-                            fontWeight: FontWeight.bold),
-                      ),
+                      // // SizedBox(
+                      // //   height: size.height * 0.005,
+                      // // ),
+                      // // Text(
+                      // //   'No. 224, 1st Floor, Humayunpur, safdasrjang Enclav,Humayupur, Safadrazganj Enclav, Humayupiur, safdarjung Enclav, New Delhi, Delhi 110029.',
+                      // //   style: GoogleFonts.raleway(
+                      // //       color: MyTheme.blueww,
+                      // //       fontSize: size.width * 0.033,
+                      // //       fontWeight: FontWeight.w500),
+                      // // ),
+                      //
                       // SizedBox(
-                      //   height: size.height * 0.005,
+                      //   height: size.height * 0.03,
                       // ),
                       // Text(
-                      //   'No. 224, 1st Floor, Humayunpur, safdasrjang Enclav,Humayupur, Safadrazganj Enclav, Humayupiur, safdarjung Enclav, New Delhi, Delhi 110029.',
-                      //   style: GoogleFonts.raleway(
-                      //       color: MyTheme.blueww,
-                      //       fontSize: size.width * 0.033,
-                      //       fontWeight: FontWeight.w500),
+                      //   'Gurgaon:',
+                      //   style: GoogleFonts.poppins(
+                      //       color: MyTheme.ambapp,
+                      //       fontSize: size.width * 0.04,
+                      //       fontWeight: FontWeight.bold),
                       // ),
-
-                      SizedBox(
-                        height: size.height * 0.03,
-                      ),
-                      Text(
-                        'Punjab:',
-                        style: GoogleFonts.poppins(
-                            color: MyTheme.ambapp,
-                            fontSize: size.width * 0.04,
-                            fontWeight: FontWeight.bold),
-                      ),
+                      // // SizedBox(
+                      // //   height: size.height * 0.005,
+                      // // ),
+                      // // Text(
+                      // //   'No. 224, 1st Floor, Humayunpur, safdasrjang Enclav,Humayupur, Safadrazganj Enclav, Humayupiur, safdarjung Enclav, New Delhi, Delhi 110029.',
+                      // //   style: GoogleFonts.raleway(
+                      // //       color: MyTheme.blueww,
+                      // //       fontSize: size.width * 0.033,
+                      // //       fontWeight: FontWeight.w500),
+                      // // ),
+                      //
+                      // SizedBox(
+                      //   height: size.height * 0.03,
+                      // ),
+                      // Text(
+                      //   'Punjab:',
+                      //   style: GoogleFonts.poppins(
+                      //       color: MyTheme.ambapp,
+                      //       fontSize: size.width * 0.04,
+                      //       fontWeight: FontWeight.bold),
+                      // ),
                       SizedBox(
                         height: size.height * 0.005,
                       ),
@@ -278,7 +278,7 @@ class SupportViewAmbrdComman extends StatelessWidget {
                       Row(
                         children: [
                           Text(
-                            'Contact : +9111126193209',
+                            'Contact : +91 8540040872',
                             style: GoogleFonts.poppins(
                                 color: MyTheme.ambapp,
                                 fontSize: size.width * 0.04,
@@ -303,7 +303,7 @@ class SupportViewAmbrdComman extends StatelessWidget {
                                         child: InkWell(
                                           onTap: () async {
                                             String telephoneNumber =
-                                                '+913326194230';
+                                                '+918540040872';
                                             String telephoneUrl =
                                                 "tel:$telephoneNumber";
                                             if (await canLaunch(telephoneUrl)) {
@@ -433,7 +433,7 @@ class SupportViewAmbrdComman extends StatelessWidget {
                           ),
                           InkWell(
                             onTap: () async {
-                              String email = 'info@ambrd.in';
+                              String email = 'info@ambulance.com';
                               String subject = 'This is a test email';
                               String body = 'This is a test email body';
 
@@ -452,7 +452,7 @@ class SupportViewAmbrdComman extends StatelessWidget {
                               children: [
                                 //_launchUrl2
                                 Text(
-                                  ' info@ambrd.in',
+                                  ' info@ambulance.com',
                                   style: GoogleFonts.poppins(
                                     color: MyTheme.ambapp,
                                     fontSize: size.width * 0.04,
@@ -498,13 +498,13 @@ class SupportViewAmbrdComman extends StatelessWidget {
                           InkWell(
                             onTap: () {
                               //_launchUrl();
-                              ///Get.to(WebViewPswebsite());
+                              Get.to(WebViewPswebsite());
                               print("clickios");
                             },
                             child: Row(
                               children: [
                                 Text(
-                                  'https://www.google.com/',
+                                  'http://ambrd.in/',
                                   style: GoogleFonts.poppins(
                                     color: MyTheme.ambapp,
                                     fontSize: size.width * 0.04,

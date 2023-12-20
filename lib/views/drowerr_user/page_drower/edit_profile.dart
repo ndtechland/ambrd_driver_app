@@ -1,12 +1,12 @@
-import 'dart:io';
-
 import 'package:ambrd_driver_app/constantsss/app_theme/app_color.dart';
+import 'package:ambrd_driver_app/controllers/update_profile_controller.dart';
+import 'package:ambrd_driver_app/models/city_model.dart';
+import 'package:ambrd_driver_app/models/state_models.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:image_picker/image_picker.dart';
 
-import '../../../controllers/signup_driver_controller/signup_controler.dart';
+//import '../../../controllers/signup_driver_controller/signup_controler.dart';
 
 //class SignUpPage extends GetView<SignUpController> {
 
@@ -16,7 +16,10 @@ String gender = "male";
 class EditProfilePage extends StatelessWidget {
   EditProfilePage({Key? key}) : super(key: key);
 
-  SignUpController _signUpController = Get.put(SignUpController());
+  EditprofileController _editprofileController =
+      Get.put(EditprofileController());
+
+  // SignUpController _signUpController = Get.put(SignUpController());
 
   String dropdownValue = list.first;
 
@@ -47,17 +50,17 @@ class EditProfilePage extends StatelessWidget {
           height: context.height,
           child: SingleChildScrollView(
             child: Form(
-              key: _signUpController.SignupFormKey,
+              key: _editprofileController.EditprofileFormKey,
               autovalidateMode: AutovalidateMode.onUserInteraction,
               child: Column(
                 children: [
                   Container(
-                    height: size.height * 0.136,
-                    width: size.width * 0.6,
+                    height: size.height * 0.13,
+                    width: size.width * 0.3,
                     decoration: const BoxDecoration(
                         image: DecorationImage(
-                            image: AssetImage('assets/logo222.png'),
-                            fit: BoxFit.fitWidth)),
+                            image: AssetImage('lib/assets/ambrdcommanlogo.jpg'),
+                            fit: BoxFit.fill)),
                   ),
                   SizedBox(
                     height: 00,
@@ -107,18 +110,19 @@ class EditProfilePage extends StatelessWidget {
                               padding: EdgeInsets.symmetric(
                                   vertical: size.height * 0.012,
                                   horizontal: size.width * 0.02),
-                              child: Image.asset(
-                                'assets/profile.png',
-                                //color: MyTheme.t1Iconcolor,
-                                height: 10,
-                                width: 10,
-                              ),
+                              child: Icon(Icons.account_circle),
+                              // Image.asset(
+                              //   'assets/profile.png',
+                              //   //color: MyTheme.t1Iconcolor,
+                              //   height: 10,
+                              //   width: 10,
+                              // ),
                             ),
                           ),
-                          keyboardType: TextInputType.visiblePassword,
-                          controller: _signUpController.Name,
+                          //keyboardType: TextInputType.visiblePassword,
+                          controller: _editprofileController.PatientName,
                           validator: (value) {
-                            return _signUpController.validateName(value!);
+                            return _editprofileController.validateName(value!);
                           },
                         ),
                       ),
@@ -130,16 +134,16 @@ class EditProfilePage extends StatelessWidget {
 
                   Directionality(
                     textDirection: TextDirection.ltr,
-                    child: Center(
-                      child: Padding(
-                        padding: const EdgeInsets.all(0.0),
-                        child: TextFormField(
+                    //child: NeumorphicTextFieldContainer(
+                    //child: Padding(
+                    // padding: EdgeInsets.symmetric(horizontal: size.width * 0.01),
+                    child: Obx(
+                      () => DropdownButtonFormField<StateModel>(
+                          value: _editprofileController.selectedState.value,
                           decoration: InputDecoration(
                             filled: true,
                             fillColor: MyTheme.ambapp12,
-
-                            // fillColor: MyTheme.t1Iconcolor,
-                            hintText: 'Email',
+                            hintText: 'Select State',
                             contentPadding: const EdgeInsets.only(
                                 left: 14.0, bottom: 4.0, top: 16.0),
                             focusedBorder: OutlineInputBorder(
@@ -156,26 +160,202 @@ class EditProfilePage extends StatelessWidget {
                                   BorderSide(color: Colors.red, width: 2.0),
                               borderRadius: BorderRadius.circular(10),
                             ),
-                            prefixIcon: Padding(
-                              padding: EdgeInsets.symmetric(
-                                  vertical: size.height * 0.012,
-                                  horizontal: size.width * 0.02),
-                              child: Image.asset(
-                                'assets/email.png',
-                                //color: MyTheme.t1Iconcolor,
-                                height: 10,
-                                width: 10,
+                            prefixIcon: Icon(
+                              Icons.real_estate_agent,
+                              color: Colors.black,
+                            ),
+                            //enabledBorder: InputBorder.none,
+                            // border: InputBorder.none,
+                          ),
+                          hint: Text('Select State'),
+                          items: _editprofileController.states
+                              .map((StateModel state) {
+                            return DropdownMenuItem(
+                              value: state,
+                              child: Text(
+                                state.stateName,
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: size.height * 0.015,
+                                ),
                               ),
+                            );
+                          }).toList(),
+                          onChanged: (StateModel? newValue) {
+                            _editprofileController.selectedState.value =
+                                newValue!;
+                            _editprofileController.selectedCity.value = null;
+                            // _hospital_2_controller.states.value =
+                            //     newValue! as List<String>;
+                            // _hospital_2_controller.selectedCity.value = null;
+                            // _hospital_2_controller.cities.clear();
+                            // _hospital_2_controller.cities
+                            //     .addAll(stateCityMap[newvalue]!);
+                          }),
+                    ),
+                    //),
+                    // ),
+                    // Padding(
+                    //   padding: const EdgeInsets.all(0.0),
+                    //   child: TextFormField(
+                    //     //maxLines: 5,
+                    //     decoration: InputDecoration(
+                    //       filled: true,
+                    //       fillColor: MyTheme.ambapp12,
+                    //
+                    //       // fillColor: MyTheme.t1Iconcolor,
+                    //       hintText: 'State',
+                    //       contentPadding: const EdgeInsets.only(
+                    //           left: 14.0, bottom: 4.0, top: 16.0),
+                    //       focusedBorder: OutlineInputBorder(
+                    //         borderSide: new BorderSide(color: Colors.green),
+                    //         borderRadius: new BorderRadius.circular(10),
+                    //       ),
+                    //       enabledBorder: UnderlineInputBorder(
+                    //         borderSide:
+                    //             new BorderSide(color: Colors.transparent),
+                    //         borderRadius: new BorderRadius.circular(10.0),
+                    //       ),
+                    //       border: OutlineInputBorder(
+                    //         borderSide:
+                    //             BorderSide(color: Colors.red, width: 2.0),
+                    //         borderRadius: BorderRadius.circular(10),
+                    //       ),
+                    //       prefixIcon: Padding(
+                    //         padding: EdgeInsets.symmetric(
+                    //             vertical: size.height * 0.012,
+                    //             horizontal: size.width * 0.02),
+                    //         child: Image.asset(
+                    //           'lib/assets/images/home.png',
+                    //           // color: MyTheme.t1Iconcolor,
+                    //           height: 10,
+                    //           width: 10,
+                    //         ),
+                    //       ),
+                    //     ),
+                    //     keyboardType: TextInputType.streetAddress,
+                    //     //obscureText: true,
+                    //     controller: _signUpController.state,
+                    //     validator: (value) {
+                    //       return _signUpController.validateState(value!);
+                    //     },
+                    //   ),
+                    // ),
+                  ),
+                  SizedBox(
+                    height: size.height * 0.03,
+                  ),
+                  Directionality(
+                    textDirection: TextDirection.ltr,
+                    //child: NeumorphicTextFieldContainer(
+                    //child: Padding(
+                    // padding: EdgeInsets.symmetric(horizontal: size.width * 0.01),
+                    child: Obx(
+                      () => DropdownButtonFormField<City>(
+                          //icon: Icon(Icons.location_city),
+                          value: _editprofileController.selectedCity.value,
+                          decoration: InputDecoration(
+                            filled: true,
+                            fillColor: MyTheme.ambapp12,
+                            hintText: 'Select State',
+                            contentPadding: const EdgeInsets.only(
+                                left: 14.0, bottom: 4.0, top: 16.0),
+                            focusedBorder: OutlineInputBorder(
+                              borderSide: new BorderSide(color: Colors.green),
+                              borderRadius: new BorderRadius.circular(10),
                             ),
+                            enabledBorder: UnderlineInputBorder(
+                              borderSide:
+                                  new BorderSide(color: Colors.transparent),
+                              borderRadius: new BorderRadius.circular(10.0),
+                            ),
+                            border: OutlineInputBorder(
+                              borderSide:
+                                  BorderSide(color: Colors.red, width: 2.0),
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            prefixIcon: Icon(
+                              Icons.location_city_outlined,
+                              color: Colors.black,
+                            ),
+                            //enabledBorder: InputBorder.none,
+                            // border: InputBorder.none,
                           ),
-                          keyboardType: TextInputType.name,
-                          controller: _signUpController.ShopName,
-                          validator: (value) {
-                            return _signUpController.validateShopname(value!);
+                          hint: Text('Selected City'),
+                          items: _editprofileController.cities.map((City city) {
+                            return DropdownMenuItem(
+                              value: city,
+                              child: Text(
+                                city.cityName,
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: size.height * 0.015,
+                                ),
+                              ),
+                            );
+                          }).toList(),
+                          onTap: () {
+                            _editprofileController.refresh();
                           },
-                        ),
-                      ),
+                          onChanged: (City? newValue) {
+                            _editprofileController.selectedCity.value =
+                                newValue!;
+                            // _hospital_2_controller.states.value =
+                            //     newValue! as List<String>;
+                            // _hospital_2_controller.selectedCity.value = null;
+                            // _hospital_2_controller.cities.clear();
+                            // _hospital_2_controller.cities
+                            //     .addAll(stateCityMap[newvalue]!);
+                          }),
                     ),
+                    //),
+                    // ),
+                    // Padding(
+                    //   padding: const EdgeInsets.all(0.0),
+                    //   child: TextFormField(
+                    //     //maxLines: 5,
+                    //     decoration: InputDecoration(
+                    //       filled: true,
+                    //       fillColor: MyTheme.ambapp12,
+                    //
+                    //       // fillColor: MyTheme.t1Iconcolor,
+                    //       hintText: 'State',
+                    //       contentPadding: const EdgeInsets.only(
+                    //           left: 14.0, bottom: 4.0, top: 16.0),
+                    //       focusedBorder: OutlineInputBorder(
+                    //         borderSide: new BorderSide(color: Colors.green),
+                    //         borderRadius: new BorderRadius.circular(10),
+                    //       ),
+                    //       enabledBorder: UnderlineInputBorder(
+                    //         borderSide:
+                    //             new BorderSide(color: Colors.transparent),
+                    //         borderRadius: new BorderRadius.circular(10.0),
+                    //       ),
+                    //       border: OutlineInputBorder(
+                    //         borderSide:
+                    //             BorderSide(color: Colors.red, width: 2.0),
+                    //         borderRadius: BorderRadius.circular(10),
+                    //       ),
+                    //       prefixIcon: Padding(
+                    //         padding: EdgeInsets.symmetric(
+                    //             vertical: size.height * 0.012,
+                    //             horizontal: size.width * 0.02),
+                    //         child: Image.asset(
+                    //           'lib/assets/images/home.png',
+                    //           // color: MyTheme.t1Iconcolor,
+                    //           height: 10,
+                    //           width: 10,
+                    //         ),
+                    //       ),
+                    //     ),
+                    //     keyboardType: TextInputType.streetAddress,
+                    //     //obscureText: true,
+                    //     controller: _signUpController.state,
+                    //     validator: (value) {
+                    //       return _signUpController.validateState(value!);
+                    //     },
+                    //   ),
+                    // ),
                   ),
                   SizedBox(
                     height: size.height * 0.03,
@@ -190,58 +370,6 @@ class EditProfilePage extends StatelessWidget {
                         decoration: InputDecoration(
                           filled: true,
                           fillColor: MyTheme.ambapp12,
-                          //fillColor: MyTheme.t1Iconcolor,
-                          hintText: 'City',
-                          contentPadding: const EdgeInsets.only(
-                              left: 14.0, bottom: 4.0, top: 16.0),
-                          focusedBorder: OutlineInputBorder(
-                            borderSide: new BorderSide(color: Colors.green),
-                            borderRadius: new BorderRadius.circular(10),
-                          ),
-                          enabledBorder: UnderlineInputBorder(
-                            borderSide:
-                                new BorderSide(color: Colors.transparent),
-                            borderRadius: new BorderRadius.circular(10.0),
-                          ),
-                          border: OutlineInputBorder(
-                            borderSide:
-                                BorderSide(color: Colors.red, width: 2.0),
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          prefixIcon: Padding(
-                            padding: EdgeInsets.symmetric(
-                                vertical: size.height * 0.012,
-                                horizontal: size.width * 0.02),
-                            child: Image.asset(
-                              'assets/home.png',
-                              // color: MyTheme.t1Iconcolor,
-                              height: 10,
-                              width: 10,
-                            ),
-                          ),
-                        ),
-                        keyboardType: TextInputType.streetAddress,
-                        //obscureText: true,
-                        controller: _signUpController.city,
-                        validator: (value) {
-                          return _signUpController.validateCity(value!);
-                        },
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    height: size.height * 0.03,
-                  ),
-                  Directionality(
-                    textDirection: TextDirection.ltr,
-                    child: Padding(
-                      padding: const EdgeInsets.all(0.0),
-                      child: TextFormField(
-                        //maxLines: 5,
-                        decoration: InputDecoration(
-                          filled: true,
-                          fillColor: MyTheme.ambapp12,
-
                           //fillColor: MyTheme.t1Iconcolor,
                           hintText: 'Address',
                           contentPadding: const EdgeInsets.only(
@@ -260,176 +388,176 @@ class EditProfilePage extends StatelessWidget {
                                 BorderSide(color: Colors.red, width: 2.0),
                             borderRadius: BorderRadius.circular(10),
                           ),
-                          prefixIcon: Padding(
-                            padding: EdgeInsets.symmetric(
-                                vertical: size.height * 0.012,
-                                horizontal: size.width * 0.02),
-                            child: Image.asset(
-                              'assets/home.png',
-                              // color: MyTheme.t1Iconcolor,
-                              height: 10,
-                              width: 10,
-                            ),
-                          ),
+                          prefixIcon: Icon(Icons.location_on),
+                          // Padding(
+                          //   padding: EdgeInsets.symmetric(
+                          //       vertical: size.height * 0.012,
+                          //       horizontal: size.width * 0.02),
+                          //   child: Image.asset(
+                          //     'lib/assets/images/home.png',
+                          //     // color: MyTheme.t1Iconcolor,
+                          //     height: 10,
+                          //     width: 10,
+                          //   ),
+                          // ),
                         ),
                         keyboardType: TextInputType.streetAddress,
                         //obscureText: true,
-                        controller: _signUpController.Address,
+                        controller: _editprofileController.Location,
                         validator: (value) {
-                          return _signUpController.validateAddress(value!);
+                          return _editprofileController.validateAddress(value!);
                         },
                       ),
                     ),
                   ),
-                  SizedBox(
-                    height: size.height * 0.03,
-                  ),
-                  Directionality(
-                    textDirection: TextDirection.ltr,
-                    child: Center(
-                      child: Padding(
-                        padding: const EdgeInsets.all(0.0),
-                        child: TextFormField(
-                          decoration: InputDecoration(
-                              filled: true,
-                              fillColor: MyTheme.ambapp12,
-
-                              // fillColor: MyTheme.t1Iconcolor,
-                              hintText: 'Locence NO',
-                              contentPadding: const EdgeInsets.only(
-                                  left: 14.0, bottom: 4.0, top: 16.0),
-                              focusedBorder: OutlineInputBorder(
-                                borderSide: new BorderSide(color: Colors.green),
-                                borderRadius: new BorderRadius.circular(10),
-                              ),
-                              enabledBorder: UnderlineInputBorder(
-                                borderSide:
-                                    new BorderSide(color: Colors.transparent),
-                                borderRadius: new BorderRadius.circular(10.0),
-                              ),
-                              border: OutlineInputBorder(
-                                borderSide:
-                                    BorderSide(color: Colors.green, width: 2.0),
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              // labelText: "Password",
-                              prefixIcon: Padding(
-                                padding: EdgeInsets.symmetric(
-                                    vertical: size.height * 0.012,
-                                    horizontal: size.width * 0.02),
-                                child: Image.asset(
-                                  'assets/credit-card.png',
-                                  //color: MyTheme.t1Iconcolor,
-                                  height: 10,
-                                  width: 10,
-                                ),
-                              ),
-                              suffixIcon: IconButton(
-                                  onPressed: () {
-                                    _modelBottomSheet(context);
-                                  },
-                                  icon: Icon(Icons.camera_alt_sharp))),
-                          keyboardType: TextInputType.phone,
-                          controller: _signUpController.AadharNo,
-                          // onSaved: (value) {
-                          //   _signUpController.aadhar = value!;
-                          // },
-                          validator: (value) {
-                            return _signUpController.validateaadharcard(value!);
-                          },
-                        ),
-                      ),
-                    ),
-                  ),
-                  Obx(() => _signUpController.selectedImagePath.value == ''
-                      ? Container(height: size.height * 0.03)
-                      : Align(
-                          alignment: Alignment.centerRight,
-                          child: Container(
-                            height: 80,
-                            width: 80,
-                            color: Colors.white,
-                            child: Image.file(
-                              File(_signUpController.selectedImagePath.value),
-                              fit: BoxFit.cover,
-                            ),
-                          ),
-                        )),
 
                   SizedBox(
                     height: size.height * 0.03,
                   ),
                   Directionality(
                     textDirection: TextDirection.ltr,
-                    child: Center(
-                      child: Padding(
-                        padding: const EdgeInsets.all(0.0),
-                        child: TextFormField(
-                          decoration: InputDecoration(
-                              filled: true,
-                              fillColor: MyTheme.ambapp12,
-
-                              // fillColor: MyTheme.t1Iconcolor,
-                              hintText: 'Your Image',
-                              contentPadding: const EdgeInsets.only(
-                                  left: 14.0, bottom: 4.0, top: 16.0),
-                              focusedBorder: OutlineInputBorder(
-                                borderSide: new BorderSide(color: Colors.red),
-                                borderRadius: new BorderRadius.circular(10),
-                              ),
-                              enabledBorder: UnderlineInputBorder(
-                                borderSide:
-                                    new BorderSide(color: Colors.transparent),
-                                borderRadius: new BorderRadius.circular(10.0),
-                              ),
-                              border: OutlineInputBorder(
-                                borderSide:
-                                    BorderSide(color: Colors.green, width: 2.0),
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              // labelText: "Password",
-                              prefixIcon: Padding(
-                                padding: EdgeInsets.symmetric(
-                                    vertical: size.height * 0.012,
-                                    horizontal: size.width * 0.02),
-                                child: Image.asset(
-                                  'assets/credit-card.png',
-                                  //color: MyTheme.t1Iconcolor,
-                                  height: 10,
-                                  width: 10,
-                                ),
-                              ),
-                              suffixIcon: IconButton(
-                                  onPressed: () {
-                                    _modelBottomSheet(context);
-                                  },
-                                  icon: Icon(Icons.camera_alt_sharp))),
-                          keyboardType: TextInputType.phone,
-                          controller: _signUpController.AadharNo,
-                          // onSaved: (value) {
-                          //   _signUpController.aadhar = value!;
-                          // },
-                          validator: (value) {
-                            return _signUpController.validateaadharcard(value!);
-                          },
+                    child: Padding(
+                      padding: const EdgeInsets.all(0.0),
+                      child: TextFormField(
+                        //maxLines: 5,
+                        decoration: InputDecoration(
+                          filled: true,
+                          fillColor: MyTheme.ambapp12,
+                          //fillColor: MyTheme.t1Iconcolor,
+                          hintText: 'Pin',
+                          contentPadding: const EdgeInsets.only(
+                              left: 14.0, bottom: 4.0, top: 16.0),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: new BorderSide(color: Colors.green),
+                            borderRadius: new BorderRadius.circular(10),
+                          ),
+                          enabledBorder: UnderlineInputBorder(
+                            borderSide:
+                                new BorderSide(color: Colors.transparent),
+                            borderRadius: new BorderRadius.circular(10.0),
+                          ),
+                          border: OutlineInputBorder(
+                            borderSide:
+                                BorderSide(color: Colors.red, width: 2.0),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          prefixIcon: Icon(Icons.pin),
+                          // Padding(
+                          //   padding: EdgeInsets.symmetric(
+                          //       vertical: size.height * 0.012,
+                          //       horizontal: size.width * 0.02),
+                          //   child: Image.asset(
+                          //     'lib/assets/images/home.png',
+                          //     // color: MyTheme.t1Iconcolor,
+                          //     height: 10,
+                          //     width: 10,
+                          //   ),
+                          // ),
                         ),
+                        keyboardType: TextInputType.number,
+                        //obscureText: true,
+                        controller: _editprofileController.PinCode,
+                        validator: (value) {
+                          return _editprofileController.validpin(value!);
+                        },
                       ),
                     ),
                   ),
-                  Obx(() => _signUpController.selectedImagePath.value == ''
-                      ? Container(height: size.height * 0.03)
-                      : Align(
-                          alignment: Alignment.centerRight,
-                          child: Container(
-                            height: 80,
-                            width: 80,
-                            color: Colors.white,
-                            child: Image.file(
-                              File(_signUpController.selectedImagePath.value),
-                              fit: BoxFit.cover,
-                            ),
-                          ),
-                        )),
+
+                  ///image2
+                  // Obx(() => _signUpController.selectedImagePath.value == ''
+                  //     ? Container(height: size.height * 0.03)
+                  //     : Align(
+                  //         alignment: Alignment.centerRight,
+                  //         child: Container(
+                  //           height: 80,
+                  //           width: 80,
+                  //           color: Colors.white,
+                  //           child: Image.file(
+                  //             File(_signUpController.selectedImagePath.value),
+                  //             fit: BoxFit.cover,
+                  //           ),
+                  //         ),
+                  //       )),
+
+                  SizedBox(
+                    height: size.height * 0.03,
+                  ),
+                  // Directionality(
+                  //   textDirection: TextDirection.ltr,
+                  //   child: Center(
+                  //     child: Padding(
+                  //       padding: const EdgeInsets.all(0.0),
+                  //       child: TextFormField(
+                  //         decoration: InputDecoration(
+                  //             filled: true,
+                  //             fillColor: MyTheme.ambapp12,
+                  //             // fillColor: MyTheme.t1Iconcolor,
+                  //             hintText: 'Your Image',
+                  //             contentPadding: const EdgeInsets.only(
+                  //                 left: 14.0, bottom: 4.0, top: 16.0),
+                  //             focusedBorder: OutlineInputBorder(
+                  //               borderSide: new BorderSide(color: Colors.red),
+                  //               borderRadius: new BorderRadius.circular(10),
+                  //             ),
+                  //             enabledBorder: UnderlineInputBorder(
+                  //               borderSide:
+                  //                   new BorderSide(color: Colors.transparent),
+                  //               borderRadius: new BorderRadius.circular(10.0),
+                  //             ),
+                  //             border: OutlineInputBorder(
+                  //               borderSide:
+                  //                   BorderSide(color: Colors.green, width: 2.0),
+                  //               borderRadius: BorderRadius.circular(10),
+                  //             ),
+                  //             // labelText: "Password",
+                  //             prefixIcon: Padding(
+                  //               padding: EdgeInsets.symmetric(
+                  //                   vertical: size.height * 0.012,
+                  //                   horizontal: size.width * 0.02),
+                  //               child: Icon(Icons.image),
+                  //               // Image.asset(
+                  //               //   'assets/credit-card.png',
+                  //               //   //color: MyTheme.t1Iconcolor,
+                  //               //   height: 10,
+                  //               //   width: 10,
+                  //               // ),
+                  //             ),
+                  //             suffixIcon: IconButton(
+                  //                 onPressed: () {
+                  //                   _modelBottomSheet(context);
+                  //                 },
+                  //                 icon: Icon(Icons.camera_alt_sharp))),
+                  //         keyboardType: TextInputType.phone,
+                  //         //controller: _signUpController.Gender,
+                  //         // onSaved: (value) {
+                  //         //   _signUpController.aadhar = value!;
+                  //         // },
+                  //         validator: (value) {
+                  //           return _signUpController.validateaadharcard(value!);
+                  //         },
+                  //       ),
+                  //     ),
+                  //   ),
+                  // ),
+                  ///
+
+                  ///start image...
+                  // Obx(() => _signUpController.selectedImagePath.value == ''
+                  //     ? Container(height: size.height * 0.03)
+                  //     : Align(
+                  //         alignment: Alignment.centerRight,
+                  //         child: Container(
+                  //           height: 80,
+                  //           width: 80,
+                  //           color: Colors.white,
+                  //           child: Image.file(
+                  //             //File(_signUpController.selectedImagePath.value),
+                  //             fit: BoxFit.cover,
+                  //           ),
+                  //         ),
+                  //       )),
+                  ///image end
                   // Container(
                   //   width: size.width,
                   //   height: size.height * 0.06,
@@ -506,9 +634,8 @@ class EditProfilePage extends StatelessWidget {
                       ),
                       onPressed: () {
                         print(
-                            "RadioButton:${_signUpController.selectedService}");
-                        _signUpController.checkLogin();
-                        // Get.to(() => LoginPasswordPage());
+                            "RadioButton:${_editprofileController.selectedService}");
+                        _editprofileController.checkeditprofileuser();
                       },
                     ),
                   ),
@@ -535,7 +662,7 @@ class EditProfilePage extends StatelessWidget {
                 leading: new Icon(Icons.camera_alt_sharp),
                 title: const Text('Camera'),
                 onTap: () {
-                  _signUpController.getImage(ImageSource.camera);
+                  // _signUpController.getImage(ImageSource.camera);
                   Navigator.pop(context);
                 },
               ),
@@ -544,7 +671,7 @@ class EditProfilePage extends StatelessWidget {
                 leading: new Icon(Icons.image_outlined),
                 title: new Text('Gallery'),
                 onTap: () {
-                  _signUpController.getImage(ImageSource.gallery);
+                  // _signUpController.getImage(ImageSource.gallery);
                   Navigator.pop(context);
                 },
               ),

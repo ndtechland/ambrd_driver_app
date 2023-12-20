@@ -1,4 +1,6 @@
 import 'package:ambrd_driver_app/constantsss/app_theme/app_color.dart';
+import 'package:ambrd_driver_app/controllers/get_profile_controller.dart';
+import 'package:ambrd_driver_app/controllers/otp_controller_new_correct/otp_new_controller.dart';
 import 'package:ambrd_driver_app/views/botttom_navigation_bar/bottom_nav_bar_controller.dart';
 import 'package:ambrd_driver_app/views/drowerr_user/page_drower/about_us.dart';
 import 'package:ambrd_driver_app/views/drowerr_user/page_drower/edit_profile.dart';
@@ -9,18 +11,31 @@ import 'package:ambrd_driver_app/views/drowerr_user/page_drower/profile_page.dar
 import 'package:ambrd_driver_app/views/drowerr_user/page_drower/support_page.dart';
 import 'package:ambrd_driver_app/views/drowerr_user/page_drower/update_bank.dart';
 import 'package:ambrd_driver_app/views/drowerr_user/page_drower/website_view.dart';
+import 'package:ambrd_driver_app/views/login_view_driver/login_page.dart';
+import 'package:ambrd_driver_app/widget/circular_loader.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
-import 'package:get_storage/get_storage.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class MainAmbrbdriverDrawer extends StatelessWidget {
   const MainAmbrbdriverDrawer({super.key});
 
   @override
   Widget build(BuildContext context) {
+    NavController _navcontroller = Get.put(NavController(), permanent: true);
+
+    OtpVerifyController _otpVerifyController = Get.put(OtpVerifyController());
+
+    GetProfileController _getProfileController =
+        Get.put(GetProfileController());
+
+    //GetProfileController _getProfileController =
+    //Get.put(GetProfileController());
+
+    ///EditprofileController _editprofile = Get.put(EditprofileController());
     ///NavController _navController = Get.put(NavController(), permanent: true);
     //GetProfileController _getProfileController = Get.put(GetProfileController());
     //WalletController _walletController = Get.put(WalletController());
@@ -29,7 +44,7 @@ class MainAmbrbdriverDrawer extends StatelessWidget {
     // WalletPostController _walletPostController = Get.put(WalletPostController());
     //_walletController.walletListssApi();
 
-    NavController _navcontroller = Get.put(NavController());
+    //NavController _navcontroller = Get.put(NavController());
 
     Size size = MediaQuery.of(context).size;
     return SafeArea(
@@ -53,7 +68,7 @@ class MainAmbrbdriverDrawer extends StatelessWidget {
                       child: ClipOval(
                         child: Padding(
                           padding: EdgeInsets.all(10),
-                          child: Image.asset('assets/logo222.png'),
+                          child: Image.asset('lib/assets/ambrdcommanlogo.jpg'),
                         ),
                       ),
                     ),
@@ -117,10 +132,13 @@ class MainAmbrbdriverDrawer extends StatelessWidget {
                   //     ? Colors.grey[300]
                   //     :
                   Colors.transparent,
-              onTap: () {
-                print(Get.currentRoute);
-                Get.back();
-                Get.to(ProfilePagess());
+              onTap: () async {
+                // print(Get.currentRoute);
+                // Get.back();
+                await _getProfileController.editProfileApi();
+                _getProfileController.onInit();
+
+                await Get.to(ProfilePagess());
 
                 ///......
                 // _navController.tabindex(3);
@@ -273,7 +291,7 @@ class MainAmbrbdriverDrawer extends StatelessWidget {
                   : null,
               onTap: () {
                 print(Get.currentRoute);
-                Get.back();
+                // Get.back();
                 Get.to(() => WebViewPswebsite());
                 // Get.offNamed('/WhatsAppTrackOrder');
               },
@@ -452,15 +470,25 @@ class MainAmbrbdriverDrawer extends StatelessWidget {
               ),
               tileColor:
                   Get.currentRoute == '/LoginPage' ? Colors.grey[300] : null,
-              onTap: () {
+              onTap: () async {
                 print(Get.currentRoute);
-
-                GetStorage prefs = GetStorage();
-                prefs.erase();
+                //GetStorage prefs = GetStorage();
+                //prefs.erase();
                 //prefs.remove('email');
 
                 //Get.to(() => LoginPage());
-                Get.offNamed('/LoginPage');
+                //Get.offNamed('/LoginPage');
+
+                ///erase all data...
+
+                _otpVerifyController.onInit();
+                CallLoader.loader();
+                await Future.delayed(Duration(seconds: 2));
+                CallLoader.hideLoader();
+                await SharedPreferences.getInstance()
+                    .then((value) => value.clear());
+                //Get.back();
+                await Get.offAll(() => LoginScreen());
               },
             ),
           ],

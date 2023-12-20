@@ -1,10 +1,12 @@
+import 'package:ambrd_driver_app/models/auto_login_services_model.dart';
+import 'package:ambrd_driver_app/services/account_service_forautologin.dart';
+import 'package:ambrd_driver_app/views/otp_new_correct_view/otp_new_correct_page.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
 
 import '../../services/api_provider.dart';
-import '../../views/otp_driver/otp_page.dart';
 import '../../widget/circular_loader.dart';
 
 //import '../splash_controller/splash_controllers.dart';
@@ -20,14 +22,19 @@ class LoginMobileController extends GetxController {
 
   void phoneemailApi() async {
     CallLoader.loader();
-    final http.Response r = await ApiProvider.PhoneEmailApi(
+    final http.Response r = await ApiProvider.PhoneLoginApi(
       "${MobileOrEmail.text}",
     );
 
     if (r.statusCode == 200) {
       CallLoader.hideLoader();
+      await Get.to(() => OtpVerification());
+      print("ACCOUNT ${r.body}");
+      final accountData = messageFromJson(r.body);
+      print("ACCOUNT ${accountData.toJson()}");
+      await accountService.setAccountData(accountData);
       // Get.to(() => OtpVerification());
-      Get.to(() => OTPPhone());
+      ///todo: change on 4 dec 2023...Get.to(() => OTPPhone());
     }
   }
 

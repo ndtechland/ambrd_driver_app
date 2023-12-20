@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "719955582782",
+    "project_id": "ambrddriverapp",
+    "storage_bucket": "ambrddriverapp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:719955582782:android:a6b38a51f475d94a5cd66f",
+        "android_client_info": {
+          "package_name": "com.ambrd.ambrddriverapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA1lSK66iUvmbrwFTp_iVd1HTR9yuLkUWQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

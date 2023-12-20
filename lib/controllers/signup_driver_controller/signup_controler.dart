@@ -1,17 +1,17 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:ambrd_driver_app/views/login_view_driver/login_page.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 
 import '../../services/api_provider.dart';
-import '../../views/home_view/home_page.dart';
 import '../../widget/circular_loader.dart';
 import '../login_driver_mobile_controller/login_mobile_controllers.dart';
 
-class SignUpController extends GetxController {
+class SignUpController22 extends GetxController {
   LoginMobileController _loginMobileController =
       Get.put(LoginMobileController());
   final GlobalKey<FormState> SignupFormKey = GlobalKey<FormState>();
@@ -59,7 +59,7 @@ class SignUpController extends GetxController {
       CallLoader.hideLoader();
       Get.snackbar('Success', 'Registration SuccessFully');
       //  _loginMobileController.login();
-      Get.to(() => HomeScreen());
+      Get.to(() => LoginScreen());
     }
   }
 

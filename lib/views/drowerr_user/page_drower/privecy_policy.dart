@@ -26,7 +26,7 @@ class _privecy_policyState extends State<privecy_policy> {
         child: Scaffold(
           appBar: AppBar(
             elevation: 0,
-            title: const Text('Ambrd APP'),
+            title: const Text('Privacy Policy'),
             backgroundColor: Colors.cyan,
             centerTitle: true,
           ),
@@ -34,7 +34,7 @@ class _privecy_policyState extends State<privecy_policy> {
             children: [
               InAppWebView(
                 initialUrlRequest:
-                    URLRequest(url: Uri.parse("https://www.google.com/")),
+                    URLRequest(url: Uri.parse("http://ambrd.in/privacy")),
                 onWebViewCreated: (InAppWebViewController controller) {
                   inAppWebViewController = controller;
                 },

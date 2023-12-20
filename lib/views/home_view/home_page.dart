@@ -1,6 +1,18 @@
+import 'dart:convert';
+
+import 'package:ambrd_driver_app/views/drowerr_user/booking_driver_history.dart';
 import 'package:ambrd_driver_app/views/drowerr_user/driver_drawer.dart';
+import 'package:ambrd_driver_app/views/drowerr_user/page_drower/payment_history.dart';
+import 'package:ambrd_driver_app/views/drowerr_user/page_drower/payout_history.dart';
+import 'package:ambrd_driver_app/views/drowerr_user/page_drower/support_page.dart';
+import 'package:ambrd_driver_app/views/firebase_notificationss/firebase_notification_servc.dart';
+import 'package:ambrd_driver_app/views/firebase_notificationss/local_notifications.dart';
+import 'package:ambrd_driver_app/views/home_view/booking_list.dart';
 import 'package:ambrd_driver_app/views/home_view/update_locations.dart';
+import 'package:ambrd_driver_app/widget/exit_popscope.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_carousel_slider/carousel_slider.dart';
 import 'package:flutter_carousel_slider/carousel_slider_indicators.dart';
@@ -8,6 +20,8 @@ import 'package:flutter_carousel_slider/carousel_slider_transforms.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
+import 'package:get_storage/get_storage.dart';
+import 'package:http/http.dart' as http;
 
 import '../../constantsss/app_theme/app_color.dart';
 import '../../controllers/home_controllers.dart';
@@ -21,6 +35,12 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  NotificationServices notificationServices = NotificationServices();
+
+  String DriverId = ''.toString();
+
+  String AdminLogin_Id = ''.toString();
+
   bool isSwitched = false;
 
   var textValue = 'You are offline';
@@ -29,16 +49,90 @@ class _HomeScreenState extends State<HomeScreen> {
     if (isSwitched == false) {
       setState(() {
         isSwitched = true;
-        textValue = 'ONLINE';
+        textValue = 'True';
       });
       print('Switch Button is ON');
     } else {
       setState(() {
         isSwitched = false;
-        textValue = 'OFFLINE';
+        textValue = 'False';
       });
       print('Switch Button is OFF');
     }
+  }
+
+  ///implement firebase....27...jun..2023
+  @override
+  void initState() {
+    super.initState();
+    notificationServices.requestNotificationPermission();
+    notificationServices.forgroundMessage();
+    notificationServices.firebaseInit(context);
+    notificationServices.setupInteractMessage(context);
+    notificationServices.isTokenRefresh();
+    // notificationServices.requestNotificationPermission();
+    // notificationServices.isTokenRefresh();
+    // notificationServices.firebaseInit();
+    notificationServices.getDeviceToken().then((value) {
+      if (kDebugMode) {
+        print('device token');
+        print(value);
+      }
+      // print('device token');
+      // print(value);
+    });
+
+    /// 1. This method call when app in terminated state and you get a notification
+    /// when you click on notification app open from terminated state and you can get notification data in this method
+
+    FirebaseMessaging.instance.getInitialMessage().then(
+      (message) {
+        print("FirebaseMessaging.instance.getInitialMessage");
+        if (message != null) {
+          print("New Notification");
+          // if (message.data['_id'] != null) {
+          //   Navigator.of(context).push(
+          //     MaterialPageRoute(
+          //       builder: (context) => DemoScreen(
+          //         id: message.data['_id'],
+          //       ),
+          //     ),
+          //   );
+          // }
+        }
+      },
+    );
+    // 2. This method only call when App in forground it mean app must be opened
+
+    FirebaseMessaging.onMessage.listen(
+      (message) {
+        print("FirebaseMessaging.onMessage.listen");
+        if (message.notification != null) {
+          print(message.notification!.title);
+          print(message.notification!.body);
+          print("message.data11 ${message.data}");
+
+          ///you can call local notification.............................
+
+          LocalNotificationService.createanddisplaynotification(message);
+
+          ///you can call local notification....................................
+
+        }
+      },
+    );
+
+    // 3. This method only call when App in background and not terminated(not closed)
+    FirebaseMessaging.onMessageOpenedApp.listen(
+      (message) {
+        print("FirebaseMessaging.onMessageOpenedApp.listen");
+        if (message.notification != null) {
+          print(message.notification!.title);
+          print(message.notification!.body);
+          print("message.data22 ${message.data['_id']}");
+        }
+      },
+    );
   }
 
   final List<String> productname = [
@@ -60,12 +154,12 @@ class _HomeScreenState extends State<HomeScreen> {
   ];
 
   final List<String> productimage = [
-    'lib/assets/images/invoice.png',
-    'lib/assets/images/add-user.png',
-    'lib/assets/images/profile.png',
-    'lib/assets/images/complaint.png',
-    'lib/assets/images/support1.png',
-    'lib/assets/images/cloud-computing.png',
+    'lib/assets/customer.png',
+    'lib/assets/travel-insurance.png',
+    'lib/assets/transaction-history (1).png',
+    'lib/assets/atm-machine.png',
+    'lib/assets/time.png',
+    'lib/assets/contact-information.png',
     // 'service 7',
     // 'service 8',
   ];
@@ -104,113 +198,216 @@ class _HomeScreenState extends State<HomeScreen> {
     Size size = MediaQuery.of(context).size;
     int pageIndex = 0;
     GlobalKey<ScaffoldState> _key = GlobalKey();
-    var base = 'https://api.gyros.farm/Images/';
-    return Scaffold(
-      key: _key,
-      //backgroundColor: MyTheme.ambapp1,
-      appBar: AppBar(
-        elevation: 1,
-        centerTitle: true,
-        backgroundColor: MyTheme.t22Iconcolor,
-        automaticallyImplyLeading: false,
-        title: Container(
-          height: size.height * 0.1,
-          width: size.width * 0.17,
-          child: Image.asset(
-            'assets/logo222.png',
-            fit: BoxFit.cover,
-            //scale: 32,
+
+    ///var base = 'https://api.gyros.farm/Images/';
+    return WillPopScope(
+      onWillPop: () => showExitPopup(context),
+      child: Scaffold(
+        key: _key,
+        //backgroundColor: MyTheme.ambapp1,
+        appBar: AppBar(
+          elevation: 1,
+          centerTitle: true,
+          backgroundColor: MyTheme.ambapp5,
+          automaticallyImplyLeading: false,
+          title: Container(
+            height: size.height * 0.085,
+            width: size.width * 0.19,
+            child: Image.asset(
+              'lib/assets/DriverPlaystore.png',
+              fit: BoxFit.cover,
+              //scale: 32,
+            ),
           ),
-        ),
-        actions: [
-          SizedBox(
-            height: 30,
-            // width: 30,
-            child:
-                Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-              // Obx(() => Text('You are: ${tooglecontroller.on}')),
-              Obx(
-                () => Transform.scale(
-                  scale: 1.3,
-                  child: Switch(
-                    materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                    onChanged: (val) => tooglecontroller.toggle(),
-                    value: tooglecontroller.on.value,
-                    activeColor: Colors.green.shade300,
-                    activeTrackColor: Colors.green,
-                    inactiveThumbColor: Colors.grey.shade300,
-                    inactiveTrackColor: Colors.grey,
-                  ),
-                ),
-              )
-              // Transform.scale(
-              //     scale: 1,
-              //     child: Switch(
-              //       materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-              //       onChanged: toggleSwitch,
-              //       value: isSwitched,
-              //       activeColor: Colors.green.shade800,
-              //       activeTrackColor: Colors.green,
-              //       inactiveThumbColor: Colors.red,
-              //       inactiveTrackColor: Colors.grey,
-              //     )),
-              // Text(
-              //   textValue,
-              //   style: TextStyle(fontSize: 10),
-              // )
-            ]),
-          ),
-          PopupMenuButton(
-              color: MyTheme.ambapp3,
-              icon: Icon(Icons.more_vert, color: Colors.white),
-              itemBuilder: (context) {
-                return [
-                  const PopupMenuItem<int>(
-                    value: 0,
-                    child: Text("Complete Ride"),
-                  ),
-                  const PopupMenuItem<int>(
-                    value: 2,
-                    child: Text("Update Location"),
-                  ),
-                ];
+          actions: [
+            SizedBox(
+              height: 30,
+              // width: 30,
+              child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    // Obx(() => Text('You are: ${tooglecontroller.on}')),
+                    Obx(
+                      () => Transform.scale(
+                        scale: 1.3,
+                        child: Switch(
+                          materialTapTargetSize:
+                              MaterialTapTargetSize.shrinkWrap,
+                          onChanged: (val) {
+                            tooglecontroller.toggle();
+                            tooglecontroller.ToogleStatusApi();
+                            // setState(() {
+                            //   gender = value.toString();
+                            // });
+                          },
+
+                          ///onChanged: (val) => tooglecontroller.toggle(),
+                          value: tooglecontroller.on.value,
+                          activeColor: Colors.green.shade300,
+                          activeTrackColor: Colors.green,
+                          inactiveThumbColor: Colors.grey.shade300,
+                          inactiveTrackColor: Colors.grey,
+                        ),
+                      ),
+                    )
+                    // Transform.scale(
+                    //     scale: 1,
+                    //     child: Switch(
+                    //       materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                    //       onChanged: toggleSwitch,
+                    //       value: isSwitched,
+                    //       activeColor: Colors.green.shade800,
+                    //       activeTrackColor: Colors.green,
+                    //       inactiveThumbColor: Colors.red,
+                    //       inactiveTrackColor: Colors.grey,
+                    //     )),
+                    // Text(
+                    //   textValue,
+                    //   style: TextStyle(fontSize: 10),
+                    // )
+                  ]),
+            ),
+            PopupMenuButton(
+                color: MyTheme.ambapp3,
+                icon: Icon(Icons.more_vert, color: Colors.white),
+                itemBuilder: (context) {
+                  return [
+                    const PopupMenuItem<int>(
+                      value: 0,
+                      child: Text("Update Location"),
+                    ),
+                    const PopupMenuItem<int>(
+                      value: 2,
+                      child: Text("Complete Ride"),
+                    ),
+                  ];
+                },
+                onSelected: (value) async {
+                  if (value == 0) {
+                    print('princee notification');
+                    notificationServices.getDeviceToken().then((value) async {
+                      var data = {
+                        //this the particular device id.....
+                        'to':
+                            //this is dummy token...
+                            "ugug6t878",
+
+                        ///todo device token......
+                        // widget
+                        //     .driverlist
+                        //     ?.message?[
+                        //         index]
+                        //     .id
+                        //     .toString(),
+                        ///
+                        //'mytokeneOs6od2nTlqsaFZl8-6ckc:APA91bHzcTpftAHsg7obx0CqhrgY1dyTlSwB5fxeUiBvGtAzX_us6iT6Xp-vXA8rIURK45EehE25_uKiE5wRIUKCF-8Ck-UKir96zS-PGRrpxxOkwPPUKS4M5Em2ql1GmYPY9FVOC4FC'
+                        //'emW_j62UQnGX04QHLSiufM:APA91bHu2uM9C7g9QEc3io7yTVMqdNpdQE3n6vNmFwcKN6z-wq5U9S7Nyl79xJzP_Z-Ve9kjGIzMf4nnaNwSrz94Rcel0-4em9C_r7LvtmCBOWzU-VyPclHXdqyBc3Nrq7JROBqUUge9'
+                        //.toString(),
+
+                        ///this is same device token....
+                        //value.toString(),
+                        'notification': {
+                          'title': 'Ps_Wellness',
+                          'body': 'You have request for ambulance',
+                          //"sound": "jetsons_doorbell.mp3"
+                        },
+                        'android': {
+                          'notification': {
+                            'notification_count': 23,
+                          },
+                        },
+                        'data': {'type': 'msj', 'id': '123456'}
+                      };
+
+                      await http.post(
+                          Uri.parse('https://fcm.googleapis.com/fcm/send'),
+                          body: jsonEncode(data),
+                          headers: {
+                            'Content-Type': 'application/json; charset=UTF-8',
+                            'Authorization':
+                                //'key=d6JbNnFARI-J8D6eV4Akgs:APA91bF0C8EdU9riyRpt6LKPmRUyVFJZOICCRe7yvY2z6FntBvtG2Zrsa3MEklktvQmU7iTKy3we9r_oVHS4mRnhJBq_aNe9Rg8st2M-gDMR39xZV2IEgiFW9DsnDp4xw-h6aLVOvtkC'
+                                'key=AAAASDFsCOM:APA91bGLHziX-gzIM6srTPyXPbXfg8I1TTj4qcbP3gaUxuY9blzHBvT8qpeB4DYjaj6G6ql3wiLmqd4UKHyEiDL1aJXTQKfoPH8oG5kmEfsMs3Uj5053I8fl69qylMMB-qikCH0warBc'
+                          }).then((value) {
+                        if (kDebugMode) {
+                          print(value.body.toString());
+                        }
+                      }).onError((error, stackTrace) {
+                        if (kDebugMode) {
+                          print(error);
+                        }
+                      });
+
+                      ///todo: from here custom from backend start...
+                      var prefs = GetStorage();
+
+                      //prefs.write("AdminLogin_Id".toString(), json.decode(r.body)['data']['AdminLogin_Id']);
+                      AdminLogin_Id = prefs.read("AdminLogin_Id").toString();
+                      print('&&&&&&&&&&&&&&&&&&&&admin:${AdminLogin_Id}');
+
+                      ///.............................................................................
+                      DriverId = prefs.read("DriverId").toString();
+                      print(
+                          '&&&&&&&&&&&&&&&&&&&&&&driverrcredentials:${DriverId}');
+                      var body = {
+                        "AdminLoginId": "${AdminLogin_Id}",
+                        "DeviceId": value.toString(),
+                      };
+                      print("userrrtokenupdateeeddbeforetttt${body}");
+                      http.Response r = await http.post(
+                        Uri.parse(
+                            'http://admin.ambrd.in/api/CommonApi/UpdateDeviceId'),
+                        body: body,
+                      );
+
+                      print(r.body);
+                      if (r.statusCode == 200) {
+                        print("userrrtokenupdatdricvfe3333${body}");
+                        return r;
+                      } else if (r.statusCode == 401) {
+                        Get.snackbar('message', r.body);
+                      } else {
+                        Get.snackbar('Error', r.body);
+                        return r;
+                      }
+
+                      ///todo end post api from backend...
+                    });
+
+                    ///end....
+                    ///
+                    await Get.to(MyLocation());
+
+                    ///print("My account menu is selected.");
+                  } else if (value == 1) {
+                    // _homePageController.logout();
+                    print("logout");
+                  }
+                }),
+          ],
+          // actions: [
+          //   IconButton(onPressed: (){
+          //     _homePageController.logout();
+          //   },
+          //     icon: Icon(Icons.logout),color: Colors.black,)
+          // ],
+          leading: InkWell(
+              onTap: () {
+                /// Get.to(LoginEmailPage());
+                _key.currentState!.openDrawer();
               },
-              onSelected: (value) {
-                if (value == 0) {
-                  Get.to(MyLocation());
+              child: Icon(
+                Icons.menu,
+                color: Colors.white,
+              )),
+        ),
 
-                  ///print("My account menu is selected.");
-                } else if (value == 1) {
-                  // _homePageController.logout();
-                  print("logout");
-                }
-              }),
-        ],
-        // actions: [
-        //   IconButton(onPressed: (){
-        //     _homePageController.logout();
-        //   },
-        //     icon: Icon(Icons.logout),color: Colors.black,)
-        // ],
-        leading: InkWell(
-            onTap: () {
-              /// Get.to(LoginEmailPage());
-              _key.currentState!.openDrawer();
-            },
-            child: Icon(
-              Icons.menu,
-              color: Colors.white,
-            )),
-      ),
-
-      drawer: MainAmbrbdriverDrawer(),
-      //MainDrawer(),
-      body: SafeArea(
-        child: Container(
-          height: size.height,
-          width: size.width,
-          color: MyTheme.ambapp3,
-          child: SingleChildScrollView(
+        drawer: MainAmbrbdriverDrawer(),
+        //MainDrawer(),
+        body: SafeArea(
+          child: Container(
+            height: size.height,
+            width: size.width,
+            color: MyTheme.ambapp3,
             child: Column(
               children: [
                 Container(
@@ -220,17 +417,20 @@ class _HomeScreenState extends State<HomeScreen> {
                   child: Mycrusial(),
                 ),
 
-                SizedBox(
-                  //height: size.height * 0.36,
+                Expanded(
+                  flex: 2,
                   child: GridView.builder(
                       shrinkWrap: true,
-                      physics: NeverScrollableScrollPhysics(),
+                      //physics: ScrollPhysics(),
+                      //physics: NeverScrollableScrollPhysics(),
                       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                           crossAxisCount: 2,
-                          childAspectRatio: 5 / 2,
-                          mainAxisExtent: size.height * 0.186,
-                          crossAxisSpacing: 2.5,
-                          mainAxisSpacing: 2.5),
+                          //childAspectRatio: 5 / 2,
+
+                          childAspectRatio: 4 / 3.1,
+                          mainAxisExtent: size.height * 0.183,
+                          crossAxisSpacing: 0,
+                          mainAxisSpacing: 2),
                       itemCount: 6,
                       // _homePageController
                       //     .getcatagartlist!.result!.length,
@@ -255,20 +455,23 @@ class _HomeScreenState extends State<HomeScreen> {
                               // Get.to(LoginEmailPage());
                               //_homePageController.toggle(index);
                               if (index == 0) {
-                                // Get.to(() => CatagaryListSubcatagary());
+                                Get.to(() => BookingListUser());
                                 //Get.to(() => BestSeller());
                                 //Get.to(() => WaterTracking());
                               } else if (index == 1) {
                                 //Get.to(() => CatagaryListSubcatagary());
                               } else if (index == 2) {
-                                // Get.to(() => CowGhee());
+                                Get.to(() => DriverPaymentHistory());
                                 //Get.to(() => WalkTracking());
                               } else if (index == 3) {
+                                Get.to(() => DriverPayoutHistory());
                                 //Get.to(() => Oil());
                               } else if (index == 4) {
-                                //Get.to(() => Spices());
+                                Get.to(() => DriverBookingHistory());
                                 //Get.to(() => WalkTracking());
                               } else if (index == 5) {
+                                Get.to(() => SupportViewAmbrdComman());
+
                                 //Get.to(() => Honey());
                                 //Get.to(() => WalkTracking());
                               } else if (index == 6) {
@@ -305,11 +508,11 @@ class _HomeScreenState extends State<HomeScreen> {
                               //: Color(0xffeff8f5),
                               elevation: 0.1,
                               child: Container(
-                                height: size.height * 0.1,
-                                width: size.width * 0.1,
+                                height: size.height * 0.09,
+                                width: size.width * 0.09,
                                 decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(5),
-                                    color: MyTheme.ambapp,
+                                    color: MyTheme.ambapp5,
                                     border: Border.all(color: Colors.red)
                                     // _homePageController
                                     //     .selectedIndex
@@ -322,53 +525,60 @@ class _HomeScreenState extends State<HomeScreen> {
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceEvenly,
                                   children: [
-                                    PhysicalModel(
-                                      color: Colors.white,
-                                      borderRadius: BorderRadius.circular(10),
-                                      elevation: 10,
-                                      child: Container(
-                                        height: size.height * 0.14,
-                                        width: size.width * 0.30,
-                                        decoration: BoxDecoration(
-                                            color: Colors.black,
-                                            border: Border.all(
-                                              color: Colors.white,
-                                            ),
-                                            borderRadius:
-                                                BorderRadius.circular(10),
-                                            image: DecorationImage(
-                                                image: NetworkImage(
-                                                  "https://images.unsplash.com/photo-1502740479091-635887520276?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2069&q=80",
+                                    Padding(
+                                      padding: const EdgeInsets.all(4.0),
+                                      child: PhysicalModel(
+                                        color: Colors.red.shade900,
+                                        borderRadius: BorderRadius.circular(10),
+                                        elevation: 30,
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(4.0),
+                                          child: Container(
+                                            height: size.height * 0.12,
+                                            width: size.width * 0.30,
+                                            decoration: BoxDecoration(
+                                                color: Colors.black,
+                                                border: Border.all(
+                                                  color: Colors.white,
                                                 ),
-                                                fit: BoxFit.fill)),
+                                                borderRadius:
+                                                    BorderRadius.circular(10),
+                                                image: DecorationImage(
+                                                    image: AssetImage(
+                                                      productimage[index],
+                                                      //"https://images.unsplash.com/photo-1502740479091-635887520276?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2069&q=80",
+                                                    ),
+                                                    fit: BoxFit.fitHeight)),
 
-                                        ///todo:error....weight...
-                                        // child:
-                                        // Image.network(
-                                        //   "https://images.unsplash.com/photo-1502740479091-635887520276?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2069&q=80"
-                                        //   // base +
-                                        //   //'${_homePageController.getcatagartlist!.result![index].imageName.toString()}'
-                                        //   ,
-                                        //   fit: BoxFit.cover,
-                                        //   errorBuilder:
-                                        //       (context, error, stackTrace) {
-                                        //     //if image not comming in catagary then we have to purchase
-                                        //
-                                        //     return Icon(
-                                        //       Icons.error,
-                                        //       color: Colors.grey,
-                                        //     );
-                                        //   },
-                                        //
-                                        //   height: size.height * 0.056,
-                                        //   width: size.width * 0.15,
-                                        //   // color: _homePageController
-                                        //   //             .selectedIndex
-                                        //   //             .value ==
-                                        //   //         index
-                                        //   //     ? Colors.white
-                                        //   //     : MyTheme.ThemeColors
-                                        // ),
+                                            ///todo:error....weight...
+                                            // child:
+                                            // Image.network(
+                                            //   "https://images.unsplash.com/photo-1502740479091-635887520276?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2069&q=80"
+                                            //   // base +
+                                            //   //'${_homePageController.getcatagartlist!.result![index].imageName.toString()}'
+                                            //   ,
+                                            //   fit: BoxFit.cover,
+                                            //   errorBuilder:
+                                            //       (context, error, stackTrace) {
+                                            //     //if image not comming in catagary then we have to purchase
+                                            //
+                                            //     return Icon(
+                                            //       Icons.error,
+                                            //       color: Colors.grey,
+                                            //     );
+                                            //   },
+                                            //
+                                            //   height: size.height * 0.056,
+                                            //   width: size.width * 0.15,
+                                            //   // color: _homePageController
+                                            //   //             .selectedIndex
+                                            //   //             .value ==
+                                            //   //         index
+                                            //   //     ? Colors.white
+                                            //   //     : MyTheme.ThemeColors
+                                            // ),
+                                          ),
+                                        ),
                                       ),
                                     ),
                                     Center(
@@ -376,8 +586,14 @@ class _HomeScreenState extends State<HomeScreen> {
                                       //width: size.width * 0.25,
                                       child: Center(
                                         child: Container(
-                                          color: Colors.grey,
-                                          height: size.height * 0.03,
+                                          height: size.height * 0.025,
+                                          decoration: BoxDecoration(
+                                            color: AppColors.whiteColor,
+                                            borderRadius: BorderRadius.only(
+                                                bottomLeft: Radius.circular(5),
+                                                bottomRight:
+                                                    Radius.circular(5)),
+                                          ),
                                           child: Center(
                                             child: Text(
                                               productname2[index]
@@ -389,8 +605,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                               ,
                                               style: TextStyle(
                                                 fontWeight: FontWeight.w700,
-                                                fontSize: 10,
-                                                color: Colors.white,
+                                                fontSize: 11,
+                                                color: Colors.blue.shade900,
 
                                                 //.ContainerUnSelectedColor
                                                 // _homePageController
@@ -1087,8 +1303,6 @@ class Mycrusial extends StatelessWidget {
     Colors.indigo,
     Colors.purple,
   ];
-
-  ///....................................................................
   final List<String> images = [
     "https://images.unsplash.com/photo-1588321421727-f807ae7da8a9?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2067&q=80",
     "https://images.unsplash.com/photo-1590125234767-5aecaa98c228?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDl8fHxlbnwwfHx8fHw%3D&auto=format&fit=crop&w=600&q=60",
@@ -1098,75 +1312,133 @@ class Mycrusial extends StatelessWidget {
     //"https://images.unsplash.com/photo-1577801622187-9a1076d049da?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTh8fGFjJTIwcmVwYWlyfGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=500&q=60",
     //"https://images.unsplash.com/photo-1615870123253-f3de8aa89e24?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxjb2xsZWN0aW9uLXBhZ2V8OXxjVlFHYWlJSTI3OHx8ZW58MHx8fHw%3D&auto=format&fit=crop&w=500&q=60",
   ];
-
-  ///...............................................................
   final bool _isPlaying = true;
+
+  ///final img = 'https://ambrdapi.ndinfotech.com/Images/';
+  final img = 'http://admin.ambrd.in/Images/';
 
   //get _sliderKey => null;
 
   @override
   Widget build(BuildContext context) {
-    var base = 'https://api.gyros.farm/Images/';
+    // var base = 'https://api.gyros.farm/Images/';
+    ///var base = 'https://ambrdapi.ndinfotech.com/Images/';
     //....
     Size size = MediaQuery.of(context).size;
     //........
     return Scaffold(
       body: Obx(
-        () => (_homePageController.isLoading.isFalse)
+        () => (_homePageController.isLoading.value)
             ? Center(child: CircularProgressIndicator())
-            // : _homePageController.getsliderbaner?.result == null
-            //     ? Center(
-            //         child: Text('No data'),
-            //       )
-            : SizedBox(
-                height: size.height * 0.25,
-                child: Container(
-                  height: size.height * 0.25,
-                  child: CarouselSlider.builder(
-                    key: _sliderKey,
-                    unlimitedMode: true,
-                    autoSliderTransitionTime: Duration(seconds: 1),
-                    slideBuilder: (index) {
-                      return Container(
-                        height: 260,
-                        alignment: Alignment.center,
-                        child: Container(
-                          height: size.height * 0.38,
-                          width: size.width,
-                          child: Image.network(
-                            //images
-                            '${images[index]}',
-                            //'${_homePageController.getsliderbaner!.result?[index].image}',
-                            fit: BoxFit.cover,
-                            errorBuilder: (context, error, stackTrace) {
-                              //if image not comming in catagary then we have to purchase
-                              return Text(
-                                'No Image',
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 12,
+            : _homePageController.getsliderbaner?.banner == null
+                ? Center(
+                    child: Text('No Image'),
+                  )
+                : Padding(
+                    padding: const EdgeInsets.all(4.0),
+                    child: Container(
+                      height: size.height * 0.28,
+                      width: size.width,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Center(
+                        child: Material(
+                          color: MyTheme.ambapp,
+                          borderRadius: BorderRadius.circular(10),
+                          elevation: 0,
+                          child: CarouselSlider.builder(
+                            key: _sliderKey,
+                            unlimitedMode: true,
+                            autoSliderTransitionTime: Duration(seconds: 1),
+                            slideBuilder: (index) {
+                              var items =
+                                  _homePageController.getsliderbaner?.banner;
+                              return Padding(
+                                padding: const EdgeInsets.all(7.0),
+                                child: Material(
+                                  elevation: 12,
+                                  borderRadius: BorderRadius.circular(10),
+                                  child: Container(
+                                    height: size.height * 38,
+                                    width: size.width,
+                                    alignment: Alignment.center,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(10),
+                                      border: Border.all(
+                                          color: Colors.white, width: 3),
+                                      image: DecorationImage(
+                                          image: NetworkImage(
+                                              '$img${items?[index].bannerImage}' ??
+                                                  ''),
+                                          fit: BoxFit.fill),
+                                    ),
+                                  ),
                                 ),
                               );
                             },
+                            slideTransform: DefaultTransform(),
+                            slideIndicator: CircularSlideIndicator(
+                              indicatorBorderWidth: 2,
+                              indicatorRadius: 4,
+                              itemSpacing: 15,
+                              currentIndicatorColor: Colors.white,
+                              padding: EdgeInsets.only(bottom: 0),
+                            ),
+                            itemCount: _homePageController
+                                .getsliderbaner!.banner.length,
+                            enableAutoSlider: true,
                           ),
                         ),
-                      );
-                    },
-                    slideTransform: DefaultTransform(),
-                    slideIndicator: CircularSlideIndicator(
-                      indicatorBorderWidth: 2,
-                      indicatorRadius: 4,
-                      itemSpacing: 15,
-                      currentIndicatorColor: Colors.red,
-                      //MyTheme.t1Iconcolor,
-                      padding: EdgeInsets.only(bottom: 3),
+                      ),
                     ),
-                    itemCount: images.length,
-                    //_homePageController.getsliderbaner!.result!.length,
-                    enableAutoSlider: true,
                   ),
-                ),
-              ),
+        // SizedBox(
+        //             height: size.height * 0.25,
+        //             child: Container(
+        //               height: size.height * 0.25,
+        //               child: CarouselSlider.builder(
+        //                 key: _sliderKey,
+        //                 unlimitedMode: true,
+        //                 autoSliderTransitionTime: Duration(seconds: 1),
+        //                 slideBuilder: (index) {
+        //                   return Container(
+        //                     height: 260,
+        //                     alignment: Alignment.center,
+        //                     child: Container(
+        //                       height: size.height * 0.38,
+        //                       width: size.width,
+        //                       child: Image.network(
+        //                         '$base${_homePageController.getsliderbaner!.banner[index].bannerImage}',
+        //                         fit: BoxFit.cover,
+        //                         errorBuilder: (context, error, stackTrace) {
+        //                           //if image not comming in catagary then we have to purchase
+        //                           return Text(
+        //                             'No Image',
+        //                             style: TextStyle(
+        //                               fontWeight: FontWeight.bold,
+        //                               fontSize: 12,
+        //                             ),
+        //                           );
+        //                         },
+        //                       ),
+        //                     ),
+        //                   );
+        //                 },
+        //                 slideTransform: DefaultTransform(),
+        //                 slideIndicator: CircularSlideIndicator(
+        //                   indicatorBorderWidth: 2,
+        //                   indicatorRadius: 4,
+        //                   itemSpacing: 15,
+        //                   currentIndicatorColor: MyTheme.t1Iconcolor,
+        //                   padding: EdgeInsets.only(bottom: 3),
+        //                 ),
+        //                 itemCount: images.length,
+        //                 //_homePageController.getsliderbaner!.result!.length,
+        //                 enableAutoSlider: true,
+        //               ),
+        //             ),
+        //           ),
       ),
     );
   }

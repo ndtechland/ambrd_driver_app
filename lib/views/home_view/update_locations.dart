@@ -87,8 +87,12 @@
 
 ///MyLocation
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:ambrd_driver_app/constantsss/color_constant2.dart';
+import 'package:ambrd_driver_app/services/account_service_forautologin.dart';
+import 'package:ambrd_driver_app/services/api_provider.dart';
+import 'package:ambrd_driver_app/views/botttom_navigation_bar/bottom_navbar.dart';
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
@@ -96,6 +100,8 @@ import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:http/http.dart' as http;
+
 //import 'package:lib/views/home_view/update_locations.dart';
 // lib/views/home_view/update_locations.dart
 // import 'package:ps_welness_new_ui/modules_view/3_driver_section_view_RRR/driver_home/driver_home_page.dart';
@@ -212,22 +218,24 @@ class _MyLocationState extends State<MyLocation> {
     var lat = _currentPosition?.latitude.toDouble();
     var lang = _currentPosition?.longitude.toDouble();
 
-    ///apiiii....
-    // void postssDriverUpdateApi() async {
-    //   http.Response r = await ApiProvider.GoogleupdatedriverApi(
-    //     lat,
-    //     lang,
-    //   );
-    //
-    //   if (r.statusCode == 200) {
-    //     //Get.snackbar('message', r.body);
-    //     var data = jsonDecode(r.body);
-    //
-    //     //CallLoader.hideLoader();
-    //
-    //     /// we can navigate to user page.....................................
-    //   }
-    // }...................................
+    ///todo:apiiii....driver update location...
+    void postssDriverUpdateApi() async {
+      http.Response r = await ApiProvider.GoogleupdatedriverApi(
+        lat,
+        lang,
+      );
+
+      if (r.statusCode == 200) {
+        //Get.snackbar('message', r.body);
+        var data = jsonDecode(r.body);
+
+        //CallLoader.hideLoader();
+
+        /// we can navigate to user page.....................................
+      }
+    }
+
+    //...................................
     ///................................................
     TextEditingController latitudecontroller =
         TextEditingController(text: "${lat}");
@@ -543,24 +551,25 @@ class _MyLocationState extends State<MyLocation> {
                             onTap: () async {
                               _getCurrentPosition();
 
-                              ///postssDriverUpdateApi();
-                              // postDriverUpdateApi();
+                              postssDriverUpdateApi();
+
+                              //postDriverUpdateApi();
                               // CallLoader.hideLoader();
-                              // accountService.getAccountData.then((accountData) {
-                              //   Timer(
-                              //     const Duration(seconds: 1),
-                              //         () {
-                              //       Navigator.push(
-                              //           context,
-                              //           MaterialPageRoute(
-                              //               builder: (context) =>
-                              //                   DriverHomePage()));
-                              //
-                              //       //Get.to((page))
-                              //       ///
-                              //     },
-                              //   );
-                              // });
+                              accountService.getAccountData.then((accountData) {
+                                Timer(
+                                  const Duration(seconds: 1),
+                                  () {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                BottomNavBar()));
+
+                                    //Get.to((page))
+                                    ///
+                                  },
+                                );
+                              });
                             },
                             child: Container(
                               height: size.height * 0.05,
@@ -616,33 +625,25 @@ class _MyLocationState extends State<MyLocation> {
                             onTap: () async {
                               _getCurrentPosition();
 
-                              ///postssDriverUpdateApi();
-                              // accountService.getAccountData.then((accountData) {
-                              //   Timer(
-                              //     const Duration(milliseconds: 100),
-                              //         () {
-                              //       _getCurrentPosition();
-                              //     },
-                              //   );
-                              // });
-                              ///.....
-                              // accountService.getAccountData.then((accountData) {
-                              //   Timer(
-                              //     const Duration(milliseconds: 1200),
-                              //         () {
-                              //       Navigator.push(
-                              //           context,
-                              //           MaterialPageRoute(
-                              //               builder: (context) =>
-                              //                   DriverHomePage()));
-                              //
-                              //       //Get.to((page))
-                              //       ///
-                              //     },
-                              //   );
-                              // });
-                              // postDriverUpdateApi();
+                              postssDriverUpdateApi();
+
+                              //postDriverUpdateApi();
                               // CallLoader.hideLoader();
+                              accountService.getAccountData.then((accountData) {
+                                Timer(
+                                  const Duration(seconds: 1),
+                                  () {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                BottomNavBar()));
+
+                                    //Get.to((page))
+                                    ///
+                                  },
+                                );
+                              });
                             },
                             child: Container(
                               height: size.height * 0.05,
@@ -667,13 +668,13 @@ class _MyLocationState extends State<MyLocation> {
                                   ]),
                               child: Center(
                                 child: Text(
-                                  """Update Location""",
+                                  """Get current Location""",
                                   // '\u{20B9}',
                                   //'\u{20B9}${_driverPayoutHistoryController.foundpayoutdriver?[index].paidAmount}',
                                   style: GoogleFonts.actor(
                                     fontSize: size.width * 0.04,
                                     fontWeight: FontWeight.w900,
-                                    color: Colors.black,
+                                    color: Colors.white,
                                   ),
                                 ),
                               ),
