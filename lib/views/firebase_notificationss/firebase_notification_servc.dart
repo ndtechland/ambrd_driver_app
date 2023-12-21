@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:ambrd_driver_app/controllers/accept_reject_list.dart';
+import 'package:ambrd_driver_app/controllers/booking_request_list_controller.dart';
 import 'package:ambrd_driver_app/controllers/driver_list_new.dart';
 import 'package:ambrd_driver_app/services/account_service_forautologin.dart';
 import 'package:ambrd_driver_app/views/firebase_notificationss/message2.dart';
@@ -22,8 +22,13 @@ class NotificationServices {
   //initialising firebase message plugin
   final FlutterLocalNotificationsPlugin _flutterLocalNotificationsPlugin =
       FlutterLocalNotificationsPlugin();
-  UseracptrejectController _useracptrejectController =
-      Get.put(UseracptrejectController());
+
+  DriverRequestListController _driverRequestListController =
+      Get.put(DriverRequestListController());
+  //UseracptrejectController _useracptrejectController =
+  // Get.put(UseracptrejectController());
+
+  ///_driverRequestListController.getDriverRequestList?
   // DoctorHistoryController _doctorHistoryController =
   //     Get.put(DoctorHistoryController());
 
@@ -185,8 +190,8 @@ class NotificationServices {
   void handleMessage(BuildContext context, RemoteMessage message) async {
     if (message.data['type'] == 'msj') {
       await Future.delayed(Duration(milliseconds: 200));
-      _useracptrejectController.driveracceptrejctlistApi();
-      _useracptrejectController.update();
+      _driverRequestListController.acceptbookingdriverApi();
+      _driverRequestListController.update();
       accountService.getAccountData.then((accountData) {
         //CallLoader.loader();
         // nearlistdriverApi();

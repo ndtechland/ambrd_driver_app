@@ -1,27 +1,117 @@
+import 'dart:convert';
+
 import 'package:ambrd_driver_app/controllers/booking_request_list_controller.dart';
 import 'package:ambrd_driver_app/views/botttom_navigation_bar/bottom_nav_bar_controller.dart';
 import 'package:ambrd_driver_app/views/botttom_navigation_bar/bottom_navbar.dart';
+import 'package:ambrd_driver_app/views/firebase_notificationss/firebase_notification_servc.dart';
+import 'package:ambrd_driver_app/views/firebase_notificationss/local_notifications.dart';
+import 'package:ambrd_driver_app/widget/circular_loader.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../constantsss/app_theme/app_color.dart';
 
-class BookingListUser extends StatelessWidget {
+class BookingListUser extends StatefulWidget {
   BookingListUser({Key? key}) : super(key: key);
+
+  @override
+  State<BookingListUser> createState() => _BookingListUserState();
+}
+
+class _BookingListUserState extends State<BookingListUser> {
+  /// UseracptrejectController _useracptrejectController =
+  // Get.put(UseracptrejectController());
+
+  NotificationServices notificationServices = NotificationServices();
 
   DriverRequestListController _driverRequestListController =
       Get.put(DriverRequestListController());
 
-  //DriverPayoutController _driverPayoutController =
-  // Get.put(DriverPayoutController());
   ///
   // DriverPayoutHistoryController _driverPayoutHistoryController =
   // Get.put(DriverPayoutHistoryController());
 
   // DriverRequestListController _driverRequestListController = Get.put(DriverRequestListController());
+  ///implement firebase....27...jun..2023
+  @override
+  void initState() {
+    super.initState();
+
+    ///
+    // _useracptrejectController.driveracceptrejctlistApi();
+    //_useracptrejectController.update();
+    // _useracptrejectController.refresh();
+
+    ///
+    notificationServices.requestNotificationPermission();
+    notificationServices.forgroundMessage();
+    notificationServices.firebaseInit(context);
+    notificationServices.setupInteractMessage(context);
+    notificationServices.isTokenRefresh();
+    // notificationServices.requestNotificationPermission();
+    // notificationServices.isTokenRefresh();
+    // notificationServices.firebaseInit();
+    notificationServices.getDeviceToken().then((value) {
+      if (kDebugMode) {
+        print('device token');
+        print(value);
+      }
+      // print('device token');
+      // print(value);
+    });
+
+    /// 1. This method call when app in terminated state and you get a notification
+    /// when you click on notification app open from terminated state and you can get notification data in this method
+
+    FirebaseMessaging.instance.getInitialMessage().then(
+      (message) {
+        print("FirebaseMessaging.instance.getInitialMessage");
+        if (message != null) {
+          print("New Notification");
+          // if (message.data['_id'] != null) {
+          //   Navigator.of(context).push(
+          //     MaterialPageRoute(
+          //       builder: (context) => DemoScreen(
+          //         id: message.data['_id'],
+          //       ),
+          //     ),
+          //   );
+          // }
+        }
+      },
+    );
+    // 2. This method only call when App in forground it mean app must be opened
+    FirebaseMessaging.onMessage.listen(
+      (message) {
+        print("FirebaseMessaging.onMessage.listen");
+        if (message.notification != null) {
+          print(message.notification!.title);
+          print(message.notification!.body);
+          print("message.data11 ${message.data}");
+
+          ///you can call local notification....
+          LocalNotificationService.createanddisplaynotification(message);
+        }
+      },
+    );
+    // 3. This method only call when App in background and not terminated(not closed)
+    FirebaseMessaging.onMessageOpenedApp.listen(
+      (message) {
+        print("FirebaseMessaging.onMessageOpenedApp.listen");
+        if (message.notification != null) {
+          print(message.notification!.title);
+          print(message.notification!.body);
+          print("message.data22 ${message.data['_id']}");
+        }
+      },
+    );
+  }
 
   NavController _navController = Get.put(NavController());
 
@@ -549,6 +639,8 @@ class BookingListUser extends StatelessWidget {
                                                                 ),
                                                               ),
                                                             ),
+
+                                                            ///todo: reject booking.........
                                                             Padding(
                                                               padding: EdgeInsets
                                                                   .symmetric(
@@ -635,9 +727,95 @@ class BookingListUser extends StatelessWidget {
                                                                                               ),
                                                                                             ),
                                                                                             onPressed: () async {
+                                                                                              CallLoader.loader();
+                                                                                              await Future.delayed(Duration(milliseconds: 500));
+                                                                                              CallLoader.hideLoader();
+                                                                                              await Get.to(BottomNavBar());
+                                                                                              await _driverRequestListController.driverRequestListApi();
+                                                                                              _driverRequestListController.onInit();
+                                                                                              SharedPreferences prefs = await SharedPreferences.getInstance();
+                                                                                              prefs.setString("driacceptrejectlistid", "${_driverRequestListController.getDriverRequestList?.userListForBookingAmbulance?[index].id}");
+                                                                                              prefs.setString("driveracceptrjctDeviceid", "${_driverRequestListController.getDriverRequestList?.userListForBookingAmbulance?[index].deviceId}");
+                                                                                              // prefs.setString(
+                                                                                              //     "lng1",
+                                                                                              //     "${widget.driverlist?.startLong.toString()}");
+                                                                                              // prefs.setString(
+                                                                                              //     "lat1",
+                                                                                              //     "${widget.driverlist?.startLat.toString()}");
+                                                                                              //
+                                                                                              // prefs.setString(
+                                                                                              //     "lng2",
+                                                                                              //     "${widget.driverlist?.endLong.toString()}");
+                                                                                              // prefs.setString(
+                                                                                              //     "lat2",
+                                                                                              //     "${widget.driverlist?.endLat.toString()}");
+                                                                                              // prefs.setString(
+                                                                                              //     "ambulance1",
+                                                                                              //     "${widget.driverlist?.ambulanceTypeId.toString()}");
+                                                                                              // prefs.setString(
+                                                                                              //     "vehicle1",
+                                                                                              //     "${widget.driverlist?.vehicleTypeId.toString()}");
+
+                                                                                              // _ambulancegetController
+                                                                                              // .postAmbulancerequestApi2();
+                                                                                              ///todo: call reject booking api...
+                                                                                              ///_driverRequestListController.getDriverRequestList?
+
+                                                                                              await _driverRequestListController.rejectbookingdriverApi();
+
+                                                                                              ///.......
+                                                                                              print('princee notification');
+                                                                                              notificationServices.getDeviceToken().then((value) async {
+                                                                                                var data = {
+                                                                                                  //this the particular device id.....
+                                                                                                  'to': "${_driverRequestListController.getDriverRequestList?.userListForBookingAmbulance?[index].deviceId}",
+
+                                                                                                  //'mytokeneOs6od2nTlqsaFZl8-6ckc:APA91bHzcTpftAHsg7obx0CqhrgY1dyTlSwB5fxeUiBvGtAzX_us6iT6Xp-vXA8rIURK45EehE25_uKiE5wRIUKCF-8Ck-UKir96zS-PGRrpxxOkwPPUKS4M5Em2ql1GmYPY9FVOC4FC'
+                                                                                                  //'emW_j62UQnGX04QHLSiufM:APA91bHu2uM9C7g9QEc3io7yTVMqdNpdQE3n6vNmFwcKN6z-wq5U9S7Nyl79xJzP_Z-Ve9kjGIzMf4nnaNwSrz94Rcel0-4em9C_r7LvtmCBOWzU-VyPclHXdqyBc3Nrq7JROBqUUge9'
+                                                                                                  //.toString(),
+
+                                                                                                  ///this is same device token....
+                                                                                                  // value
+                                                                                                  // .toString(),
+                                                                                                  'notification': {
+                                                                                                    'title': 'Ambrd Driver',
+                                                                                                    'body': 'You request rejected by Driver',
+                                                                                                    //"sound": "jetsons_doorbell.mp3"
+                                                                                                  },
+                                                                                                  'android': {
+                                                                                                    'notification': {
+                                                                                                      'notification_count': 23,
+                                                                                                    },
+                                                                                                  },
+                                                                                                  'data': {
+                                                                                                    'type': 'reject_case',
+                                                                                                    //reject_case
+                                                                                                    //accept_case
+                                                                                                    'id': '1234567'
+                                                                                                  }
+                                                                                                };
+                                                                                                print("datareject:${data}");
+
+                                                                                                await http.post(Uri.parse('https://fcm.googleapis.com/fcm/send'), body: jsonEncode(data), headers: {
+                                                                                                  'Content-Type': 'application/json; charset=UTF-8',
+                                                                                                  'Authorization':
+                                                                                                      //'key=d6JbNnFARI-J8D6eV4Akgs:APA91bF0C8EdU9riyRpt6LKPmRUyVFJZOICCRe7yvY2z6FntBvtG2Zrsa3MEklktvQmU7iTKy3we9r_oVHS4mRnhJBq_aNe9Rg8st2M-gDMR39xZV2IEgiFW9DsnDp4xw-h6aLVOvtkC'
+                                                                                                      'key=AAAAp6CyXz4:APA91bEKZ_ArxpUWyMYnP8Do3oYrgXFVdNm2jQk-i1DjKcR8duPeccS64TohP-OAqxL57-840qWe0oeYDBAOO68-aOO2z9EWIcBbUIsXc-3kA5usYMviDYc_wK6qMsQecvAdM54xfZsO'
+                                                                                                  //'AAAASDFsCOM:APA91bGLHziX-gzIM6srTPyXPbXfg8I1TTj4qcbP3gaUxuY9blzHBvT8qpeB4DYjaj6G6ql3wiLmqd4UKHyEiDL1aJXTQKfoPH8oG5kmEfsMs3Uj5053I8fl69qylMMB-qikCH0warBc'
+                                                                                                }).then((value) {
+                                                                                                  if (kDebugMode) {
+                                                                                                    print("princedriverreject${value.body.toString()}");
+                                                                                                  }
+                                                                                                }).onError((error, stackTrace) {
+                                                                                                  if (kDebugMode) {
+                                                                                                    print(error);
+                                                                                                  }
+                                                                                                });
+                                                                                              });
+
                                                                                               // await _callNumber(
                                                                                               //     "${_doctorHomepageController.founddoctoraptProducts2?[index].mobileNumber}".toString());
-                                                                                              Get.back();
+                                                                                              //Get.back();
                                                                                             },
                                                                                             child: const Text(
                                                                                               'Yes',
@@ -808,9 +986,122 @@ class BookingListUser extends StatelessWidget {
                                                                                               ),
                                                                                             ),
                                                                                             onPressed: () async {
+                                                                                              SharedPreferences prefs = await SharedPreferences.getInstance();
+                                                                                              CallLoader.loader();
+                                                                                              await Future.delayed(Duration(milliseconds: 500));
+                                                                                              CallLoader.hideLoader();
+                                                                                              await _driverRequestListController.driverRequestListApi();
+                                                                                              _driverRequestListController.onInit();
+                                                                                              //driacceptrejectlistid
+                                                                                              prefs.setString("driacceptrejectlistid", "${_driverRequestListController.getDriverRequestList?.userListForBookingAmbulance?[index].id}");
+                                                                                              prefs.setString("driveracceptrjctDeviceid", "${_driverRequestListController.getDriverRequestList?.userListForBookingAmbulance?[index].deviceId}");
+                                                                                              // prefs.setString(
+                                                                                              //     "lng1",
+                                                                                              //     "${widget.driverlist?.startLong.toString()}");
+                                                                                              // prefs.setString(
+                                                                                              //     "lat1",
+                                                                                              //     "${widget.driverlist?.startLat.toString()}");
+                                                                                              //
+                                                                                              // prefs.setString(
+                                                                                              //     "lng2",
+                                                                                              //     "${widget.driverlist?.endLong.toString()}");
+                                                                                              // prefs.setString(
+                                                                                              //     "lat2",
+                                                                                              //     "${widget.driverlist?.endLat.toString()}");
+                                                                                              // prefs.setString(
+                                                                                              //     "ambulance1",
+                                                                                              //     "${widget.driverlist?.ambulanceTypeId.toString()}");
+                                                                                              // prefs.setString(
+                                                                                              //     "vehicle1",
+                                                                                              //     "${widget.driverlist?.vehicleTypeId.toString()}");
+
+                                                                                              // _ambulancegetController
+                                                                                              // .postAmbulancerequestApi2();
+                                                                                              ///todo: call reject booking api...
+                                                                                              ///_driverRequestListController.getDriverRequestList?
+                                                                                              // SharedPreferences
+                                                                                              // prefs =
+                                                                                              // await SharedPreferences
+                                                                                              //     .getInstance();
+                                                                                              // prefs.setString(
+                                                                                              //     "driverlistssId",
+                                                                                              //     "${widget.driverlist?.message?[index].driverId.toString()}");
+                                                                                              // prefs.setString(
+                                                                                              //     "lng1",
+                                                                                              //     "${widget.driverlist?.startLong.toString()}");
+                                                                                              // prefs.setString(
+                                                                                              //     "lat1",
+                                                                                              //     "${widget.driverlist?.startLat.toString()}");
+                                                                                              //
+                                                                                              // prefs.setString(
+                                                                                              //     "lng2",
+                                                                                              //     "${widget.driverlist?.endLong.toString()}");
+                                                                                              // prefs.setString(
+                                                                                              //     "lat2",
+                                                                                              //     "${widget.driverlist?.endLat.toString()}");
+                                                                                              // prefs.setString(
+                                                                                              //     "ambulance1",
+                                                                                              //     "${widget.driverlist?.ambulanceTypeId.toString()}");
+                                                                                              // prefs.setString(
+                                                                                              //     "vehicle1",
+                                                                                              //     "${widget.driverlist?.vehicleTypeId.toString()}");
+
+                                                                                              // _ambulancegetController
+                                                                                              // .postAmbulancerequestApi2();
+
+                                                                                              ///......._driverRequestListController.getDriverRequestList?
+                                                                                              ///todo: call accept booking api...
+                                                                                              await _driverRequestListController.acceptbookingdriverApi();
+                                                                                              print('princee notification');
+                                                                                              notificationServices.getDeviceToken().then((value) async {
+                                                                                                var data = {
+                                                                                                  //this the particular device id.....
+                                                                                                  'to': "${_driverRequestListController.getDriverRequestList?.userListForBookingAmbulance?[index].deviceId}",
+
+                                                                                                  //'mytokeneOs6od2nTlqsaFZl8-6ckc:APA91bHzcTpftAHsg7obx0CqhrgY1dyTlSwB5fxeUiBvGtAzX_us6iT6Xp-vXA8rIURK45EehE25_uKiE5wRIUKCF-8Ck-UKir96zS-PGRrpxxOkwPPUKS4M5Em2ql1GmYPY9FVOC4FC'
+                                                                                                  //'emW_j62UQnGX04QHLSiufM:APA91bHu2uM9C7g9QEc3io7yTVMqdNpdQE3n6vNmFwcKN6z-wq5U9S7Nyl79xJzP_Z-Ve9kjGIzMf4nnaNwSrz94Rcel0-4em9C_r7LvtmCBOWzU-VyPclHXdqyBc3Nrq7JROBqUUge9'
+                                                                                                  //.toString(),
+
+                                                                                                  ///this is same device token....
+                                                                                                  //value
+                                                                                                  //.toString(),
+                                                                                                  'notification': {
+                                                                                                    'title': 'Ambrs driver',
+                                                                                                    'body': 'Your request accepted by driver',
+                                                                                                    //"sound": "jetsons_doorbell.mp3"
+                                                                                                  },
+                                                                                                  'android': {
+                                                                                                    'notification': {
+                                                                                                      'notification_count': 23,
+                                                                                                    },
+                                                                                                  },
+                                                                                                  'data': {
+                                                                                                    'type': 'accept_case',
+                                                                                                    'id': '12345678'
+                                                                                                  }
+                                                                                                };
+                                                                                                print("dataccept:${data}");
+
+                                                                                                await http.post(Uri.parse('https://fcm.googleapis.com/fcm/send'), body: jsonEncode(data), headers: {
+                                                                                                  'Content-Type': 'application/json; charset=UTF-8',
+                                                                                                  'Authorization':
+                                                                                                      //'key=d6JbNnFARI-J8D6eV4Akgs:APA91bF0C8EdU9riyRpt6LKPmRUyVFJZOICCRe7yvY2z6FntBvtG2Zrsa3MEklktvQmU7iTKy3we9r_oVHS4mRnhJBq_aNe9Rg8st2M-gDMR39xZV2IEgiFW9DsnDp4xw-h6aLVOvtkC'
+                                                                                                      'key=AAAAp6CyXz4:APA91bEKZ_ArxpUWyMYnP8Do3oYrgXFVdNm2jQk-i1DjKcR8duPeccS64TohP-OAqxL57-840qWe0oeYDBAOO68-aOO2z9EWIcBbUIsXc-3kA5usYMviDYc_wK6qMsQecvAdM54xfZsO'
+                                                                                                  //'AAAASDFsCOM:APA91bGLHziX-gzIM6srTPyXPbXfg8I1TTj4qcbP3gaUxuY9blzHBvT8qpeB4DYjaj6G6ql3wiLmqd4UKHyEiDL1aJXTQKfoPH8oG5kmEfsMs3Uj5053I8fl69qylMMB-qikCH0warBc'
+                                                                                                }).then((value) {
+                                                                                                  if (kDebugMode) {
+                                                                                                    print("princedriver${value.body.toString()}");
+                                                                                                  }
+                                                                                                }).onError((error, stackTrace) {
+                                                                                                  if (kDebugMode) {
+                                                                                                    print(error);
+                                                                                                  }
+                                                                                                });
+                                                                                              });
                                                                                               // await _callNumber(
                                                                                               //     "${_doctorHomepageController.founddoctoraptProducts2?[index].mobileNumber}".toString());
-                                                                                              Get.back();
+                                                                                              // Get.back();
+                                                                                              await Get.to(BottomNavBar());
                                                                                             },
                                                                                             child: const Text(
                                                                                               'Yes',

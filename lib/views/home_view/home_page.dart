@@ -1,5 +1,8 @@
+import 'dart:async';
 import 'dart:convert';
 
+import 'package:ambrd_driver_app/controllers/booking_request_list_controller.dart';
+import 'package:ambrd_driver_app/services/account_service_forautologin.dart';
 import 'package:ambrd_driver_app/views/drowerr_user/booking_driver_history.dart';
 import 'package:ambrd_driver_app/views/drowerr_user/driver_drawer.dart';
 import 'package:ambrd_driver_app/views/drowerr_user/page_drower/payment_history.dart';
@@ -9,6 +12,7 @@ import 'package:ambrd_driver_app/views/firebase_notificationss/firebase_notifica
 import 'package:ambrd_driver_app/views/firebase_notificationss/local_notifications.dart';
 import 'package:ambrd_driver_app/views/home_view/booking_list.dart';
 import 'package:ambrd_driver_app/views/home_view/update_locations.dart';
+import 'package:ambrd_driver_app/widget/circular_loader.dart';
 import 'package:ambrd_driver_app/widget/exit_popscope.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
@@ -36,6 +40,9 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   NotificationServices notificationServices = NotificationServices();
+
+  DriverRequestListController _driverRequestListController =
+      Get.put(DriverRequestListController());
 
   String DriverId = ''.toString();
 
@@ -307,7 +314,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         ///this is same device token....
                         //value.toString(),
                         'notification': {
-                          'title': 'Ps_Wellness',
+                          'title': 'Ambrd Driver',
                           'body': 'You have request for ambulance',
                           //"sound": "jetsons_doorbell.mp3"
                         },
@@ -326,7 +333,8 @@ class _HomeScreenState extends State<HomeScreen> {
                             'Content-Type': 'application/json; charset=UTF-8',
                             'Authorization':
                                 //'key=d6JbNnFARI-J8D6eV4Akgs:APA91bF0C8EdU9riyRpt6LKPmRUyVFJZOICCRe7yvY2z6FntBvtG2Zrsa3MEklktvQmU7iTKy3we9r_oVHS4mRnhJBq_aNe9Rg8st2M-gDMR39xZV2IEgiFW9DsnDp4xw-h6aLVOvtkC'
-                                'key=AAAASDFsCOM:APA91bGLHziX-gzIM6srTPyXPbXfg8I1TTj4qcbP3gaUxuY9blzHBvT8qpeB4DYjaj6G6ql3wiLmqd4UKHyEiDL1aJXTQKfoPH8oG5kmEfsMs3Uj5053I8fl69qylMMB-qikCH0warBc'
+                                'key=AAAAp6CyXz4:APA91bGPkLfnMIlQQJRVMqHmqSAghl0cL0MqtI2oJugrPTgBRO-Ps1VJh0TtQr9Hjx5WdAkRbzLLNhLIvWrUFhJHHFvwGyGwKyyNOVCmukeL3JDSgK2IoextNQ_3r5rM557EuiKwgEFE'
+                            //'AAAASDFsCOM:APA91bGLHziX-gzIM6srTPyXPbXfg8I1TTj4qcbP3gaUxuY9blzHBvT8qpeB4DYjaj6G6ql3wiLmqd4UKHyEiDL1aJXTQKfoPH8oG5kmEfsMs3Uj5053I8fl69qylMMB-qikCH0warBc'
                           }).then((value) {
                         if (kDebugMode) {
                           print(value.body.toString());
@@ -428,9 +436,9 @@ class _HomeScreenState extends State<HomeScreen> {
                           //childAspectRatio: 5 / 2,
 
                           childAspectRatio: 4 / 3.1,
-                          mainAxisExtent: size.height * 0.183,
-                          crossAxisSpacing: 0,
-                          mainAxisSpacing: 2),
+                          mainAxisExtent: size.height * 0.1835,
+                          crossAxisSpacing: 1.5,
+                          mainAxisSpacing: 2.5),
                       itemCount: 6,
                       // _homePageController
                       //     .getcatagartlist!.result!.length,
@@ -451,26 +459,54 @@ class _HomeScreenState extends State<HomeScreen> {
                               horizontal: size.width * 0.006,
                               vertical: size.height * 0.002),
                           child: InkWell(
-                            onTap: () {
+                            onTap: () async {
+                              await _driverRequestListController
+                                  .driverRequestListApi();
+                              _driverRequestListController.onInit();
                               // Get.to(LoginEmailPage());
                               //_homePageController.toggle(index);
                               if (index == 0) {
-                                Get.to(() => BookingListUser());
+                                /// periodicTimer()
+                                CallLoader.loader();
+                                await Future.delayed(
+                                    Duration(milliseconds: 500));
+                                CallLoader.hideLoader();
+                                await accountService.getAccountData
+                                    .then((accountData) {
+                                  Timer(
+                                    const Duration(milliseconds: 300),
+                                    () {
+                                      Get.to(() => BookingListUser());
+
+                                      ///  Get.to(DriverHomePage());
+                                      ///  8 dec 2023
+                                      // _viewhealthchkpreviewController.healthreviewratingApi();
+                                      //_viewhealthchkpreviewController.update();
+                                      // Get.snackbar(
+                                      //     'Add review Successfully', "Review Submitted. Thank-you."
+                                      //   // "${r.body}"
+                                      // );
+                                      //Get.to(() => CheckupSchedulePage());
+                                      //Get.to((page))
+                                      ///
+                                    },
+                                  );
+                                });
                                 //Get.to(() => BestSeller());
                                 //Get.to(() => WaterTracking());
                               } else if (index == 1) {
                                 //Get.to(() => CatagaryListSubcatagary());
                               } else if (index == 2) {
-                                Get.to(() => DriverPaymentHistory());
+                                await Get.to(() => DriverPaymentHistory());
                                 //Get.to(() => WalkTracking());
                               } else if (index == 3) {
-                                Get.to(() => DriverPayoutHistory());
+                                await Get.to(() => DriverPayoutHistory());
                                 //Get.to(() => Oil());
                               } else if (index == 4) {
-                                Get.to(() => DriverBookingHistory());
+                                await Get.to(() => DriverBookingHistory());
                                 //Get.to(() => WalkTracking());
                               } else if (index == 5) {
-                                Get.to(() => SupportViewAmbrdComman());
+                                await Get.to(() => SupportViewAmbrdComman());
 
                                 //Get.to(() => Honey());
                                 //Get.to(() => WalkTracking());

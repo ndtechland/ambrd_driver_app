@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:ambrd_driver_app/constantsss/app_theme/app_color.dart';
-import 'package:ambrd_driver_app/controllers/accept_reject_list.dart';
+import 'package:ambrd_driver_app/controllers/booking_request_list_controller.dart';
 import 'package:ambrd_driver_app/views/firebase_notificationss/firebase_notification_servc.dart';
 import 'package:ambrd_driver_app/views/firebase_notificationss/local_notifications.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -27,8 +27,11 @@ class MessageScreen extends StatefulWidget {
 
 class _MessageScreenState extends State<MessageScreen> {
   //DriverPayoutController _driverPayoutController =
-  UseracptrejectController _useracptrejectController =
-      Get.put(UseracptrejectController());
+  //UseracptrejectController _useracptrejectController =
+  //Get.put(UseracptrejectController());
+
+  DriverRequestListController _driverRequestListController =
+      Get.put(DriverRequestListController());
 
   NotificationServices notificationServices = NotificationServices();
 
@@ -191,9 +194,9 @@ class _MessageScreenState extends State<MessageScreen> {
                   ),
                 ),
                 Obx(
-                  () => (_useracptrejectController.isLoading.value)
+                  () => (_driverRequestListController.isLoading.value)
                       ? const Center(child: CircularProgressIndicator())
-                      : _useracptrejectController.userListModeldriver
+                      : _driverRequestListController.getDriverRequestList
                                   ?.userListForBookingAmbulance ==
                               null
                           ? const Center(
@@ -204,8 +207,8 @@ class _MessageScreenState extends State<MessageScreen> {
                                   shrinkWrap: true,
                                   itemCount:
                                       //4,
-                                      _useracptrejectController
-                                          .userListModeldriver
+                                      _driverRequestListController
+                                          .getDriverRequestList
                                           ?.userListForBookingAmbulance
                                           ?.length,
                                   itemBuilder:
@@ -304,7 +307,7 @@ class _MessageScreenState extends State<MessageScreen> {
                                                                 0xff12BFC4),
                                                           ),
                                                           Text(
-                                                            "${_useracptrejectController.userListModeldriver?.userListForBookingAmbulance?[index].patientName.toString()}",
+                                                            "${_driverRequestListController.getDriverRequestList?.userListForBookingAmbulance?[index].patientName.toString()}",
                                                             //"Kumar Prince",
                                                             // 'Kumar Prince',
                                                             //'\u{20B9}${_driverPayoutHistoryController.foundpayoutdriver?[index].paidAmount}',
@@ -356,7 +359,7 @@ class _MessageScreenState extends State<MessageScreen> {
                                                                 0.01,
                                                           ),
                                                           Text(
-                                                            "${_useracptrejectController.userListModeldriver?.userListForBookingAmbulance?[index].mobileNumber.toString()}",
+                                                            "${_driverRequestListController.getDriverRequestList?.userListForBookingAmbulance?[index].mobileNumber.toString()}",
 
                                                             // "10 km.",
                                                             //'2020 Honda Clive',
@@ -409,7 +412,7 @@ class _MessageScreenState extends State<MessageScreen> {
                                                                 0.01,
                                                           ),
                                                           Text(
-                                                            "${_useracptrejectController.userListModeldriver?.userListForBookingAmbulance?[index].toatlDistance}Km",
+                                                            "${_driverRequestListController.getDriverRequestList?.userListForBookingAmbulance?[index].totalDistance}Km",
 
                                                             // "10 km.",
                                                             //'2020 Honda Clive',
@@ -454,7 +457,7 @@ class _MessageScreenState extends State<MessageScreen> {
                                                                 0.01,
                                                           ),
                                                           Text(
-                                                            "\u{20B9}${_useracptrejectController.userListModeldriver?.userListForBookingAmbulance?[index].totalPrice}",
+                                                            "\u{20B9}${_driverRequestListController.getDriverRequestList?.userListForBookingAmbulance?[index].totalPrice}",
 
                                                             //"\u{20B9} 100",
                                                             // '121234333377',
@@ -503,7 +506,7 @@ class _MessageScreenState extends State<MessageScreen> {
                                                             width: size.width *
                                                                 0.61,
                                                             child: Text(
-                                                              "${_useracptrejectController.userListModeldriver?.userListForBookingAmbulance?[index].reverseStartLatLongToLocation.toString()}",
+                                                              "${_driverRequestListController.getDriverRequestList?.userListForBookingAmbulance?[index].reverseStartLatLongToLocation.toString()}",
 
                                                               // """Noida near nd infotech C53 Noida YY YY YY trhtrhtdsVsdvds cdsVDS""",
                                                               maxLines: 2,
@@ -555,7 +558,7 @@ class _MessageScreenState extends State<MessageScreen> {
                                                             width: size.width *
                                                                 0.66,
                                                             child: Text(
-                                                              "${_useracptrejectController.userListModeldriver?.userListForBookingAmbulance?[index].reverseEndLatLongToLocation.toString()}",
+                                                              "${_driverRequestListController.getDriverRequestList?.userListForBookingAmbulance?[index].reverseEndLatLongToLocation.toString()}",
 
                                                               //  """Noida near nd infotech C53 Noida YY YY YY trhtrhtdsVsdvds cdsVDS""",
                                                               maxLines: 2,
@@ -609,10 +612,10 @@ class _MessageScreenState extends State<MessageScreen> {
                                                                         .getInstance();
                                                                 prefs.setString(
                                                                     "driacceptrejectlistid",
-                                                                    "${_useracptrejectController.userListModeldriver?.userListForBookingAmbulance?[index].id}");
+                                                                    "${_driverRequestListController.getDriverRequestList?.userListForBookingAmbulance?[index].id}");
                                                                 prefs.setString(
                                                                     "driveracceptrjctDeviceid",
-                                                                    "${_useracptrejectController.userListModeldriver?.userListForBookingAmbulance?[index].deviceId}");
+                                                                    "${_driverRequestListController.getDriverRequestList?.userListForBookingAmbulance?[index].deviceId}");
                                                                 // prefs.setString(
                                                                 //     "lng1",
                                                                 //     "${widget.driverlist?.startLong.toString()}");
@@ -636,8 +639,9 @@ class _MessageScreenState extends State<MessageScreen> {
                                                                 // _ambulancegetController
                                                                 // .postAmbulancerequestApi2();
                                                                 ///todo: call reject booking api...
-
-                                                                _useracptrejectController
+                                                                ///_driverRequestListController.getDriverRequestList?
+//
+                                                                _driverRequestListController
                                                                     .rejectbookingdriverApi();
 
                                                                 ///.......
@@ -650,7 +654,7 @@ class _MessageScreenState extends State<MessageScreen> {
                                                                   var data = {
                                                                     //this the particular device id.....
                                                                     'to':
-                                                                        "${_useracptrejectController.userListModeldriver?.userListForBookingAmbulance?[index].deviceId}",
+                                                                        "${_driverRequestListController.getDriverRequestList?.userListForBookingAmbulance?[index].deviceId}",
 
                                                                     //'mytokeneOs6od2nTlqsaFZl8-6ckc:APA91bHzcTpftAHsg7obx0CqhrgY1dyTlSwB5fxeUiBvGtAzX_us6iT6Xp-vXA8rIURK45EehE25_uKiE5wRIUKCF-8Ck-UKir96zS-PGRrpxxOkwPPUKS4M5Em2ql1GmYPY9FVOC4FC'
                                                                     //'emW_j62UQnGX04QHLSiufM:APA91bHu2uM9C7g9QEc3io7yTVMqdNpdQE3n6vNmFwcKN6z-wq5U9S7Nyl79xJzP_Z-Ve9kjGIzMf4nnaNwSrz94Rcel0-4em9C_r7LvtmCBOWzU-VyPclHXdqyBc3Nrq7JROBqUUge9'
@@ -777,11 +781,11 @@ class _MessageScreenState extends State<MessageScreen> {
                                                                         .getInstance();
                                                                 prefs.setString(
                                                                     "driveracceptrjctDeviceid",
-                                                                    "${_useracptrejectController.userListModeldriver?.userListForBookingAmbulance?[index].deviceId}");
+                                                                    "${_driverRequestListController.getDriverRequestList?.userListForBookingAmbulance?[index].deviceId}");
 
                                                                 prefs.setString(
                                                                     "driacceptrejectlistid",
-                                                                    "${_useracptrejectController.userListModeldriver?.userListForBookingAmbulance?[index].id}");
+                                                                    "${_driverRequestListController.getDriverRequestList?.userListForBookingAmbulance?[index].id}");
                                                                 // SharedPreferences
                                                                 // prefs =
                                                                 // await SharedPreferences
@@ -814,7 +818,8 @@ class _MessageScreenState extends State<MessageScreen> {
 
                                                                 ///.......
                                                                 ///todo: call accept booking api...
-                                                                _useracptrejectController
+                                                                ///_driverRequestListController.getDriverRequestList?
+                                                                _driverRequestListController
                                                                     .acceptbookingdriverApi();
                                                                 print(
                                                                     'princee notification');
@@ -825,7 +830,7 @@ class _MessageScreenState extends State<MessageScreen> {
                                                                   var data = {
                                                                     //this the particular device id.....
                                                                     'to':
-                                                                        "${_useracptrejectController.userListModeldriver?.userListForBookingAmbulance?[index].deviceId}",
+                                                                        "${_driverRequestListController.getDriverRequestList?.userListForBookingAmbulance?[index].deviceId}",
 
                                                                     //'mytokeneOs6od2nTlqsaFZl8-6ckc:APA91bHzcTpftAHsg7obx0CqhrgY1dyTlSwB5fxeUiBvGtAzX_us6iT6Xp-vXA8rIURK45EehE25_uKiE5wRIUKCF-8Ck-UKir96zS-PGRrpxxOkwPPUKS4M5Em2ql1GmYPY9FVOC4FC'
                                                                     //'emW_j62UQnGX04QHLSiufM:APA91bHu2uM9C7g9QEc3io7yTVMqdNpdQE3n6vNmFwcKN6z-wq5U9S7Nyl79xJzP_Z-Ve9kjGIzMf4nnaNwSrz94Rcel0-4em9C_r7LvtmCBOWzU-VyPclHXdqyBc3Nrq7JROBqUUge9'

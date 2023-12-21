@@ -746,13 +746,13 @@ class ApiProvider {
     }
   }
 
-  ///todo: accept ambulance api on of user.......14 july 2023.......25,,,,,,.....................
+  ///todo: accept ambulance api on of driver ambrd....21 dec 2023.......25,,,,,,.....................
 
   static AcceptrequestdriverApi() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     var driacceptrejectlistid = preferences.getString("driacceptrejectlistid");
     print("driacceptrejectlistid: ${driacceptrejectlistid}");
-    var url = '${baseUrl}api/DriverApi/BookingAmbulanceAcceptReject';
+    var url = '${baseUrl}DriverApi/BookingAmbulanceAccept';
     // http://test.pswellness.in/api/DriverApi/BookingAmbulanceAcceptReject
     var prefs = GetStorage();
     userId = prefs.read("userId").toString();
@@ -820,14 +820,14 @@ class ApiProvider {
     }
   }
 
-  ///todo: reject driver list july 2023....user api......24
+  ///todo: reject driver list 21  dec 2023....driver api.ambrd.....24
 
   static RejectrequestdriverApi() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     var driacceptrejectlistid = preferences.getString("driacceptrejectlistid");
     print("driacceptrejectlistid: ${driacceptrejectlistid}");
     //http://test.pswellness.in/api/DriverApi/AmbulanceReject
-    var url = '${baseUrl}api/DriverApi/AmbulanceReject';
+    var url = '${baseUrl}DriverApi/BookingAmbulanceAccept';
     var prefs = GetStorage();
     userId = prefs.read("userId").toString();
     print('&&&&&&&&&&&&&&&&&&&&&&usergoogle:${userId}');
@@ -845,6 +845,11 @@ class ApiProvider {
     );
     //print(r.body);
     if (r.statusCode == 200) {
+      print("rejecttdfdfd:${body}");
+      print("rejecttdfdfccsad:${r.body}");
+
+      //r.body
+
       ///ambulance..
       //saved id..........
       // var prefs = GetStorage();
@@ -855,7 +860,7 @@ class ApiProvider {
 
       print(r.body);
       print(r.statusCode);
-      Get.snackbar("Booking Status", 'Request Reject Successfully');
+      Get.snackbar("Booking Status", ' Reject Successfully');
       return r;
     } else if (r.statusCode == 401) {
       Get.snackbar('message', r.body);
