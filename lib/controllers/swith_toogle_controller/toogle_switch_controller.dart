@@ -32,7 +32,7 @@ class SwitchX extends GetxController {
     selectedService.value = service;
   }
 
-  void ToogleStatusApi() async {
+  Future<void> ToogleStatusApi() async {
     http.Response r = await ApiProvider.TogglestatusdriverApi(
       on.value,
     );

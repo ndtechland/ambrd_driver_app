@@ -471,10 +471,12 @@ class ApiProvider {
   ) async {
     var url = '${baseUrl}CommonApi/AddBankDetail';
     var prefs = GetStorage();
+    AdminLogin_Id = prefs.read("AdminLogin_Id").toString();
+    print('&&&&&&&&&&&&bankadmgcgin:${AdminLogin_Id}');
     userId = prefs.read("userId").toString();
     print('&readuserbank:${userId}');
     var body = {
-      "Login_Id": userId,
+      "Login_Id": AdminLogin_Id,
       "AccountNumber": "$AccountNumber",
       "IFSCCode": "$IFSCCode",
       "BranchName": "$BranchName",
@@ -483,6 +485,59 @@ class ApiProvider {
       "MobileNumber": "$MobileNumber"
     };
     print("ok1:${body}");
+    http.Response r = await http.post(
+      Uri.parse(url),
+      body: body,
+    );
+    print("okup:${r.body}");
+    if (r.statusCode == 200) {
+      print(r.body);
+      Get.snackbar(
+        'Success',
+        r.body,
+        duration: const Duration(seconds: 2),
+      );
+      print(r.body);
+
+      return r;
+    } else if (r.statusCode == 401) {
+      Get.snackbar(
+        'Message',
+        r.body,
+        duration: Duration(seconds: 2),
+      );
+    } else {
+      Get.snackbar('Error', r.body, duration: Duration(seconds: 2));
+      return r;
+    }
+  }
+
+  ///todo: edit bank detail...ambrb....111
+
+  static EditBankDetailApi(
+    var AccountNumber,
+    var IFSCCode,
+    var BranchName,
+    var BranchAddress,
+    var HolderName,
+    //var MobileNumber,
+  ) async {
+    var url = '${baseUrl}CommonApi/UpdateBankDetail';
+    var prefs = GetStorage();
+    userId = prefs.read("userId").toString();
+    AdminLogin_Id = prefs.read("AdminLogin_Id").toString();
+    print('&&&&&&&&&&&&bankadmgcgin:${AdminLogin_Id}');
+    print('&readuserbank:${userId}');
+    var body = {
+      "Login_Id": AdminLogin_Id,
+      "AccountNumber": "$AccountNumber",
+      "IFSCCode": "$IFSCCode",
+      "BranchName": "$BranchName",
+      "BranchAddress": "$BranchAddress",
+      "HolderName": "$HolderName",
+      // "MobileNumber": "$MobileNumber"
+    };
+    print("ok1edit:${body}");
     http.Response r = await http.post(
       Uri.parse(url),
       body: body,
@@ -660,7 +715,7 @@ class ApiProvider {
         borderRadius: 10,
         margin: EdgeInsets.all(15),
         colorText: Colors.white,
-        duration: Duration(seconds: 5),
+        duration: Duration(seconds: 2),
         isDismissible: true,
         snackStyle: SnackStyle.FLOATING,
         //dismissDirection: SnackDismissDirection.horizontal,
@@ -747,11 +802,11 @@ class ApiProvider {
   }
 
   ///todo: accept ambulance api on of driver ambrd....21 dec 2023.......25,,,,,,.....................
-
   static AcceptrequestdriverApi() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     var driacceptrejectlistid = preferences.getString("driacceptrejectlistid");
     print("driacceptrejectlistid: ${driacceptrejectlistid}");
+    // driacceptrejectlistid
     var url = '${baseUrl}DriverApi/BookingAmbulanceAccept';
     // http://test.pswellness.in/api/DriverApi/BookingAmbulanceAcceptReject
     var prefs = GetStorage();
@@ -802,6 +857,9 @@ class ApiProvider {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     var driverlistbookingId = preferences.getString("driverlistbookingId");
     print("driverlistbookingId: ${driverlistbookingId}");
+
+    var driacceptrejectlistid = preferences.getString("driacceptrejectlistid");
+    print("driacceptrejectlistid: ${driacceptrejectlistid}");
     //driverlistbookingId
     var url =
         '${baseUrl}api/DriverApi/GetAcceptedReqDriverDetail?Id=$driverlistbookingId';

@@ -4,8 +4,8 @@ import 'dart:io';
 import 'package:ambrd_driver_app/controllers/booking_request_list_controller.dart';
 import 'package:ambrd_driver_app/controllers/driver_list_new.dart';
 import 'package:ambrd_driver_app/services/account_service_forautologin.dart';
-import 'package:ambrd_driver_app/views/firebase_notificationss/message2.dart';
 import 'package:ambrd_driver_app/views/firebase_notificationss/message_screen.dart';
+import 'package:ambrd_driver_app/views/home_view/booking_list.dart';
 import 'package:ambrd_driver_app/widget/circular_loader.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
@@ -190,13 +190,18 @@ class NotificationServices {
   void handleMessage(BuildContext context, RemoteMessage message) async {
     if (message.data['type'] == 'msj') {
       await Future.delayed(Duration(milliseconds: 200));
-      _driverRequestListController.acceptbookingdriverApi();
-      _driverRequestListController.update();
+      //_driverRequestListController.acceptbookingdriverApi();
+      //_driverRequestListController.update();
+      await _driverRequestListController.driverRequestListApi();
+      _driverRequestListController.onInit();
+      CallLoader.loader();
+      await Future.delayed(Duration(milliseconds: 100));
+      CallLoader.hideLoader();
       accountService.getAccountData.then((accountData) {
         //CallLoader.loader();
         // nearlistdriverApi();
         Timer(
-          const Duration(milliseconds: 200),
+          const Duration(milliseconds: 300),
           () {
             print("dataa1${message.data['id']}");
             // nearlistdriverApi();

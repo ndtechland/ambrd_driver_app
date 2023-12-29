@@ -31,7 +31,7 @@ Future<void> main() async {
   ///i created new class name is firebase api kumar prince extra its not needed
   await FirebaseApi().initNotifications();
 
-  HttpOverrides.global = MyHttpOverrides();
+  ///HttpOverrides.global = MyHttpOverrides();
   //WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   //FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
   runApp(

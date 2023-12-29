@@ -1,6 +1,8 @@
 import 'dart:async';
 
+import 'package:ambrd_driver_app/controllers/booking_request_list_controller.dart';
 import 'package:ambrd_driver_app/controllers/home_controllers.dart';
+import 'package:ambrd_driver_app/controllers/swith_toogle_controller/toogle_switch_controller.dart';
 import 'package:ambrd_driver_app/services/account_service_forautologin.dart';
 import 'package:ambrd_driver_app/views/botttom_navigation_bar/bottom_nav_bar_controller.dart';
 import 'package:ambrd_driver_app/views/botttom_navigation_bar/bottom_navbar.dart';
@@ -18,6 +20,10 @@ class SplashController extends GetxController
   // Get.put(VehicleServicecatController());
   NavController _navController = Get.put(NavController());
   HomeController _homePageController = Get.put(HomeController());
+  DriverRequestListController _driverRequestListController =
+      Get.put(DriverRequestListController());
+
+  SwitchX tooglecontroller = Get.put(SwitchX());
 
 //my
   final getStorage = GetStorage();
@@ -32,9 +38,10 @@ class SplashController extends GetxController
         () async {
           if (accountData == null) {
             await _homePageController.AllServicesApi();
-
             await _homePageController.sliderBannerApi();
-
+            await _driverRequestListController.driverRequestListApi();
+            _driverRequestListController.onInit();
+            //tooglecontroller.ToogleStatusApi();
             _homePageController.onInit();
 
             //await _vehicleservicecatController.servicecatvehicleApi();
@@ -74,12 +81,18 @@ class SplashController extends GetxController
               );
               //CallLoader.hideLoader();
             });
-            await _navController.tabindex(0);
-            await Get.to(BottomNavBar());
-
             await _homePageController.AllServicesApi();
             await _homePageController.sliderBannerApi();
             _homePageController.onInit();
+            await _driverRequestListController.driverRequestListApi();
+            _driverRequestListController.onInit();
+            await tooglecontroller.ToogleStatusApi();
+            await _navController.tabindex(0);
+            await Get.to(BottomNavBar());
+
+            // await _homePageController.AllServicesApi();
+            //await _homePageController.sliderBannerApi();
+            // _homePageController.onInit();
 
             // await _vehicleservicecatController.servicecatvehicleApi();
             //_vehicleservicecatController.onInit();
@@ -95,7 +108,6 @@ class SplashController extends GetxController
             //     Get.to(UserHomePage());
             //
             // }
-
           }
         },
       );
