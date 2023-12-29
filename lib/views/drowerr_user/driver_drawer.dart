@@ -3,6 +3,7 @@ import 'package:ambrd_driver_app/controllers/get_profile_controller.dart';
 import 'package:ambrd_driver_app/controllers/otp_controller_new_correct/otp_new_controller.dart';
 import 'package:ambrd_driver_app/views/botttom_navigation_bar/bottom_nav_bar_controller.dart';
 import 'package:ambrd_driver_app/views/drowerr_user/page_drower/about_us.dart';
+import 'package:ambrd_driver_app/views/drowerr_user/page_drower/edit_bank.dart';
 import 'package:ambrd_driver_app/views/drowerr_user/page_drower/edit_profile.dart';
 import 'package:ambrd_driver_app/views/drowerr_user/page_drower/payment_history.dart';
 import 'package:ambrd_driver_app/views/drowerr_user/page_drower/payout_history.dart';
@@ -133,12 +134,12 @@ class MainAmbrbdriverDrawer extends StatelessWidget {
                   //     :
                   Colors.transparent,
               onTap: () async {
+                Get.back();
                 // print(Get.currentRoute);
-                // Get.back();
-                await _getProfileController.editProfileApi();
-                _getProfileController.onInit();
 
                 await Get.to(ProfilePagess());
+                await _getProfileController.editProfileApi();
+                _getProfileController.onInit();
 
                 ///......
                 // _navController.tabindex(3);
@@ -167,7 +168,7 @@ class MainAmbrbdriverDrawer extends StatelessWidget {
                 //'Gift Boxes',
                 style: TextStyle(fontSize: 10, fontWeight: FontWeight.w600),
               ),
-              tileColor: Get.currentRoute == '/EditProfilePage'
+              tileColor: Get.currentRoute == '/EditrProfilePage'
                   ? Colors.grey[300]
                   : null,
               onTap: () {
@@ -204,6 +205,38 @@ class MainAmbrbdriverDrawer extends StatelessWidget {
                 print(Get.currentRoute);
                 Get.back();
                 Get.to(() => AddbankPage());
+                //Get.offNamed('/GiftBox');
+              },
+            ),
+
+            ///EditbankPage
+            ///
+            ListTile(
+              //horizontalTitleGap: 2.h,
+              leading: Icon(
+                Icons.edit_note,
+                color: Colors.black,
+                size: 14,
+              ),
+              trailing: Icon(
+                Icons.arrow_forward_ios_sharp,
+                size: 11,
+                color: Colors.black,
+              ),
+              contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 10),
+              dense: true,
+              // visualDensity: VisualDensity(horizontal: 0, vertical: -1),
+              title: Text(
+                'Edit your bank',
+                //'Gift Boxes',
+                style: TextStyle(fontSize: 10, fontWeight: FontWeight.w600),
+              ),
+              tileColor:
+                  Get.currentRoute == '/AddbankPage' ? Colors.grey[300] : null,
+              onTap: () {
+                print(Get.currentRoute);
+                Get.back();
+                Get.to(() => EditbankPage());
                 //Get.offNamed('/GiftBox');
               },
             ),

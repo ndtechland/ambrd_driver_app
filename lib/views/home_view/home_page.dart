@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:ambrd_driver_app/controllers/booking_request_list_controller.dart';
-import 'package:ambrd_driver_app/services/account_service_forautologin.dart';
 import 'package:ambrd_driver_app/views/drowerr_user/booking_driver_history.dart';
 import 'package:ambrd_driver_app/views/drowerr_user/driver_drawer.dart';
 import 'package:ambrd_driver_app/views/drowerr_user/page_drower/payment_history.dart';
@@ -43,6 +42,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
   DriverRequestListController _driverRequestListController =
       Get.put(DriverRequestListController());
+
+  SwitchX tooglecontroller = Get.put(SwitchX());
 
   String DriverId = ''.toString();
 
@@ -199,8 +200,7 @@ class _HomeScreenState extends State<HomeScreen> {
   // _launchURLBrowser() async {
   @override
   Widget build(BuildContext context) {
-    SwitchX tooglecontroller =
-        Get.put(SwitchX()); // Instantiate Get Controller, *in* build()
+    // Instantiate Get Controller, *in* build()
 
     Size size = MediaQuery.of(context).size;
     int pageIndex = 0;
@@ -240,9 +240,110 @@ class _HomeScreenState extends State<HomeScreen> {
                         child: Switch(
                           materialTapTargetSize:
                               MaterialTapTargetSize.shrinkWrap,
-                          onChanged: (val) {
+                          onChanged: (val) async {
+                            notificationServices
+                                .getDeviceToken()
+                                .then((value) async {
+                              var data = {
+                                //this the particular device id.....
+                                'to':
+                                    //this is dummy token...
+                                    "ugug6t878",
+
+                                ///todo device token......
+                                // widget
+                                //     .driverlist
+                                //     ?.message?[
+                                //         index]
+                                //     .id
+                                //     .toString(),
+                                ///
+                                //'mytokeneOs6od2nTlqsaFZl8-6ckc:APA91bHzcTpftAHsg7obx0CqhrgY1dyTlSwB5fxeUiBvGtAzX_us6iT6Xp-vXA8rIURK45EehE25_uKiE5wRIUKCF-8Ck-UKir96zS-PGRrpxxOkwPPUKS4M5Em2ql1GmYPY9FVOC4FC'
+                                //'emW_j62UQnGX04QHLSiufM:APA91bHu2uM9C7g9QEc3io7yTVMqdNpdQE3n6vNmFwcKN6z-wq5U9S7Nyl79xJzP_Z-Ve9kjGIzMf4nnaNwSrz94Rcel0-4em9C_r7LvtmCBOWzU-VyPclHXdqyBc3Nrq7JROBqUUge9'
+                                //.toString(),
+
+                                ///this is same device token....
+                                //value.toString(),
+                                'notification': {
+                                  'title': 'Ambrd Driver',
+                                  'body': 'You have request for ambulance',
+                                  //"sound": "jetsons_doorbell.mp3"
+                                },
+                                'android': {
+                                  'notification': {
+                                    'notification_count': 23,
+                                  },
+                                },
+                                'data': {'type': 'msj', 'id': '123456'}
+                              };
+
+                              await http.post(
+                                  Uri.parse(
+                                      'https://fcm.googleapis.com/fcm/send'),
+                                  body: jsonEncode(data),
+                                  headers: {
+                                    'Content-Type':
+                                        'application/json; charset=UTF-8',
+                                    'Authorization':
+                                        //'key=d6JbNnFARI-J8D6eV4Akgs:APA91bF0C8EdU9riyRpt6LKPmRUyVFJZOICCRe7yvY2z6FntBvtG2Zrsa3MEklktvQmU7iTKy3we9r_oVHS4mRnhJBq_aNe9Rg8st2M-gDMR39xZV2IEgiFW9DsnDp4xw-h6aLVOvtkC'
+                                        'key=AAAAp6CyXz4:APA91bEKZ_ArxpUWyMYnP8Do3oYrgXFVdNm2jQk-i1DjKcR8duPeccS64TohP-OAqxL57-840qWe0oeYDBAOO68-aOO2z9EWIcBbUIsXc-3kA5usYMviDYc_wK6qMsQecvAdM54xfZsO'
+                                    // 'AAAAp6CyXz4:APA91bGPkLfnMIlQQJRVMqHmqSAghl0cL0MqtI2oJugrPTgBRO-Ps1VJh0TtQr9Hjx5WdAkRbzLLNhLIvWrUFhJHHFvwGyGwKyyNOVCmukeL3JDSgK2IoextNQ_3r5rM557EuiKwgEFE'
+                                    //'AAAASDFsCOM:APA91bGLHziX-gzIM6srTPyXPbXfg8I1TTj4qcbP3gaUxuY9blzHBvT8qpeB4DYjaj6G6ql3wiLmqd4UKHyEiDL1aJXTQKfoPH8oG5kmEfsMs3Uj5053I8fl69qylMMB-qikCH0warBc'
+                                  }).then((value) {
+                                if (kDebugMode) {
+                                  print(value.body.toString());
+                                }
+                              }).onError((error, stackTrace) {
+                                if (kDebugMode) {
+                                  print(error);
+                                }
+                              });
+
+                              ///todo: from here custom from backend start...
+                              var prefs = GetStorage();
+
+                              //prefs.write("AdminLogin_Id".toString(), json.decode(r.body)['data']['AdminLogin_Id']);
+                              AdminLogin_Id =
+                                  prefs.read("AdminLogin_Id").toString();
+                              print(
+                                  '&&&&&&&&&&&&&&&&&&&&admin:${AdminLogin_Id}');
+
+                              ///.............................................................................
+                              DriverId = prefs.read("DriverId").toString();
+                              print(
+                                  '&&&&&&&&&&&&&&&&&&&&&&driverrcredentials:${DriverId}');
+                              var body = {
+                                "AdminLoginId": "${AdminLogin_Id}",
+                                "DeviceId": value.toString(),
+                              };
+                              print("userrrtokenupdateeeddbeforetttt${body}");
+                              http.Response r = await http.post(
+                                Uri.parse(
+                                    'http://admin.ambrd.in/api/CommonApi/UpdateDeviceId'),
+                                body: body,
+                              );
+
+                              print(r.body);
+                              if (r.statusCode == 200) {
+                                print("userrrtokenupdatdricvfe3333${body}");
+                                return r;
+                              } else if (r.statusCode == 401) {
+                                Get.snackbar('message', r.body);
+                              } else {
+                                Get.snackbar('Error', r.body);
+                                return r;
+                              }
+
+                              ///todo end post api from backend...
+                            });
+
+                            ///todo: other apis...
+                            await _driverRequestListController
+                                .driverRequestListApi();
+                            _driverRequestListController.onInit();
                             tooglecontroller.toggle();
-                            tooglecontroller.ToogleStatusApi();
+                            await tooglecontroller.ToogleStatusApi();
+
                             // setState(() {
                             //   gender = value.toString();
                             // });
@@ -333,7 +434,8 @@ class _HomeScreenState extends State<HomeScreen> {
                             'Content-Type': 'application/json; charset=UTF-8',
                             'Authorization':
                                 //'key=d6JbNnFARI-J8D6eV4Akgs:APA91bF0C8EdU9riyRpt6LKPmRUyVFJZOICCRe7yvY2z6FntBvtG2Zrsa3MEklktvQmU7iTKy3we9r_oVHS4mRnhJBq_aNe9Rg8st2M-gDMR39xZV2IEgiFW9DsnDp4xw-h6aLVOvtkC'
-                                'key=AAAAp6CyXz4:APA91bGPkLfnMIlQQJRVMqHmqSAghl0cL0MqtI2oJugrPTgBRO-Ps1VJh0TtQr9Hjx5WdAkRbzLLNhLIvWrUFhJHHFvwGyGwKyyNOVCmukeL3JDSgK2IoextNQ_3r5rM557EuiKwgEFE'
+                                'key=AAAAp6CyXz4:APA91bEKZ_ArxpUWyMYnP8Do3oYrgXFVdNm2jQk-i1DjKcR8duPeccS64TohP-OAqxL57-840qWe0oeYDBAOO68-aOO2z9EWIcBbUIsXc-3kA5usYMviDYc_wK6qMsQecvAdM54xfZsO'
+                            // 'AAAAp6CyXz4:APA91bGPkLfnMIlQQJRVMqHmqSAghl0cL0MqtI2oJugrPTgBRO-Ps1VJh0TtQr9Hjx5WdAkRbzLLNhLIvWrUFhJHHFvwGyGwKyyNOVCmukeL3JDSgK2IoextNQ_3r5rM557EuiKwgEFE'
                             //'AAAASDFsCOM:APA91bGLHziX-gzIM6srTPyXPbXfg8I1TTj4qcbP3gaUxuY9blzHBvT8qpeB4DYjaj6G6ql3wiLmqd4UKHyEiDL1aJXTQKfoPH8oG5kmEfsMs3Uj5053I8fl69qylMMB-qikCH0warBc'
                           }).then((value) {
                         if (kDebugMode) {
@@ -460,38 +562,40 @@ class _HomeScreenState extends State<HomeScreen> {
                               vertical: size.height * 0.002),
                           child: InkWell(
                             onTap: () async {
-                              await _driverRequestListController
-                                  .driverRequestListApi();
-                              _driverRequestListController.onInit();
                               // Get.to(LoginEmailPage());
                               //_homePageController.toggle(index);
                               if (index == 0) {
                                 /// periodicTimer()
+                                await _driverRequestListController
+                                    .driverRequestListApi();
+                                _driverRequestListController.onInit();
                                 CallLoader.loader();
                                 await Future.delayed(
                                     Duration(milliseconds: 500));
                                 CallLoader.hideLoader();
-                                await accountService.getAccountData
-                                    .then((accountData) {
-                                  Timer(
-                                    const Duration(milliseconds: 300),
-                                    () {
-                                      Get.to(() => BookingListUser());
-
-                                      ///  Get.to(DriverHomePage());
-                                      ///  8 dec 2023
-                                      // _viewhealthchkpreviewController.healthreviewratingApi();
-                                      //_viewhealthchkpreviewController.update();
-                                      // Get.snackbar(
-                                      //     'Add review Successfully', "Review Submitted. Thank-you."
-                                      //   // "${r.body}"
-                                      // );
-                                      //Get.to(() => CheckupSchedulePage());
-                                      //Get.to((page))
-                                      ///
-                                    },
-                                  );
-                                });
+                                await Get.to(() => MessageScreen(id: "123456"));
+                                // await accountService.getAccountData
+                                //     .then((accountData) {
+                                //   Timer(
+                                //     const Duration(milliseconds: 100),
+                                //     () {
+                                //       await Get.to(
+                                //           () => BookingListUser(id: "123456"));
+                                //
+                                //       ///  Get.to(DriverHomePage());
+                                //       ///  8 dec 2023
+                                //       // _viewhealthchkpreviewController.healthreviewratingApi();
+                                //       //_viewhealthchkpreviewController.update();
+                                //       // Get.snackbar(
+                                //       //     'Add review Successfully', "Review Submitted. Thank-you."
+                                //       //   // "${r.body}"
+                                //       // );
+                                //       //Get.to(() => CheckupSchedulePage());
+                                //       //Get.to((page))
+                                //       ///
+                                //     },
+                                //   );
+                                //});
                                 //Get.to(() => BestSeller());
                                 //Get.to(() => WaterTracking());
                               } else if (index == 1) {

@@ -1,5 +1,7 @@
+import 'package:ambrd_driver_app/controllers/booking_request_list_controller.dart';
 import 'package:ambrd_driver_app/controllers/home_controllers.dart';
 import 'package:ambrd_driver_app/controllers/login_driver_mobile_controller/login_mobile_controllers.dart';
+import 'package:ambrd_driver_app/controllers/swith_toogle_controller/toogle_switch_controller.dart';
 import 'package:ambrd_driver_app/models/auto_login_services_model.dart';
 import 'package:ambrd_driver_app/services/account_service_forautologin.dart';
 import 'package:ambrd_driver_app/services/api_provider.dart';
@@ -17,6 +19,9 @@ class OtpVerifyController extends GetxController {
   ///todo: this is the login apis....controller...
   LoginMobileController _loginMobileController =
       Get.put(LoginMobileController());
+  SwitchX tooglecontroller = Get.put(SwitchX());
+  DriverRequestListController _driverRequestListController =
+      Get.put(DriverRequestListController());
 
   HomeController _homePageController = Get.put(HomeController());
 
@@ -38,6 +43,14 @@ class OtpVerifyController extends GetxController {
       //Get.to(() => DetailsProfile());
       await _homePageController.AllServicesApi();
       await _homePageController.sliderBannerApi();
+      _homePageController.onInit();
+
+      //await _homePageController.AllServicesApi();
+      //await _homePageController.sliderBannerApi();
+      await _driverRequestListController.driverRequestListApi();
+      _driverRequestListController.onInit();
+      tooglecontroller.ToogleStatusApi();
+
       _homePageController.onInit();
       await _navController.tabindex(0);
 

@@ -17,14 +17,15 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../constantsss/app_theme/app_color.dart';
 
-class BookingListUser extends StatefulWidget {
-  BookingListUser({Key? key}) : super(key: key);
+class MessageScreen extends StatefulWidget {
+  final String id;
+  MessageScreen({Key? key, required this.id}) : super(key: key);
 
   @override
-  State<BookingListUser> createState() => _BookingListUserState();
+  State<MessageScreen> createState() => _MessageScreenState();
 }
 
-class _BookingListUserState extends State<BookingListUser> {
+class _MessageScreenState extends State<MessageScreen> {
   /// UseracptrejectController _useracptrejectController =
   // Get.put(UseracptrejectController());
 
@@ -728,9 +729,8 @@ class _BookingListUserState extends State<BookingListUser> {
                                                                                             ),
                                                                                             onPressed: () async {
                                                                                               CallLoader.loader();
-                                                                                              await Future.delayed(Duration(milliseconds: 500));
+                                                                                              await Future.delayed(Duration(milliseconds: 100));
                                                                                               CallLoader.hideLoader();
-                                                                                              await Get.to(BottomNavBar());
                                                                                               await _driverRequestListController.driverRequestListApi();
                                                                                               _driverRequestListController.onInit();
                                                                                               SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -798,9 +798,12 @@ class _BookingListUserState extends State<BookingListUser> {
 
                                                                                                 await http.post(Uri.parse('https://fcm.googleapis.com/fcm/send'), body: jsonEncode(data), headers: {
                                                                                                   'Content-Type': 'application/json; charset=UTF-8',
-                                                                                                  'Authorization':
-                                                                                                      //'key=d6JbNnFARI-J8D6eV4Akgs:APA91bF0C8EdU9riyRpt6LKPmRUyVFJZOICCRe7yvY2z6FntBvtG2Zrsa3MEklktvQmU7iTKy3we9r_oVHS4mRnhJBq_aNe9Rg8st2M-gDMR39xZV2IEgiFW9DsnDp4xw-h6aLVOvtkC'
-                                                                                                      'key=AAAAp6CyXz4:APA91bEKZ_ArxpUWyMYnP8Do3oYrgXFVdNm2jQk-i1DjKcR8duPeccS64TohP-OAqxL57-840qWe0oeYDBAOO68-aOO2z9EWIcBbUIsXc-3kA5usYMviDYc_wK6qMsQecvAdM54xfZsO'
+
+                                                                                                  ///todo: this will be user firebase server key........22 dec 2023.
+                                                                                                  'Authorization': 'key=AAAAbao_0RU:APA91bFNp9i75TwjvU16WgWfPltmSZS4RLdHKCXmk93D5RBLXBSmI2ArbPbd4mcSvNaN8w_A-JuERFWLHf00NkRannNN4dJBR_ok3SkDM_erMRYUUUZChujPJXJK8-MFmxtN23Vodtyv'
+                                                                                                  // 'AAAAbao_0RU:APA91bFNp9i75TwjvU16WgWfPltmSZS4RLdHKCXmk93D5RBLXBSmI2ArbPbd4mcSvNaN8w_A-JuERFWLHf00NkRannNN4dJBR_ok3SkDM_erMRYUUUZChujPJXJK8-MFmxtN23Vodtyv'
+                                                                                                  //'key=d6JbNnFARI-J8D6eV4Akgs:APA91bF0C8EdU9riyRpt6LKPmRUyVFJZOICCRe7yvY2z6FntBvtG2Zrsa3MEklktvQmU7iTKy3we9r_oVHS4mRnhJBq_aNe9Rg8st2M-gDMR39xZV2IEgiFW9DsnDp4xw-h6aLVOvtkC'
+                                                                                                  //'key=AAAAp6CyXz4:APA91bEKZ_ArxpUWyMYnP8Do3oYrgXFVdNm2jQk-i1DjKcR8duPeccS64TohP-OAqxL57-840qWe0oeYDBAOO68-aOO2z9EWIcBbUIsXc-3kA5usYMviDYc_wK6qMsQecvAdM54xfZsO'
                                                                                                   //'AAAASDFsCOM:APA91bGLHziX-gzIM6srTPyXPbXfg8I1TTj4qcbP3gaUxuY9blzHBvT8qpeB4DYjaj6G6ql3wiLmqd4UKHyEiDL1aJXTQKfoPH8oG5kmEfsMs3Uj5053I8fl69qylMMB-qikCH0warBc'
                                                                                                 }).then((value) {
                                                                                                   if (kDebugMode) {
@@ -812,6 +815,9 @@ class _BookingListUserState extends State<BookingListUser> {
                                                                                                   }
                                                                                                 });
                                                                                               });
+
+                                                                                              await Get.to(BottomNavBar());
+                                                                                              Get.back();
 
                                                                                               // await _callNumber(
                                                                                               //     "${_doctorHomepageController.founddoctoraptProducts2?[index].mobileNumber}".toString());
@@ -1084,9 +1090,9 @@ class _BookingListUserState extends State<BookingListUser> {
 
                                                                                                 await http.post(Uri.parse('https://fcm.googleapis.com/fcm/send'), body: jsonEncode(data), headers: {
                                                                                                   'Content-Type': 'application/json; charset=UTF-8',
-                                                                                                  'Authorization':
-                                                                                                      //'key=d6JbNnFARI-J8D6eV4Akgs:APA91bF0C8EdU9riyRpt6LKPmRUyVFJZOICCRe7yvY2z6FntBvtG2Zrsa3MEklktvQmU7iTKy3we9r_oVHS4mRnhJBq_aNe9Rg8st2M-gDMR39xZV2IEgiFW9DsnDp4xw-h6aLVOvtkC'
-                                                                                                      'key=AAAAp6CyXz4:APA91bEKZ_ArxpUWyMYnP8Do3oYrgXFVdNm2jQk-i1DjKcR8duPeccS64TohP-OAqxL57-840qWe0oeYDBAOO68-aOO2z9EWIcBbUIsXc-3kA5usYMviDYc_wK6qMsQecvAdM54xfZsO'
+                                                                                                  'Authorization': 'key=AAAAbao_0RU:APA91bFNp9i75TwjvU16WgWfPltmSZS4RLdHKCXmk93D5RBLXBSmI2ArbPbd4mcSvNaN8w_A-JuERFWLHf00NkRannNN4dJBR_ok3SkDM_erMRYUUUZChujPJXJK8-MFmxtN23Vodtyv'
+
+                                                                                                  // 'Authorization': 'key=AAAAp6CyXz4:APA91bEKZ_ArxpUWyMYnP8Do3oYrgXFVdNm2jQk-i1DjKcR8duPeccS64TohP-OAqxL57-840qWe0oeYDBAOO68-aOO2z9EWIcBbUIsXc-3kA5usYMviDYc_wK6qMsQecvAdM54xfZsO'
                                                                                                   //'AAAASDFsCOM:APA91bGLHziX-gzIM6srTPyXPbXfg8I1TTj4qcbP3gaUxuY9blzHBvT8qpeB4DYjaj6G6ql3wiLmqd4UKHyEiDL1aJXTQKfoPH8oG5kmEfsMs3Uj5053I8fl69qylMMB-qikCH0warBc'
                                                                                                 }).then((value) {
                                                                                                   if (kDebugMode) {

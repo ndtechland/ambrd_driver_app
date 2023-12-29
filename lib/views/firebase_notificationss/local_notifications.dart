@@ -12,7 +12,6 @@ class LocalNotificationService {
         InitializationSettings(
       android: AndroidInitializationSettings("@mipmap/ic_launcher"),
     );
-
     _notificationsPlugin.initialize(
       initializationSettings,
       // onSelectNotification: (String? id) async {
