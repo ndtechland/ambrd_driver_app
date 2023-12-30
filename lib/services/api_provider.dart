@@ -9,6 +9,7 @@ import 'package:ambrd_driver_app/models/driver_booking_history_model.dart';
 import 'package:ambrd_driver_app/models/driver_payment_history_model.dart';
 import 'package:ambrd_driver_app/models/galarry_model.dart';
 import 'package:ambrd_driver_app/models/get_profile.dart';
+import 'package:ambrd_driver_app/models/ongoingridemodels.dart';
 import 'package:ambrd_driver_app/models/state_models.dart';
 import 'package:ambrd_driver_app/models/user_list_model_indriverrr.dart';
 import 'package:ambrd_driver_app/views/home_view/home_page.dart';
@@ -608,7 +609,7 @@ class ApiProvider {
     var prefs = GetStorage();
     userId = prefs.read("userId").toString();
     print('&&&&&&&&&&&&&&&&&&&&&&userid:${userId}');
-    var url = '${baseUrl}DriverApi/AmbulanceBookingHistory?DriverId=1';
+    var url = '${baseUrl}DriverApi/AmbulanceBookingHistory?DriverId=$userId';
     //176
     try {
       http.Response r = await http.get(Uri.parse(url));
@@ -645,6 +646,32 @@ class ApiProvider {
     }
   }
 
+  ///todo: here ongoing ride user and track....29 dec 2023...........
+  static OngoingRideApiApi() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    var driverlistbookingId = preferences.getString("driverlistbookingId");
+    print("driverlistbookingId: ${driverlistbookingId}");
+    var prefs = GetStorage();
+    userId = prefs.read("userId").toString();
+    print('&&&&&&&&&&&&&&&&&&&&&&userid:${userId}');
+    //driverlistbookingId
+    //http://admin.ambrd.in/api/PatientApi/GetAcceptedReqDriverDetail?Id=1
+    //http://admin.ambrd.in/api/DriverApi/GetOnGoingRide_UserDetail?DriverId=1
+    var url = '${baseUrl}DriverApi/GetOnGoingRide_UserDetail?DriverId=$userId';
+    try {
+      http.Response r = await http.get(Uri.parse(url));
+      if (r.statusCode == 200) {
+        print("ambulanceonl:${r.body}");
+        print("ambulanceonliner:${url}");
+
+        OngoingRideModel ongoingRideModel = ongoingRideModelFromJson(r.body);
+        return ongoingRideModel;
+      }
+    } catch (error) {
+      return;
+    }
+  }
+
   ///todo: google update driver location api on .......20 dec 2023.......,,,,,,.....................
 
   static GoogleupdatedriverApi(
@@ -672,7 +699,47 @@ class ApiProvider {
     if (r.statusCode == 200) {
       print(r.body);
       print(r.statusCode);
-      Get.snackbar("title", '${r.body}');
+
+      /// Get.snackbar("title", '${r.body}');
+      return r;
+    } else if (r.statusCode == 401) {
+      Get.snackbar('message', r.body);
+    } else {
+      Get.snackbar('Errorgoogle', r.body);
+      return r;
+    }
+  }
+
+  ///todo: complete ride api on .......20 dec 2023.......,,,,,,.....................
+
+  static CompleteridedriverApi(
+    var Id,
+  ) async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    var DriverListId = preferences.getString("DriverListId");
+    print("DriverListId3434: ${DriverListId}");
+
+    var url = baseUrl + 'DriverApi/UpdateDriverLocation';
+    var prefs = GetStorage();
+    userId = prefs.read("userId").toString();
+    print('&&&&&&&&&&&&&&&&&&&&&&xzxzuserid:${DriverListId}');
+
+    var body = {
+      "Id":
+          //"178",
+          "${DriverListId}",
+    };
+    print(body);
+    http.Response r = await http.post(
+      Uri.parse(url), body: body,
+      //headers: headers
+    );
+    //print(r.body);
+    if (r.statusCode == 200) {
+      print(r.body);
+      print(r.statusCode);
+
+      /// Get.snackbar("title", '${r.body}');
       return r;
     } else if (r.statusCode == 401) {
       Get.snackbar('message', r.body);

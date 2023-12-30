@@ -37,6 +37,8 @@ Future<void> main() async {
   runApp(
     GetMaterialApp(
       title: "Application",
+      // theme: ThemeData(useMaterial3: true),
+
       //initialRoute: AppPages.INITIAL,
       //getPages: AppPages.routes,
       debugShowCheckedModeBanner: false,

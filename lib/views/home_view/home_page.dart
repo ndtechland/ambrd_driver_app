@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:ambrd_driver_app/controllers/booking_request_list_controller.dart';
+import 'package:ambrd_driver_app/controllers/ongoing_ride_controller.dart';
 import 'package:ambrd_driver_app/views/drowerr_user/booking_driver_history.dart';
 import 'package:ambrd_driver_app/views/drowerr_user/driver_drawer.dart';
 import 'package:ambrd_driver_app/views/drowerr_user/page_drower/payment_history.dart';
@@ -10,6 +11,7 @@ import 'package:ambrd_driver_app/views/drowerr_user/page_drower/support_page.dar
 import 'package:ambrd_driver_app/views/firebase_notificationss/firebase_notification_servc.dart';
 import 'package:ambrd_driver_app/views/firebase_notificationss/local_notifications.dart';
 import 'package:ambrd_driver_app/views/home_view/booking_list.dart';
+import 'package:ambrd_driver_app/views/home_view/ongoing_ride.dart';
 import 'package:ambrd_driver_app/views/home_view/update_locations.dart';
 import 'package:ambrd_driver_app/widget/circular_loader.dart';
 import 'package:ambrd_driver_app/widget/exit_popscope.dart';
@@ -42,6 +44,9 @@ class _HomeScreenState extends State<HomeScreen> {
 
   DriverRequestListController _driverRequestListController =
       Get.put(DriverRequestListController());
+
+  OngoingRideController _ongoingRideController =
+      Get.put(OngoingRideController());
 
   SwitchX tooglecontroller = Get.put(SwitchX());
 
@@ -392,7 +397,10 @@ class _HomeScreenState extends State<HomeScreen> {
                 },
                 onSelected: (value) async {
                   if (value == 0) {
+                    CircularProgressIndicator();
                     print('princee notification');
+                    await _ongoingRideController.ongoingRideApi();
+                    _ongoingRideController.update();
                     notificationServices.getDeviceToken().then((value) async {
                       var data = {
                         //this the particular device id.....
@@ -488,9 +496,15 @@ class _HomeScreenState extends State<HomeScreen> {
                     await Get.to(MyLocation());
 
                     ///print("My account menu is selected.");
-                  } else if (value == 1) {
+                  } else if (value == 2) {
+                    CircularProgressIndicator();
+
+                    await _ongoingRideController.ongoingRideApi();
+                    _ongoingRideController.update();
+                    await Get.to(MyLocation());
+
                     // _homePageController.logout();
-                    print("logout");
+                    //print("logout");
                   }
                 }),
           ],
@@ -599,6 +613,17 @@ class _HomeScreenState extends State<HomeScreen> {
                                 //Get.to(() => BestSeller());
                                 //Get.to(() => WaterTracking());
                               } else if (index == 1) {
+                                await _ongoingRideController.ongoingRideApi();
+                                _ongoingRideController.onInit();
+                                _ongoingRideController.update();
+                                CallLoader.loader();
+                                await Future.delayed(
+                                    Duration(milliseconds: 300));
+                                CallLoader.hideLoader();
+                                await Get.to(() =>
+                                    OngoingRideTracking(id: "1234567890"));
+
+                                //OngoingRideTracking
                                 //Get.to(() => CatagaryListSubcatagary());
                               } else if (index == 2) {
                                 await Get.to(() => DriverPaymentHistory());
