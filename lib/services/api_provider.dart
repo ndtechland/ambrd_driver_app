@@ -719,7 +719,7 @@ class ApiProvider {
     var DriverListId = preferences.getString("DriverListId");
     print("DriverListId3434: ${DriverListId}");
 
-    var url = baseUrl + 'DriverApi/UpdateDriverLocation';
+    var url = baseUrl + 'DriverApi/CompleteRide';
     var prefs = GetStorage();
     userId = prefs.read("userId").toString();
     print('&&&&&&&&&&&&&&&&&&&&&&xzxzuserid:${DriverListId}');
@@ -738,6 +738,7 @@ class ApiProvider {
     if (r.statusCode == 200) {
       print(r.body);
       print(r.statusCode);
+      print('&&&&&&&&body:${body}');
 
       /// Get.snackbar("title", '${r.body}');
       return r;

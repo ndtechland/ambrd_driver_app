@@ -1,10 +1,12 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:ambrd_driver_app/constantsss/app_theme/app_color.dart';
 import 'package:ambrd_driver_app/controllers/ongoing_ride_controller.dart';
 import 'package:ambrd_driver_app/views/botttom_navigation_bar/bottom_nav_bar_controller.dart';
 import 'package:ambrd_driver_app/views/firebase_notificationss/firebase_notification_servc.dart';
 import 'package:ambrd_driver_app/views/firebase_notificationss/local_notifications.dart';
+import 'package:ambrd_driver_app/widget/circular_loader.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
@@ -13,6 +15,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class OngoingRideTracking extends StatefulWidget {
@@ -97,7 +101,7 @@ class _OngoingRideTrackingState extends State<OngoingRideTracking> {
           print(message.notification!.body);
           print("message.data11 ${message.data}");
 
-          ///you can call local notification....
+          ///you can call local notification........
           LocalNotificationService.createanddisplaynotification(message);
         }
       },
@@ -647,6 +651,94 @@ class _OngoingRideTrackingState extends State<OngoingRideTracking> {
                                                                   .onInit();
                                                               _ongoingRideController
                                                                   .update();
+
+                                                              ///tod: notification....
+                                                              SharedPreferences
+                                                                  prefs =
+                                                                  await SharedPreferences
+                                                                      .getInstance();
+                                                              CallLoader
+                                                                  .loader();
+                                                              await Future.delayed(
+                                                                  Duration(
+                                                                      milliseconds:
+                                                                          500));
+                                                              CallLoader
+                                                                  .hideLoader();
+                                                              //driacceptrejectlistid
+                                                              //prefs.setString("driacceptrejectlistid", "${_driverRequestListController.getDriverRequestList?.userListForBookingAmbulance?[index].id}");
+                                                              // prefs.setString("driveracceptrjctDeviceid", "${_driverRequestListController.getDriverRequestList?.userListForBookingAmbulance?[index].deviceId}");
+
+                                                              print(
+                                                                  'princee notification');
+                                                              notificationServices
+                                                                  .getDeviceToken()
+                                                                  .then(
+                                                                      (value) async {
+                                                                var data = {
+                                                                  //this the particular device id.....
+                                                                  'to':
+                                                                      "${_ongoingRideController.ongoingRide?.deviceId}",
+
+                                                                  //'mytokeneOs6od2nTlqsaFZl8-6ckc:APA91bHzcTpftAHsg7obx0CqhrgY1dyTlSwB5fxeUiBvGtAzX_us6iT6Xp-vXA8rIURK45EehE25_uKiE5wRIUKCF-8Ck-UKir96zS-PGRrpxxOkwPPUKS4M5Em2ql1GmYPY9FVOC4FC'
+                                                                  //'emW_j62UQnGX04QHLSiufM:APA91bHu2uM9C7g9QEc3io7yTVMqdNpdQE3n6vNmFwcKN6z-wq5U9S7Nyl79xJzP_Z-Ve9kjGIzMf4nnaNwSrz94Rcel0-4em9C_r7LvtmCBOWzU-VyPclHXdqyBc3Nrq7JROBqUUge9'
+                                                                  //.toString(),
+
+                                                                  ///this is same device token....
+                                                                  //value
+                                                                  //.toString(),
+                                                                  'notification':
+                                                                      {
+                                                                    'title':
+                                                                        'Ambrd driver',
+                                                                    'body':
+                                                                        'Your Driver is coming',
+                                                                    //"sound": "jetsons_doorbell.mp3"
+                                                                  },
+                                                                  'android': {
+                                                                    'notification':
+                                                                        {
+                                                                      'notification_count':
+                                                                          23,
+                                                                    },
+                                                                  },
+                                                                  'data': {
+                                                                    'type':
+                                                                        'comingride_case',
+                                                                    'id':
+                                                                        '12334'
+                                                                  }
+                                                                };
+                                                                print(
+                                                                    "dataccept:${data}");
+
+                                                                await http.post(
+                                                                    Uri.parse(
+                                                                        'https://fcm.googleapis.com/fcm/send'),
+                                                                    body: jsonEncode(
+                                                                        data),
+                                                                    headers: {
+                                                                      'Content-Type':
+                                                                          'application/json; charset=UTF-8',
+                                                                      'Authorization':
+                                                                          'key=AAAAbao_0RU:APA91bFNp9i75TwjvU16WgWfPltmSZS4RLdHKCXmk93D5RBLXBSmI2ArbPbd4mcSvNaN8w_A-JuERFWLHf00NkRannNN4dJBR_ok3SkDM_erMRYUUUZChujPJXJK8-MFmxtN23Vodtyv'
+
+                                                                      // 'Authorization': 'key=AAAAp6CyXz4:APA91bEKZ_ArxpUWyMYnP8Do3oYrgXFVdNm2jQk-i1DjKcR8duPeccS64TohP-OAqxL57-840qWe0oeYDBAOO68-aOO2z9EWIcBbUIsXc-3kA5usYMviDYc_wK6qMsQecvAdM54xfZsO'
+                                                                      //'AAAASDFsCOM:APA91bGLHziX-gzIM6srTPyXPbXfg8I1TTj4qcbP3gaUxuY9blzHBvT8qpeB4DYjaj6G6ql3wiLmqd4UKHyEiDL1aJXTQKfoPH8oG5kmEfsMs3Uj5053I8fl69qylMMB-qikCH0warBc'
+                                                                    }).then(
+                                                                    (value) {
+                                                                  if (kDebugMode) {
+                                                                    print(
+                                                                        "princedriver${value.body.toString()}");
+                                                                  }
+                                                                }).onError((error,
+                                                                    stackTrace) {
+                                                                  if (kDebugMode) {
+                                                                    print(
+                                                                        error);
+                                                                  }
+                                                                });
+                                                              });
 
                                                               ///todo: open google map and reache to ride.........start..
 

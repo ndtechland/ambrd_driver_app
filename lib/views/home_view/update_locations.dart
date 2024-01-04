@@ -94,6 +94,7 @@ import 'package:ambrd_driver_app/controllers/ongoing_ride_controller.dart';
 import 'package:ambrd_driver_app/services/account_service_forautologin.dart';
 import 'package:ambrd_driver_app/services/api_provider.dart';
 import 'package:ambrd_driver_app/views/botttom_navigation_bar/bottom_navbar.dart';
+import 'package:ambrd_driver_app/widget/circular_loader.dart';
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
@@ -103,6 +104,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
+
+Timer? timer;
 
 OngoingRideController _ongoingRideController = Get.put(OngoingRideController());
 
@@ -135,6 +138,8 @@ class _MyLocationState extends State<MyLocation> {
   ];
 
   CameraPosition _initialLocation = CameraPosition(target: LatLng(0.0, 0.0));
+  var x = 0;
+  var period = const Duration(seconds: 1);
   late GoogleMapController mapController;
   late GoogleMapController newGoogleMapController;
   double mapbottompadding = 0;
@@ -199,7 +204,9 @@ class _MyLocationState extends State<MyLocation> {
   }
 
   ///......................................................
-  LatLng startLocation = LatLng(28.535517, 77.391029);
+  // LatLng startLocation = LatLng(28.535517, 77.391029);
+  LatLng startLocation = LatLng(0.0, 0.0);
+
   Future<void> _getAddressFromLatLng(Position position) async {
     await placemarkFromCoordinates(
             _currentPosition!.latitude, _currentPosition!.longitude)
@@ -212,6 +219,19 @@ class _MyLocationState extends State<MyLocation> {
     }).catchError((e) {
       debugPrint(e);
     });
+  }
+
+  ///init state.........................................
+  @override
+  void initState() {
+    super.initState();
+    _handleLocationPermission().then(
+      (_) => {
+        _getCurrentPosition().then((coordinates) => {
+              ///Todo: here from time dperiod function.....
+            }),
+      },
+    );
   }
 
   @override
@@ -452,6 +472,7 @@ class _MyLocationState extends State<MyLocation> {
                                   child: TextFormField(
                                     autofillHints: [AutofillHints.location],
                                     controller: latitudecontroller,
+
                                     //
                                     // validator: (value) {
                                     //   return _hospital_2_controller.validPhone(value!);
@@ -577,7 +598,7 @@ class _MyLocationState extends State<MyLocation> {
                                     "${_ongoingRideController.ongoingRide?.id ?? 0.0}");
                                 await _getCurrentPosition();
 
-                                await postssDriverUpdateApi();
+                                ///await postssDriverUpdateApi();
 
                                 //CompleterideApi
                                 await showDialog(
@@ -631,6 +652,10 @@ class _MyLocationState extends State<MyLocation> {
                                                   color: Colors.white,
                                                   fontWeight: FontWeight.bold)),
                                           onPressed: () async {
+                                            CallLoader.loader();
+                                            await Future.delayed(
+                                                Duration(milliseconds: 500));
+                                            CallLoader.hideLoader();
                                             await _ongoingRideController
                                                 .ongoingRideApi();
                                             _ongoingRideController.onInit();
@@ -645,6 +670,15 @@ class _MyLocationState extends State<MyLocation> {
 
                                             ///todo: open google map and reache to ride.........start..
                                             await CompleterideApi();
+                                            await postssDriverUpdateApi();
+
+                                            ///timeperiod.............start...
+                                            Timer.periodic(
+                                                Duration(seconds: 20),
+                                                (Timer t) =>
+                                                    postssDriverUpdateApi());
+
+                                            ///timeperiod.............start...
 
                                             Navigator.of(context).pop();
                                           },
@@ -728,6 +762,15 @@ class _MyLocationState extends State<MyLocation> {
                                 await _getCurrentPosition();
 
                                 await postssDriverUpdateApi();
+
+                                Timer.periodic(Duration(seconds: 6),
+                                    (Timer t) => _getCurrentPosition());
+
+                                ///timeperiod.............start...
+                                Timer.periodic(Duration(seconds: 10),
+                                    (Timer t) => postssDriverUpdateApi());
+
+                                ///timeperiod.............start...
 
                                 //postDriverUpdateApi();
                                 // CallLoader.hideLoader();
