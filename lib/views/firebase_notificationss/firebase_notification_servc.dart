@@ -6,6 +6,7 @@ import 'package:ambrd_driver_app/controllers/driver_list_new.dart';
 import 'package:ambrd_driver_app/services/account_service_forautologin.dart';
 import 'package:ambrd_driver_app/views/firebase_notificationss/message_screen.dart';
 import 'package:ambrd_driver_app/views/home_view/booking_list.dart';
+import 'package:ambrd_driver_app/views/home_view/ongoing_ride.dart';
 import 'package:ambrd_driver_app/widget/circular_loader.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
@@ -350,20 +351,14 @@ class NotificationServices {
       });
     } else if (message.data['type'] == 'accept_case') {
       print("dataaaccept${message.data['id']}");
-      //_useracptrejectController.driveracceptrejctlistApi();
-      //_useracptrejectController.update();
-
       await Future.delayed(Duration(milliseconds: 200));
       _driverAcceptlistController.driveracceptuserDetailApi();
       _driverAcceptlistController.update();
       accountService.getAccountData.then((accountData) {
-        // CallLoader.loader();
-        // nearlistdriverApi();
-
         Timer(
           const Duration(milliseconds: 600),
           () {
-            // nearlistdriverApi();
+            /// nearlistdriverApi();
             Navigator.push(
                 context,
                 MaterialPageRoute(
@@ -388,6 +383,54 @@ class NotificationServices {
       //         builder: (context) => MessageScreen(
       //               id: message.data['id'],
       //             )));
+    } else if (message.data['type'] == 'comingride_case') {
+      print("dataridecoming${message.data['id']}");
+      await Future.delayed(Duration(milliseconds: 200));
+      _driverAcceptlistController.driveracceptuserDetailApi();
+      _driverAcceptlistController.update();
+      accountService.getAccountData.then((accountData) {
+        Timer(
+          const Duration(milliseconds: 600),
+          () {
+            // Navigator.push(
+            //     context,
+            //     MaterialPageRoute(
+            //         builder: (context) => OngoingRideTracking(
+            //               id: message.data['id'],
+            //             )));
+            //postAmbulancerequestApi(markers);
+
+            ///
+          },
+        );
+        CallLoader.hideLoader();
+      });
+    }
+
+    ///todo: accept payment.....
+
+    else if (message.data['type'] == 'payment_case') {
+      print("datauserpayment${message.data['id']}");
+      await Future.delayed(Duration(milliseconds: 200));
+      _driverAcceptlistController.driveracceptuserDetailApi();
+      _driverAcceptlistController.update();
+      accountService.getAccountData.then((accountData) {
+        Timer(
+          const Duration(milliseconds: 600),
+          () {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => OngoingRideTracking(
+                          id: message.data['id'],
+                        )));
+            //postAmbulancerequestApi(markers);
+
+            ///
+          },
+        );
+        CallLoader.hideLoader();
+      });
     }
   }
 

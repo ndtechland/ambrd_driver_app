@@ -401,6 +401,8 @@ class _HomeScreenState extends State<HomeScreen> {
                     print('princee notification');
                     await _ongoingRideController.ongoingRideApi();
                     _ongoingRideController.update();
+                    _ongoingRideController.onInit();
+
                     notificationServices.getDeviceToken().then((value) async {
                       var data = {
                         //this the particular device id.....
@@ -476,7 +478,6 @@ class _HomeScreenState extends State<HomeScreen> {
                             'http://admin.ambrd.in/api/CommonApi/UpdateDeviceId'),
                         body: body,
                       );
-
                       print(r.body);
                       if (r.statusCode == 200) {
                         print("userrrtokenupdatdricvfe3333${body}");
@@ -497,10 +498,14 @@ class _HomeScreenState extends State<HomeScreen> {
 
                     ///print("My account menu is selected.");
                   } else if (value == 2) {
-                    CircularProgressIndicator();
+                    //CircularProgressIndicator();
+                    CallLoader.loader();
+                    await Future.delayed(Duration(milliseconds: 500));
+                    CallLoader.hideLoader();
 
                     await _ongoingRideController.ongoingRideApi();
                     _ongoingRideController.update();
+                    _ongoingRideController.onInit();
                     await Get.to(MyLocation());
 
                     // _homePageController.logout();
@@ -620,8 +625,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                 await Future.delayed(
                                     Duration(milliseconds: 300));
                                 CallLoader.hideLoader();
-                                await Get.to(() =>
-                                    OngoingRideTracking(id: "1234567890"));
+                                await Get.to(
+                                    () => OngoingRideTracking(id: "1233"));
 
                                 //OngoingRideTracking
                                 //Get.to(() => CatagaryListSubcatagary());

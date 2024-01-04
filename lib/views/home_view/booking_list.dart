@@ -997,61 +997,7 @@ class _MessageScreenState extends State<MessageScreen> {
                                                                                               //driacceptrejectlistid
                                                                                               prefs.setString("driacceptrejectlistid", "${_driverRequestListController.getDriverRequestList?.userListForBookingAmbulance?[index].id}");
                                                                                               prefs.setString("driveracceptrjctDeviceid", "${_driverRequestListController.getDriverRequestList?.userListForBookingAmbulance?[index].deviceId}");
-                                                                                              // prefs.setString(
-                                                                                              //     "lng1",
-                                                                                              //     "${widget.driverlist?.startLong.toString()}");
-                                                                                              // prefs.setString(
-                                                                                              //     "lat1",
-                                                                                              //     "${widget.driverlist?.startLat.toString()}");
-                                                                                              //
-                                                                                              // prefs.setString(
-                                                                                              //     "lng2",
-                                                                                              //     "${widget.driverlist?.endLong.toString()}");
-                                                                                              // prefs.setString(
-                                                                                              //     "lat2",
-                                                                                              //     "${widget.driverlist?.endLat.toString()}");
-                                                                                              // prefs.setString(
-                                                                                              //     "ambulance1",
-                                                                                              //     "${widget.driverlist?.ambulanceTypeId.toString()}");
-                                                                                              // prefs.setString(
-                                                                                              //     "vehicle1",
-                                                                                              //     "${widget.driverlist?.vehicleTypeId.toString()}");
 
-                                                                                              // _ambulancegetController
-                                                                                              // .postAmbulancerequestApi2();
-                                                                                              ///todo: call reject booking api...
-                                                                                              ///_driverRequestListController.getDriverRequestList?
-                                                                                              // SharedPreferences
-                                                                                              // prefs =
-                                                                                              // await SharedPreferences
-                                                                                              //     .getInstance();
-                                                                                              // prefs.setString(
-                                                                                              //     "driverlistssId",
-                                                                                              //     "${widget.driverlist?.message?[index].driverId.toString()}");
-                                                                                              // prefs.setString(
-                                                                                              //     "lng1",
-                                                                                              //     "${widget.driverlist?.startLong.toString()}");
-                                                                                              // prefs.setString(
-                                                                                              //     "lat1",
-                                                                                              //     "${widget.driverlist?.startLat.toString()}");
-                                                                                              //
-                                                                                              // prefs.setString(
-                                                                                              //     "lng2",
-                                                                                              //     "${widget.driverlist?.endLong.toString()}");
-                                                                                              // prefs.setString(
-                                                                                              //     "lat2",
-                                                                                              //     "${widget.driverlist?.endLat.toString()}");
-                                                                                              // prefs.setString(
-                                                                                              //     "ambulance1",
-                                                                                              //     "${widget.driverlist?.ambulanceTypeId.toString()}");
-                                                                                              // prefs.setString(
-                                                                                              //     "vehicle1",
-                                                                                              //     "${widget.driverlist?.vehicleTypeId.toString()}");
-
-                                                                                              // _ambulancegetController
-                                                                                              // .postAmbulancerequestApi2();
-
-                                                                                              ///......._driverRequestListController.getDriverRequestList?
                                                                                               ///todo: call accept booking api...
                                                                                               await _driverRequestListController.acceptbookingdriverApi();
                                                                                               print('princee notification');
@@ -1060,13 +1006,6 @@ class _MessageScreenState extends State<MessageScreen> {
                                                                                                   //this the particular device id.....
                                                                                                   'to': "${_driverRequestListController.getDriverRequestList?.userListForBookingAmbulance?[index].deviceId}",
 
-                                                                                                  //'mytokeneOs6od2nTlqsaFZl8-6ckc:APA91bHzcTpftAHsg7obx0CqhrgY1dyTlSwB5fxeUiBvGtAzX_us6iT6Xp-vXA8rIURK45EehE25_uKiE5wRIUKCF-8Ck-UKir96zS-PGRrpxxOkwPPUKS4M5Em2ql1GmYPY9FVOC4FC'
-                                                                                                  //'emW_j62UQnGX04QHLSiufM:APA91bHu2uM9C7g9QEc3io7yTVMqdNpdQE3n6vNmFwcKN6z-wq5U9S7Nyl79xJzP_Z-Ve9kjGIzMf4nnaNwSrz94Rcel0-4em9C_r7LvtmCBOWzU-VyPclHXdqyBc3Nrq7JROBqUUge9'
-                                                                                                  //.toString(),
-
-                                                                                                  ///this is same device token....
-                                                                                                  //value
-                                                                                                  //.toString(),
                                                                                                   'notification': {
                                                                                                     'title': 'Ambrs driver',
                                                                                                     'body': 'Your request accepted by driver',
@@ -1083,13 +1022,9 @@ class _MessageScreenState extends State<MessageScreen> {
                                                                                                   }
                                                                                                 };
                                                                                                 print("dataccept:${data}");
-
                                                                                                 await http.post(Uri.parse('https://fcm.googleapis.com/fcm/send'), body: jsonEncode(data), headers: {
                                                                                                   'Content-Type': 'application/json; charset=UTF-8',
                                                                                                   'Authorization': 'key=AAAAbao_0RU:APA91bFNp9i75TwjvU16WgWfPltmSZS4RLdHKCXmk93D5RBLXBSmI2ArbPbd4mcSvNaN8w_A-JuERFWLHf00NkRannNN4dJBR_ok3SkDM_erMRYUUUZChujPJXJK8-MFmxtN23Vodtyv'
-
-                                                                                                  // 'Authorization': 'key=AAAAp6CyXz4:APA91bEKZ_ArxpUWyMYnP8Do3oYrgXFVdNm2jQk-i1DjKcR8duPeccS64TohP-OAqxL57-840qWe0oeYDBAOO68-aOO2z9EWIcBbUIsXc-3kA5usYMviDYc_wK6qMsQecvAdM54xfZsO'
-                                                                                                  //'AAAASDFsCOM:APA91bGLHziX-gzIM6srTPyXPbXfg8I1TTj4qcbP3gaUxuY9blzHBvT8qpeB4DYjaj6G6ql3wiLmqd4UKHyEiDL1aJXTQKfoPH8oG5kmEfsMs3Uj5053I8fl69qylMMB-qikCH0warBc'
                                                                                                 }).then((value) {
                                                                                                   if (kDebugMode) {
                                                                                                     print("princedriver${value.body.toString()}");
@@ -1100,9 +1035,6 @@ class _MessageScreenState extends State<MessageScreen> {
                                                                                                   }
                                                                                                 });
                                                                                               });
-                                                                                              // await _callNumber(
-                                                                                              //     "${_doctorHomepageController.founddoctoraptProducts2?[index].mobileNumber}".toString());
-                                                                                              // Get.back();
                                                                                               await Get.to(BottomNavBar());
                                                                                             },
                                                                                             child: const Text(

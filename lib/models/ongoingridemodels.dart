@@ -15,7 +15,7 @@ class OngoingRideModel {
   int? patientId;
   String? patientName;
   String? mobileNumber;
-  int? totalPrice;
+  num? totalPrice;
   double? latDriver;
   double? langDriver;
   double? startLat;
@@ -25,6 +25,7 @@ class OngoingRideModel {
   num? driverUserDistance;
   num? expectedTime;
   num? totalDistance;
+  String? deviceId;
   String? pickupLocation;
   String? dropLocation;
 
@@ -43,6 +44,7 @@ class OngoingRideModel {
     this.driverUserDistance,
     this.expectedTime,
     this.totalDistance,
+    this.deviceId,
     this.pickupLocation,
     this.dropLocation,
   });
@@ -63,6 +65,7 @@ class OngoingRideModel {
         driverUserDistance: json["DriverUserDistance"],
         expectedTime: json["ExpectedTime"],
         totalDistance: json["TotalDistance"],
+        deviceId: json["DeviceId"],
         pickupLocation: json["PickupLocation"],
         dropLocation: json["DropLocation"],
       );
@@ -82,6 +85,7 @@ class OngoingRideModel {
         "DriverUserDistance": driverUserDistance,
         "ExpectedTime": expectedTime,
         "TotalDistance": totalDistance,
+        "DeviceId": deviceId,
         "PickupLocation": pickupLocation,
         "DropLocation": dropLocation,
       };
