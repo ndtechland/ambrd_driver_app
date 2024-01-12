@@ -8,8 +8,10 @@ import 'package:ambrd_driver_app/models/driver_acceptlist_model.dart';
 import 'package:ambrd_driver_app/models/driver_booking_history_model.dart';
 import 'package:ambrd_driver_app/models/driver_payment_history_model.dart';
 import 'package:ambrd_driver_app/models/galarry_model.dart';
+import 'package:ambrd_driver_app/models/get_bank_model.dart';
 import 'package:ambrd_driver_app/models/get_profile.dart';
 import 'package:ambrd_driver_app/models/ongoingridemodels.dart';
+import 'package:ambrd_driver_app/models/payout_model_for_driver.dart';
 import 'package:ambrd_driver_app/models/state_models.dart';
 import 'package:ambrd_driver_app/models/user_list_model_indriverrr.dart';
 import 'package:ambrd_driver_app/views/home_view/home_page.dart';
@@ -993,6 +995,50 @@ class ApiProvider {
     } else {
       Get.snackbar('Errorgoogle', r.body);
       return r;
+    }
+  }
+
+  /// todo driverPayoutHistory.............8...jan 2024......
+  static UserPayoutHistory() async {
+    var prefs = GetStorage();
+    userId = prefs.read("userId").toString();
+    print('&&&&&&&&&&&&&&&&&&&&&&usergoogle:${userId}');
+    //http://admin.ambrd.in/api/DriverApi/DriverPayoutHistory?DriverId=1
+    var url = '${baseUrl}DriverApi/DriverPayoutHistory?DriverId=$userId';
+    //176
+    try {
+      http.Response r = await http.get(Uri.parse(url));
+      if (r.statusCode == 200) {
+        //DriverAppoinmentDetailModel driverAppoinmentDetail =
+        //             driverAppoinmentDetailModelFromJson(r.body);
+        DriverPayoutHistoryModel driverPayoutHistoryModel =
+            driverPayoutHistoryModelFromJson(r.body);
+        return driverPayoutHistoryModel;
+      }
+    } catch (error) {
+      return;
+    }
+  }
+
+  ///todo: get bank apis.....ambrb................29
+  static geBankkApi() async {
+    var prefs = GetStorage();
+    userId = prefs.read("userId").toString();
+    AdminLogin_Id = prefs.read("AdminLogin_Id").toString();
+    print('&&&&&okadmin:${AdminLogin_Id}');
+    userId = prefs.read("userId").toString();
+    print('&readuserprofile:${userId}');
+    //admin.ambrd.in/api/CommonApi/GetBankDetail?AdminLoginId=15
+    var url = '${baseUrl}CommonApi/GetBankDetail?AdminLoginId=$AdminLogin_Id';
+    try {
+      http.Response r = await http.get(Uri.parse(url));
+      if (r.statusCode == 200) {
+        BankGetModel getbankprofileModel = bankGetModelFromJson(r.body);
+        return getbankprofileModel;
+      }
+    } catch (error) {
+      print('Errorprofile: ${error}');
+      return;
     }
   }
 

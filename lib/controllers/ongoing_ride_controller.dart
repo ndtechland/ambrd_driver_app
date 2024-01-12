@@ -44,6 +44,7 @@ class OngoingRideController extends GetxController {
 
   @override
   void onInit() {
+    ongoingRideApi();
     OngoingRideController();
     super.onInit();
   }
