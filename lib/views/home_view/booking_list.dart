@@ -216,13 +216,6 @@ class _MessageScreenState extends State<MessageScreen> {
                                               BorderRadius.circular(25.7),
                                         ),
                                       ),
-                                      // onChanged: (value) =>
-                                      //     _doctorHomepageController
-                                      //         .filterdrApointmentProducts2(
-                                      //         value),
-                                      // onChanged: (value) =>
-                                      //     doctorHomepageController
-                                      //         .filterProducts(value),
                                     ),
                                   ),
                                 ),
@@ -729,35 +722,14 @@ class _MessageScreenState extends State<MessageScreen> {
                                                                                             ),
                                                                                             onPressed: () async {
                                                                                               CallLoader.loader();
-                                                                                              await Future.delayed(Duration(milliseconds: 100));
+                                                                                              await Future.delayed(Duration(milliseconds: 900));
                                                                                               CallLoader.hideLoader();
                                                                                               await _driverRequestListController.driverRequestListApi();
                                                                                               _driverRequestListController.onInit();
                                                                                               SharedPreferences prefs = await SharedPreferences.getInstance();
                                                                                               prefs.setString("driacceptrejectlistid", "${_driverRequestListController.getDriverRequestList?.userListForBookingAmbulance?[index].id}");
                                                                                               prefs.setString("driveracceptrjctDeviceid", "${_driverRequestListController.getDriverRequestList?.userListForBookingAmbulance?[index].deviceId}");
-                                                                                              // prefs.setString(
-                                                                                              //     "lng1",
-                                                                                              //     "${widget.driverlist?.startLong.toString()}");
-                                                                                              // prefs.setString(
-                                                                                              //     "lat1",
-                                                                                              //     "${widget.driverlist?.startLat.toString()}");
-                                                                                              //
-                                                                                              // prefs.setString(
-                                                                                              //     "lng2",
-                                                                                              //     "${widget.driverlist?.endLong.toString()}");
-                                                                                              // prefs.setString(
-                                                                                              //     "lat2",
-                                                                                              //     "${widget.driverlist?.endLat.toString()}");
-                                                                                              // prefs.setString(
-                                                                                              //     "ambulance1",
-                                                                                              //     "${widget.driverlist?.ambulanceTypeId.toString()}");
-                                                                                              // prefs.setString(
-                                                                                              //     "vehicle1",
-                                                                                              //     "${widget.driverlist?.vehicleTypeId.toString()}");
 
-                                                                                              // _ambulancegetController
-                                                                                              // .postAmbulancerequestApi2();
                                                                                               ///todo: call reject booking api...
                                                                                               ///_driverRequestListController.getDriverRequestList?
 
@@ -912,7 +884,11 @@ class _MessageScreenState extends State<MessageScreen> {
                                                               child:
                                                                   ElevatedButton(
                                                                 onPressed: () {
+                                                                  //Get.back();
+
                                                                   Get.dialog(
+                                                                    barrierDismissible:
+                                                                        true,
                                                                     Column(
                                                                       mainAxisAlignment:
                                                                           MainAxisAlignment
@@ -990,10 +966,11 @@ class _MessageScreenState extends State<MessageScreen> {
                                                                                             onPressed: () async {
                                                                                               SharedPreferences prefs = await SharedPreferences.getInstance();
                                                                                               CallLoader.loader();
-                                                                                              await Future.delayed(Duration(milliseconds: 500));
+                                                                                              await Future.delayed(Duration(milliseconds: 900));
                                                                                               CallLoader.hideLoader();
-                                                                                              await _driverRequestListController.driverRequestListApi();
-                                                                                              _driverRequestListController.onInit();
+
+                                                                                              ///await _driverRequestListController.driverRequestListApi();
+                                                                                              /// _driverRequestListController.onInit();
                                                                                               //driacceptrejectlistid
                                                                                               prefs.setString("driacceptrejectlistid", "${_driverRequestListController.getDriverRequestList?.userListForBookingAmbulance?[index].id}");
                                                                                               prefs.setString("driveracceptrjctDeviceid", "${_driverRequestListController.getDriverRequestList?.userListForBookingAmbulance?[index].deviceId}");
@@ -1035,7 +1012,11 @@ class _MessageScreenState extends State<MessageScreen> {
                                                                                                   }
                                                                                                 });
                                                                                               });
+                                                                                              await _driverRequestListController.driverRequestListApi();
+                                                                                              _driverRequestListController.onInit();
                                                                                               await Get.to(BottomNavBar());
+
+                                                                                              Get.back();
                                                                                             },
                                                                                             child: const Text(
                                                                                               'Yes',

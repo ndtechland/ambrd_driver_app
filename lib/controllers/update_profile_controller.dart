@@ -1,3 +1,4 @@
+import 'package:ambrd_driver_app/controllers/get_profile_controller.dart';
 import 'package:ambrd_driver_app/models/city_model.dart';
 import 'package:ambrd_driver_app/models/state_models.dart';
 import 'package:ambrd_driver_app/views/botttom_navigation_bar/bottom_nav_bar_controller.dart';
@@ -13,6 +14,8 @@ class EditprofileController extends GetxController {
   final GlobalKey<FormState> EditprofileFormKey = GlobalKey<FormState>();
 
   NavController _navController = Get.put(NavController());
+
+  GetProfileController _getProfileController = Get.put(GetProfileController());
 
   ///this is radio button function......
   var selectedService = ''.obs;
@@ -112,9 +115,14 @@ class EditprofileController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    PatientName;
-    Location;
-    PinCode;
+    PatientName = TextEditingController(
+        text: "${_getProfileController.getProfileDetail?.driverName ?? 0}");
+    Location = TextEditingController(
+        text: "${_getProfileController.getProfileDetail?.location ?? 0}");
+
+    PinCode = TextEditingController(
+        text: "${_getProfileController.getProfileDetail?.pinCode ?? 0}");
+
     StateMaster_Id;
     CityMaster_Id;
 

@@ -1,6 +1,8 @@
 import 'package:ambrd_driver_app/constantsss/app_theme/app_color.dart';
+import 'package:ambrd_driver_app/controllers/edit_bank_controller/edit_bank_detail_controller.dart';
 import 'package:ambrd_driver_app/controllers/get_profile_controller.dart';
 import 'package:ambrd_driver_app/controllers/otp_controller_new_correct/otp_new_controller.dart';
+import 'package:ambrd_driver_app/controllers/update_profile_controller.dart';
 import 'package:ambrd_driver_app/views/botttom_navigation_bar/bottom_nav_bar_controller.dart';
 import 'package:ambrd_driver_app/views/drowerr_user/page_drower/about_us.dart';
 import 'package:ambrd_driver_app/views/drowerr_user/page_drower/edit_bank.dart';
@@ -32,6 +34,11 @@ class MainAmbrbdriverDrawer extends StatelessWidget {
 
     GetProfileController _getProfileController =
         Get.put(GetProfileController());
+    EditbankdetailController _editbankdetailController =
+        Get.put(EditbankdetailController());
+
+    EditprofileController _editprofileController =
+        Get.put(EditprofileController());
 
     //GetProfileController _getProfileController =
     //Get.put(GetProfileController());
@@ -102,11 +109,12 @@ class MainAmbrbdriverDrawer extends StatelessWidget {
               onTap: () {
                 print(Get.currentRoute);
                 Get.back();
+
                 _navcontroller.tabindex(0);
 
-                ///Get.to(() => NavBar());
+                ///Get.to(() => MyAppTestingUrl());
                 //Get.to(() => AllProducts());
-                Get.offNamed('/NavBar');
+                //Get.offNamed('/NavBar');
               },
             ),
             ListTile(
@@ -171,10 +179,13 @@ class MainAmbrbdriverDrawer extends StatelessWidget {
               tileColor: Get.currentRoute == '/EditrProfilePage'
                   ? Colors.grey[300]
                   : null,
-              onTap: () {
+              onTap: () async {
+                await _getProfileController.editProfileApi();
+                // _getProfileController.onInit();
+                // await _editprofileController.getStateApi();
                 print(Get.currentRoute);
                 Get.back();
-                Get.to(() => EditProfilePage());
+                await Get.to(() => EditProfilePage());
                 //Get.offNamed('/GiftBox');
               },
             ),
@@ -233,10 +244,13 @@ class MainAmbrbdriverDrawer extends StatelessWidget {
               ),
               tileColor:
                   Get.currentRoute == '/AddbankPage' ? Colors.grey[300] : null,
-              onTap: () {
+              onTap: () async {
                 print(Get.currentRoute);
+                await _editbankdetailController.getBankProfileApi();
+                _editbankdetailController.onInit();
+                _editbankdetailController.update();
                 Get.back();
-                Get.to(() => EditbankPage());
+                await Get.to(() => EditbankPage());
                 //Get.offNamed('/GiftBox');
               },
             ),

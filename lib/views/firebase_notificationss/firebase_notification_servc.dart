@@ -3,8 +3,8 @@ import 'dart:io';
 
 import 'package:ambrd_driver_app/controllers/booking_request_list_controller.dart';
 import 'package:ambrd_driver_app/controllers/driver_list_new.dart';
+import 'package:ambrd_driver_app/controllers/ongoing_ride_controller.dart';
 import 'package:ambrd_driver_app/services/account_service_forautologin.dart';
-import 'package:ambrd_driver_app/views/firebase_notificationss/message_screen.dart';
 import 'package:ambrd_driver_app/views/home_view/booking_list.dart';
 import 'package:ambrd_driver_app/views/home_view/ongoing_ride.dart';
 import 'package:ambrd_driver_app/widget/circular_loader.dart';
@@ -23,6 +23,9 @@ class NotificationServices {
   //initialising firebase message plugin
   final FlutterLocalNotificationsPlugin _flutterLocalNotificationsPlugin =
       FlutterLocalNotificationsPlugin();
+
+  OngoingRideController _ongoingRideController =
+      Get.put(OngoingRideController());
 
   DriverRequestListController _driverRequestListController =
       Get.put(DriverRequestListController());
@@ -196,7 +199,7 @@ class NotificationServices {
       await _driverRequestListController.driverRequestListApi();
       _driverRequestListController.onInit();
       CallLoader.loader();
-      await Future.delayed(Duration(milliseconds: 100));
+      await Future.delayed(Duration(milliseconds: 300));
       CallLoader.hideLoader();
       accountService.getAccountData.then((accountData) {
         //CallLoader.loader();
@@ -235,42 +238,44 @@ class NotificationServices {
       //_useracptrejectController.driveracceptrejctlistApi();
       //_useracptrejectController.update();
 
-      await Future.delayed(Duration(milliseconds: 200));
-      _driverAcceptlistController.driveracceptuserDetailApi();
-      _driverAcceptlistController.update();
+      // await Future.delayed(Duration(milliseconds: 200));
+      // _driverAcceptlistController.driveracceptuserDetailApi();
+      // _driverAcceptlistController.update();
 
       ///todo new....29....aug 2023...
 
-      _driverAcceptlistController.refresh();
-      _driverAcceptlistController.onInit();
+      // _driverAcceptlistController.refresh();
+      // _driverAcceptlistController.onInit();
 
       ///todo end new....29....aug 2023...
 
-      accountService.getAccountData.then((accountData) {
-        // CallLoader.loader();
-        // nearlistdriverApi();
+      // accountService.getAccountData.then((accountData) {
+      //   // CallLoader.loader();
+      //   // nearlistdriverApi();
+      //
+      //   Timer(
+      //     const Duration(milliseconds: 600),
+      //     () {
+      //       // nearlistdriverApi();
+      //       Navigator.push(
+      //           context,
+      //           MaterialPageRoute(
+      //               builder: (context) => MessageScreen2(
+      //                     id: message.data['id'],
+      //                   )));
+      //       // Get.to(MessageScreen(
+      //       //   id: message.data['id'],
+      //       // ));
+      //       //Get.to((MapView));
+      //       //postAmbulancerequestApi(markers);
+      //
+      //       ///
+      //     },
+      //   );
+      //   CallLoader.hideLoader();
+      // });
 
-        Timer(
-          const Duration(milliseconds: 600),
-          () {
-            // nearlistdriverApi();
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => MessageScreen2(
-                          id: message.data['id'],
-                        )));
-            // Get.to(MessageScreen(
-            //   id: message.data['id'],
-            // ));
-            //Get.to((MapView));
-            //postAmbulancerequestApi(markers);
-
-            ///
-          },
-        );
-        CallLoader.hideLoader();
-      });
+      ///
 
       // Navigator.push(
       //     context,
@@ -280,102 +285,34 @@ class NotificationServices {
       //             )));
     } else if (message.data['type'] == 'reject_case') {
       print("reject${message.data['id']}");
-    } else if (message.data['type'] == 'cancel_case_doctor') {
-      print("dataaacceptewew${message.data['id']}");
-      //_useracptrejectController.driveracceptrejctlistApi();
-      //_useracptrejectController.update();
-
-      await Future.delayed(Duration(milliseconds: 200));
-      // _doctorHomepageController.doctorAppoinmentDetail();
-      //_doctorHomepageController.update();
-      ///_doctorHistoryController.doctorListHospitalApi();
-      ///_doctorHistoryController.onInit();
-      ///_doctorHistoryController.update();
-      accountService.getAccountData.then((accountData) {
-        // CallLoader.loader();
-        // nearlistdriverApi();
-
-        Timer(
-          const Duration(milliseconds: 600),
-          () {
-            // nearlistdriverApi();
-            // Navigator.push(
-            //     context,
-            //     MaterialPageRoute(
-            //         builder: (context) => DoctorHistoryUser(
-            //               id: message.data['id'],
-            //             )));
-
-            ///
-          },
-        );
-        CallLoader.hideLoader();
-      });
-    } else if (message.data['type'] == 'cancel_case_nurse') {
-      print("dataaacceptewew${message.data['id']}");
-      //_useracptrejectController.driveracceptrejctlistApi();
-      //_useracptrejectController.update();
-
-      await Future.delayed(Duration(milliseconds: 200));
-      // _nurseappointmentnursedetailController.nurseappointmentApi();
-      // _nurseappointmentnursedetailController.update();
-      //_nurseappointmentnursedetailController.onInit();
-      ///
-      ///_nurseHistoryController.nursehistoryApi();
-      /// _nurseHistoryController.update();
-      //                                                                                     //  .skillsListApi();
-      //                                                                                     _nurseHistoryController.update();
-      // CallLoader.loader();
-      // await Future.delayed(
-      //     Duration(milliseconds: 900));
-      // CallLoader.hideLoader();
-      accountService.getAccountData.then((accountData) {
-        // CallLoader.loader();
-        // nearlistdriverApi();
-
-        Timer(
-          const Duration(milliseconds: 600),
-          () {
-            // nearlistdriverApi();
-            // Navigator.push(
-            //     context,
-            //     MaterialPageRoute(
-            //         builder: (context) => NurseHistoryUser(
-            //               id: message.data['id'],
-            //             )));
-
-            ///
-          },
-        );
-        CallLoader.hideLoader();
-      });
     } else if (message.data['type'] == 'accept_case') {
       print("dataaaccept${message.data['id']}");
-      await Future.delayed(Duration(milliseconds: 200));
-      _driverAcceptlistController.driveracceptuserDetailApi();
-      _driverAcceptlistController.update();
-      accountService.getAccountData.then((accountData) {
-        Timer(
-          const Duration(milliseconds: 600),
-          () {
-            /// nearlistdriverApi();
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => MessageScreen2(
-                          id: message.data['id'],
-                        )));
-            // Get.to(MessageScreen(
-            //   id: message.data['id'],
-            // ));
-            //Get.to((MapView));
-            //postAmbulancerequestApi(markers);
-
-            ///
-          },
-        );
-        CallLoader.hideLoader();
-      });
+      // await Future.delayed(Duration(milliseconds: 200));
+      // _driverAcceptlistController.driveracceptuserDetailApi();
+      // _driverAcceptlistController.update();
+      // accountService.getAccountData.then((accountData) {
+      //   Timer(
+      //     const Duration(milliseconds: 600),
+      //     () {
+      //       /// nearlistdriverApi();
+      //       Navigator.push(
+      //           context,
+      //           MaterialPageRoute(
+      //               builder: (context) => MessageScreen2(
+      //                     id: message.data['id'],
+      //                   )));
+      //       // Get.to(MessageScreen(
+      //       //   id: message.data['id'],
+      //       // ));
+      //       //Get.to((MapView));
+      //       //postAmbulancerequestApi(markers);
+      //
+      //       ///
+      //     },
+      //   );
+      //   CallLoader.hideLoader();
+      // });
+      ///
 
       // Navigator.push(
       //     context,
@@ -385,38 +322,24 @@ class NotificationServices {
       //             )));
     } else if (message.data['type'] == 'comingride_case') {
       print("dataridecoming${message.data['id']}");
-      await Future.delayed(Duration(milliseconds: 200));
-      _driverAcceptlistController.driveracceptuserDetailApi();
-      _driverAcceptlistController.update();
-      accountService.getAccountData.then((accountData) {
-        Timer(
-          const Duration(milliseconds: 600),
-          () {
-            // Navigator.push(
-            //     context,
-            //     MaterialPageRoute(
-            //         builder: (context) => OngoingRideTracking(
-            //               id: message.data['id'],
-            //             )));
-            //postAmbulancerequestApi(markers);
-
-            ///
-          },
-        );
-        CallLoader.hideLoader();
-      });
     }
 
     ///todo: accept payment.....
-
     else if (message.data['type'] == 'payment_case') {
       print("datauserpayment${message.data['id']}");
-      await Future.delayed(Duration(milliseconds: 200));
-      _driverAcceptlistController.driveracceptuserDetailApi();
-      _driverAcceptlistController.update();
+
+      CallLoader.loader();
+      await Future.delayed(Duration(milliseconds: 300));
+      CallLoader.hideLoader();
+      await _ongoingRideController.ongoingRideApi();
+      _ongoingRideController.update();
+      _ongoingRideController.onInit();
+      // await Future.delayed(Duration(milliseconds: 200));
+
       accountService.getAccountData.then((accountData) {
+        //1233
         Timer(
-          const Duration(milliseconds: 600),
+          const Duration(milliseconds: 300),
           () {
             Navigator.push(
                 context,

@@ -1,4 +1,5 @@
 //import 'package:ambrd_appss/modules/botttom_nav_bar/bottom_navbar.dart';
+import 'package:ambrd_driver_app/models/get_bank_model.dart';
 import 'package:ambrd_driver_app/views/botttom_navigation_bar/bottom_navbar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -8,6 +9,8 @@ import '../../services/api_provider.dart';
 import '../../widget/circular_loader.dart';
 
 class EditbankdetailController extends GetxController {
+  RxBool isLoading = false.obs;
+
   final GlobalKey<FormState> editbankdetailFormKey = GlobalKey<FormState>();
 
   TextEditingController AccountNumber = TextEditingController();
@@ -42,38 +45,42 @@ class EditbankdetailController extends GetxController {
       CallLoader.hideLoader();
       Get.snackbar('Success', 'Edit Bank SuccessFully');
       //_loginMobileController.login();
+      // await getBankProfileApi();
       Get.to(() => BottomNavBar());
     }
   }
 
-  ///....
+  ///todo:bank detail...
+  BankGetModel? getbankdetail;
 
-  // image picker
-  // void getImage(ImageSource imageSource) async {
-  //   final pickedFile = await ImagePicker().getImage(source: imageSource);
-  //   if (pickedFile != null) {
-  //     selectedImagePath.value = pickedFile.path;
-  //     selectedImageSize.value =
-  //         ((File(selectedImagePath.value)).lengthSync() / 1024 / 1024)
-  //                 .toStringAsFixed(2) +
-  //             " Mb";
-  //   } else {
-  //     Get.snackbar('Error', 'No Image Selected',
-  //         snackPosition: SnackPosition.BOTTOM,
-  //         backgroundColor: Colors.red,
-  //         colorText: Colors.white);
-  //   }
-  // }
+  Future<void> getBankProfileApi() async {
+    isLoading(true);
+    getbankdetail = await ApiProvider.geBankkApi();
+    if (getbankdetail!.holderName != null) {
+      //onInit();
+      //print("ookoddee43434${getProfileDetail!.pinCode}");
+
+      isLoading(false);
+    } else {}
+  }
 
   @override
   void onInit() {
     super.onInit();
-    AccountNumber;
-    IFSCCode;
-    BranchName;
-    BranchAddress;
-    HolderName;
-    MobileNumber;
+    getBankProfileApi();
+
+    AccountNumber = TextEditingController(
+        text: "${getbankdetail?.accountNumber.toString() ?? 0}");
+    IFSCCode = TextEditingController(
+        text: "${getbankdetail?.ifscCode.toString() ?? 0}");
+    BranchName = TextEditingController(
+        text: "${getbankdetail?.branchName.toString() ?? 0}");
+    BranchAddress = TextEditingController(
+        text: "${getbankdetail?.branchAddress.toString() ?? 0}");
+    HolderName = TextEditingController(
+        text: "${getbankdetail?.holderName.toString() ?? 0}");
+    MobileNumber = TextEditingController(
+        text: "${getbankdetail?.mobileNumber.toString() ?? 0}");
     // dateofbirth = TextEditingController();
     // dateofbirth.text = "YYY-MM-DD";
   }

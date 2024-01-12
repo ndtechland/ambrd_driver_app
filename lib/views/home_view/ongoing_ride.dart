@@ -3,10 +3,10 @@ import 'dart:convert';
 
 import 'package:ambrd_driver_app/constantsss/app_theme/app_color.dart';
 import 'package:ambrd_driver_app/controllers/ongoing_ride_controller.dart';
+import 'package:ambrd_driver_app/services/account_service_forautologin.dart';
 import 'package:ambrd_driver_app/views/botttom_navigation_bar/bottom_nav_bar_controller.dart';
 import 'package:ambrd_driver_app/views/firebase_notificationss/firebase_notification_servc.dart';
 import 'package:ambrd_driver_app/views/firebase_notificationss/local_notifications.dart';
-import 'package:ambrd_driver_app/widget/circular_loader.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
@@ -14,8 +14,10 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
+import 'package:maps_launcher/maps_launcher.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -32,6 +34,10 @@ class _OngoingRideTrackingState extends State<OngoingRideTracking> {
   //DriverPayoutController _driverPayoutController =
   // AmbulancegetController _ambulancegetController =
   //     Get.put(AmbulancegetController());
+
+  String PatientRegNo = ''.toString();
+  String userPassword = ''.toString();
+  String AdminLogin_Id = ''.toString();
   NotificationServices notificationServices = NotificationServices();
 
   OngoingRideController _ongoingRideController =
@@ -158,11 +164,22 @@ class _OngoingRideTrackingState extends State<OngoingRideTracking> {
     final userendlang =
         (_ongoingRideController.ongoingRide?.endLong?.toDouble() ?? 00.00);
 
+    ///todo:user end lang....
+
+    final userstartlocation =
+        (_ongoingRideController.ongoingRide?.pickupLocation.toString() ?? 0);
+
+    final userendlocation =
+        (_ongoingRideController.ongoingRide?.dropLocation.toString() ?? 0);
+
     print("startlat${usersatartlat}");
     print("endlat${usersatartlang}");
 
     print("endlang${userendlang}");
     print("endlat${userendlat}");
+
+    print("userstartlocation${userstartlocation}");
+    print("userendlocation${userendlocation}");
 
     return WillPopScope(
       onWillPop: () async {
@@ -516,7 +533,7 @@ class _OngoingRideTrackingState extends State<OngoingRideTracking> {
                                         Row(
                                           children: [
                                             SizedBox(
-                                              height: size.height * 0.06,
+                                              height: size.height * 0.063,
                                               width: size.width * 0.28,
                                               child: Text(
                                                 'User Location :',
@@ -528,7 +545,7 @@ class _OngoingRideTrackingState extends State<OngoingRideTracking> {
                                               ),
                                             ),
                                             SizedBox(
-                                              height: size.height * 0.06,
+                                              height: size.height * 0.063,
                                               width: size.width * 0.45,
                                               child: Center(
                                                 child: Align(
@@ -568,195 +585,326 @@ class _OngoingRideTrackingState extends State<OngoingRideTracking> {
                                                     ),
                                                   ),
                                                 ),
-                                                onPressed: () async {
-                                                  await showDialog(
+                                                onPressed: () {
+                                                  showDialog(
                                                     context: context,
                                                     builder:
                                                         (BuildContext context) {
-                                                      return AlertDialog(
-                                                        title:
-                                                            Text("Meet User"),
-                                                        content: Text(
-                                                            "Reach Your Pickup Location"),
-                                                        actions: [
-                                                          ElevatedButton(
-                                                            child: SizedBox(
-                                                              width:
-                                                                  size.width *
-                                                                      0.21,
+                                                      return SizedBox(
+                                                        height:
+                                                            size.height * 0.1,
+                                                        width:
+                                                            size.width * 0.21,
+                                                        child: AlertDialog(
+                                                          title:
+                                                              Text("Meet User"),
+                                                          content: Text(
+                                                              "Reach Your Pickup Location"),
+                                                          actions: [
+                                                            ElevatedButton(
+                                                              child: SizedBox(
+                                                                width:
+                                                                    size.width *
+                                                                        0.21,
+                                                                child: Text(
+                                                                  "   Cancel   ",
+                                                                  style:
+                                                                      TextStyle(
+                                                                    color: Colors
+                                                                        .white,
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                              style: ElevatedButton
+                                                                  .styleFrom(
+                                                                      primary:
+                                                                          Colors
+                                                                              .red,
+                                                                      shape:
+                                                                          RoundedRectangleBorder(
+                                                                        borderRadius:
+                                                                            BorderRadius.circular(10),
+                                                                      ),
+                                                                      textStyle: TextStyle(
+                                                                          fontSize:
+                                                                              15,
+                                                                          color: Colors
+                                                                              .white,
+                                                                          fontWeight:
+                                                                              FontWeight.bold)),
+                                                              onPressed: () {
+                                                                Navigator.of(
+                                                                        context)
+                                                                    .pop();
+                                                              },
+                                                            ),
+                                                            //Spacer(),
+                                                            ElevatedButton(
                                                               child: Text(
-                                                                "   Cancel   ",
+                                                                "Track User",
                                                                 style:
                                                                     TextStyle(
                                                                   color: Colors
                                                                       .white,
                                                                 ),
                                                               ),
-                                                            ),
-                                                            style: ElevatedButton
-                                                                .styleFrom(
-                                                                    primary:
-                                                                        Colors
-                                                                            .red,
-                                                                    shape:
-                                                                        RoundedRectangleBorder(
-                                                                      borderRadius:
-                                                                          BorderRadius.circular(
-                                                                              10),
-                                                                    ),
-                                                                    textStyle: TextStyle(
-                                                                        fontSize:
-                                                                            15,
-                                                                        color: Colors
-                                                                            .white,
-                                                                        fontWeight:
-                                                                            FontWeight.bold)),
-                                                            onPressed: () {
-                                                              Navigator.of(
-                                                                      context)
-                                                                  .pop();
-                                                            },
-                                                          ),
-                                                          Spacer(),
-                                                          ElevatedButton(
-                                                            child: Text(
-                                                              "Track User",
-                                                              style: TextStyle(
-                                                                color: Colors
-                                                                    .white,
-                                                              ),
-                                                            ),
-                                                            style: ElevatedButton
-                                                                .styleFrom(
-                                                                    primary: Colors
-                                                                        .green,
-                                                                    shape:
-                                                                        RoundedRectangleBorder(
-                                                                      borderRadius:
-                                                                          BorderRadius.circular(
-                                                                              10),
-                                                                    ),
-                                                                    textStyle: TextStyle(
-                                                                        fontSize:
-                                                                            15,
-                                                                        color: Colors
-                                                                            .white,
-                                                                        fontWeight:
-                                                                            FontWeight.bold)),
-                                                            onPressed:
-                                                                () async {
-                                                              await _ongoingRideController
-                                                                  .ongoingRideApi();
-                                                              _ongoingRideController
-                                                                  .onInit();
-                                                              _ongoingRideController
-                                                                  .update();
+                                                              style: ElevatedButton
+                                                                  .styleFrom(
+                                                                      primary:
+                                                                          Colors
+                                                                              .green,
+                                                                      shape:
+                                                                          RoundedRectangleBorder(
+                                                                        borderRadius:
+                                                                            BorderRadius.circular(10),
+                                                                      ),
+                                                                      textStyle: TextStyle(
+                                                                          fontSize:
+                                                                              15,
+                                                                          color: Colors
+                                                                              .white,
+                                                                          fontWeight:
+                                                                              FontWeight.bold)),
+                                                              onPressed:
+                                                                  () async {
+                                                                ///todo: start...
+                                                                SharedPreferences
+                                                                    prefs =
+                                                                    await SharedPreferences
+                                                                        .getInstance();
+                                                                await prefs.setString(
+                                                                    "driverId",
+                                                                    "${_ongoingRideController.ongoingRide?.id}");
+                                                                await prefs.setString(
+                                                                    "startLat5",
+                                                                    "${_ongoingRideController.ongoingRide?.startLat}");
+                                                                await prefs.setString(
+                                                                    "startLong5",
+                                                                    "${_ongoingRideController.ongoingRide?.startLong}");
+                                                                await prefs.setString(
+                                                                    "endLat5",
+                                                                    "${_ongoingRideController.ongoingRide?.endLat}");
+                                                                await prefs.setString(
+                                                                    "endLong5",
+                                                                    "${_ongoingRideController.ongoingRide?.endLong}");
 
-                                                              ///tod: notification....
-                                                              SharedPreferences
-                                                                  prefs =
-                                                                  await SharedPreferences
-                                                                      .getInstance();
-                                                              CallLoader
-                                                                  .loader();
-                                                              await Future.delayed(
-                                                                  Duration(
-                                                                      milliseconds:
-                                                                          500));
-                                                              CallLoader
-                                                                  .hideLoader();
-                                                              //driacceptrejectlistid
-                                                              //prefs.setString("driacceptrejectlistid", "${_driverRequestListController.getDriverRequestList?.userListForBookingAmbulance?[index].id}");
-                                                              // prefs.setString("driveracceptrjctDeviceid", "${_driverRequestListController.getDriverRequestList?.userListForBookingAmbulance?[index].deviceId}");
+                                                                // await Future.delayed(
+                                                                //     Duration(
+                                                                //         milliseconds:
+                                                                //             400));
 
-                                                              print(
-                                                                  'princee notification');
-                                                              notificationServices
-                                                                  .getDeviceToken()
-                                                                  .then(
-                                                                      (value) async {
-                                                                var data = {
-                                                                  //this the particular device id.....
-                                                                  'to':
-                                                                      "${_ongoingRideController.ongoingRide?.deviceId}",
+                                                                ///
+                                                                prefs.setString(
+                                                                    "driverlistssId",
+                                                                    "${_ongoingRideController.ongoingRide?.id}");
 
-                                                                  //'mytokeneOs6od2nTlqsaFZl8-6ckc:APA91bHzcTpftAHsg7obx0CqhrgY1dyTlSwB5fxeUiBvGtAzX_us6iT6Xp-vXA8rIURK45EehE25_uKiE5wRIUKCF-8Ck-UKir96zS-PGRrpxxOkwPPUKS4M5Em2ql1GmYPY9FVOC4FC'
-                                                                  //'emW_j62UQnGX04QHLSiufM:APA91bHu2uM9C7g9QEc3io7yTVMqdNpdQE3n6vNmFwcKN6z-wq5U9S7Nyl79xJzP_Z-Ve9kjGIzMf4nnaNwSrz94Rcel0-4em9C_r7LvtmCBOWzU-VyPclHXdqyBc3Nrq7JROBqUUge9'
-                                                                  //.toString(),
+                                                                prefs.setString(
+                                                                    "drivertotalamount",
+                                                                    "${_ongoingRideController.ongoingRide?.totalPrice}");
+                                                                prefs.setString(
+                                                                    "driverlistbookingId",
+                                                                    "${_ongoingRideController.ongoingRide?.patientId}");
 
-                                                                  ///this is same device token....
-                                                                  //value
-                                                                  //.toString(),
-                                                                  'notification':
-                                                                      {
-                                                                    'title':
-                                                                        'Ambrd driver',
-                                                                    'body':
-                                                                        'Your Driver is coming',
-                                                                    //"sound": "jetsons_doorbell.mp3"
-                                                                  },
-                                                                  'android': {
-                                                                    'notification':
-                                                                        {
-                                                                      'notification_count':
-                                                                          23,
-                                                                    },
-                                                                  },
-                                                                  'data': {
-                                                                    'type':
-                                                                        'comingride_case',
-                                                                    'id':
-                                                                        '12334'
-                                                                  }
-                                                                };
+                                                                prefs.setString(
+                                                                    "lng1",
+                                                                    "${_ongoingRideController.ongoingRide?.startLat}");
+                                                                prefs.setString(
+                                                                    "lat1",
+                                                                    "${_ongoingRideController.ongoingRide?.startLong}");
+
+                                                                prefs.setString(
+                                                                    "lng2",
+                                                                    "${_ongoingRideController.ongoingRide?.endLong}");
+                                                                prefs.setString(
+                                                                    "lat2",
+                                                                    "${_ongoingRideController.ongoingRide?.endLat}");
+
                                                                 print(
-                                                                    "dataccept:${data}");
+                                                                  "${_ongoingRideController.ongoingRide?.deviceId}"
+                                                                      .toString(),
+                                                                );
 
-                                                                await http.post(
-                                                                    Uri.parse(
-                                                                        'https://fcm.googleapis.com/fcm/send'),
-                                                                    body: jsonEncode(
-                                                                        data),
-                                                                    headers: {
-                                                                      'Content-Type':
-                                                                          'application/json; charset=UTF-8',
-                                                                      'Authorization':
-                                                                          'key=AAAAbao_0RU:APA91bFNp9i75TwjvU16WgWfPltmSZS4RLdHKCXmk93D5RBLXBSmI2ArbPbd4mcSvNaN8w_A-JuERFWLHf00NkRannNN4dJBR_ok3SkDM_erMRYUUUZChujPJXJK8-MFmxtN23Vodtyv'
+                                                                ///.......
+                                                                print(
+                                                                    'princee notificationplplp');
+                                                                try {
+                                                                  notificationServices
+                                                                      .getDeviceToken()
+                                                                      .then(
+                                                                          (value) async {
+                                                                    var data = {
+                                                                      //this the particular device id.....
+                                                                      ///todo device token......
+                                                                      'to': "${_ongoingRideController.ongoingRide?.deviceId}"
+                                                                          .toString(),
 
-                                                                      // 'Authorization': 'key=AAAAp6CyXz4:APA91bEKZ_ArxpUWyMYnP8Do3oYrgXFVdNm2jQk-i1DjKcR8duPeccS64TohP-OAqxL57-840qWe0oeYDBAOO68-aOO2z9EWIcBbUIsXc-3kA5usYMviDYc_wK6qMsQecvAdM54xfZsO'
-                                                                      //'AAAASDFsCOM:APA91bGLHziX-gzIM6srTPyXPbXfg8I1TTj4qcbP3gaUxuY9blzHBvT8qpeB4DYjaj6G6ql3wiLmqd4UKHyEiDL1aJXTQKfoPH8oG5kmEfsMs3Uj5053I8fl69qylMMB-qikCH0warBc'
-                                                                    }).then(
-                                                                    (value) {
-                                                                  if (kDebugMode) {
+                                                                      ///this is same device token....
+                                                                      //value
+                                                                      //.toString(),
+                                                                      'notification':
+                                                                          {
+                                                                        'title':
+                                                                            'Ambrd driver',
+                                                                        'body':
+                                                                            'Your Driver is coming',
+                                                                        //"sound": "jetsons_doorbell.mp3"
+                                                                      },
+                                                                      'android':
+                                                                          {
+                                                                        'notification':
+                                                                            {
+                                                                          'notification_count':
+                                                                              23,
+                                                                        },
+                                                                      },
+                                                                      'data': {
+                                                                        'type':
+                                                                            'comingride_case',
+                                                                        'id':
+                                                                            '12334'
+                                                                      }
+                                                                    };
+
                                                                     print(
-                                                                        "princedriver${value.body.toString()}");
-                                                                  }
-                                                                }).onError((error,
-                                                                    stackTrace) {
-                                                                  if (kDebugMode) {
+                                                                        "data3342323${data}");
+
+                                                                    await http.post(
+                                                                        Uri.parse(
+                                                                            'https://fcm.googleapis.com/fcm/send'),
+                                                                        body: jsonEncode(
+                                                                            data),
+                                                                        headers: {
+                                                                          'Content-Type':
+                                                                              'application/json; charset=UTF-8',
+                                                                          'Authorization':
+                                                                              'key=AAAAbao_0RU:APA91bFNp9i75TwjvU16WgWfPltmSZS4RLdHKCXmk93D5RBLXBSmI2ArbPbd4mcSvNaN8w_A-JuERFWLHf00NkRannNN4dJBR_ok3SkDM_erMRYUUUZChujPJXJK8-MFmxtN23Vodtyv'
+
+                                                                          //'key=d6JbNnFARI-J8D6eV4Akgs:APA91bF0C8EdU9riyRpt6LKPmRUyVFJZOICCRe7yvY2z6FntBvtG2Zrsa3MEklktvQmU7iTKy3we9r_oVHS4mRnhJBq_aNe9Rg8st2M-gDMR39xZV2IEgiFW9DsnDp4xw-h6aLVOvtkC'
+                                                                          //'key=AAAAp6CyXz4:APA91bEKZ_ArxpUWyMYnP8Do3oYrgXFVdNm2jQk-i1DjKcR8duPeccS64TohP-OAqxL57-840qWe0oeYDBAOO68-aOO2z9EWIcBbUIsXc-3kA5usYMviDYc_wK6qMsQecvAdM54xfZsO'
+                                                                          //'AAAAbao_0RU:APA91bFNp9i75TwjvU16WgWfPltmSZS4RLdHKCXmk93D5RBLXBSmI2ArbPbd4mcSvNaN8w_A-JuERFWLHf00NkRannNN4dJBR_ok3SkDM_erMRYUUUZChujPJXJK8-MFmxtN23Vodtyv'
+                                                                        }).then(
+                                                                        (value) {
+                                                                      if (kDebugMode) {
+                                                                        print(
+                                                                            "bookdriver${value.body.toString()}");
+                                                                      }
+                                                                    }).onError(
+                                                                        (error,
+                                                                            stackTrace) {
+                                                                      if (kDebugMode) {
+                                                                        print(
+                                                                            error);
+                                                                      }
+                                                                    });
+
+                                                                    ///todo: google map launcher......
+
+                                                                    MapsLauncher.launchCoordinates(
+                                                                        usersatartlat,
+                                                                        usersatartlang,
+                                                                        "${userstartlocation}");
+                                                                    Navigator.of(
+                                                                            context)
+                                                                        .pop();
+
+                                                                    ///todo: from here custom from backend start...
+                                                                    var prefs =
+                                                                        GetStorage();
+
+                                                                    ///todo: from here custom from backend start...
+                                                                    // PatientRegNo =
+                                                                    // prefs.read("PatientRegNo").toString();
+
+                                                                    AdminLogin_Id = prefs
+                                                                        .read(
+                                                                            "AdminLogin_Id")
+                                                                        .toString();
+                                                                    PatientRegNo = prefs
+                                                                        .read(
+                                                                            "PatientRegNo")
+                                                                        .toString();
                                                                     print(
-                                                                        error);
-                                                                  }
-                                                                });
-                                                              });
+                                                                        '&&&&&&&&&&&&&&&&&&&&&&usecredentials:${PatientRegNo}');
+                                                                    var body = {
+                                                                      "AdminLoginId":
+                                                                          "${AdminLogin_Id}",
+                                                                      "DeviceId":
+                                                                          value
+                                                                              .toString(),
+                                                                    };
+                                                                    print(
+                                                                        "uqdtt${body}");
+                                                                    http.Response
+                                                                        r =
+                                                                        await http
+                                                                            .post(
+                                                                      Uri.parse(
+                                                                          'http://admin.ambrd.in/api/CommonApi/UpdateDeviceId'),
+                                                                      body:
+                                                                          body,
+                                                                    );
 
-                                                              ///todo: open google map and reache to ride.........start..
+                                                                    print(
+                                                                        r.body);
+                                                                    if (r.statusCode ==
+                                                                        200) {
+                                                                      ///todo: bottom nav bar......start..
+                                                                      //
+                                                                      _navcontroller
+                                                                          .tabindex(
+                                                                              0);
 
-                                                              await MapUtils.openMap(
-                                                                  usersatartlat,
-                                                                  usersatartlang);
+                                                                      // Get.to(
+                                                                      //     BottomNavBar());
 
-                                                              ///todo: open google map and reached ride.......end..
-                                                              ///
-                                                              ///todo: motification.....
+                                                                      ///todo: bottom nav bar......end...
+                                                                      print(
+                                                                          "usesxssxedd99999${body}");
+                                                                      return r;
+                                                                    } else if (r
+                                                                            .statusCode ==
+                                                                        401) {
+                                                                      Get.snackbar(
+                                                                          'message',
+                                                                          r.body);
+                                                                    } else {
+                                                                      Get.snackbar(
+                                                                          'Error',
+                                                                          r.body);
+                                                                      return r;
+                                                                    }
 
-                                                              ///
-                                                              Navigator.of(
-                                                                      context)
-                                                                  .pop();
-                                                            },
-                                                          ),
-                                                        ],
+                                                                    ///todo end post api from backend..
+                                                                    ///
+                                                                    ///call message 2 screen....from book driver....21 july..
+
+                                                                    accountService
+                                                                        .getAccountData
+                                                                        .then(
+                                                                            (accountData) {});
+                                                                  });
+                                                                } catch (e, s) {
+                                                                  print(s);
+
+                                                                  ///todo: open google map and reache to ride.........start....maplaunch
+                                                                  ///todo: changed from 9 jan 2024...kumar prince...
+
+                                                                  // MapUtils.openMap(
+                                                                  //     usersatartlat,
+                                                                  //     usersatartlang);
+
+                                                                  ///end
+                                                                  ///
+                                                                  /// useing packkage map launcher
+
+                                                                }
+
+                                                                ///todo;;
+                                                                ///todo: end........................................
+                                                              },
+                                                            ),
+                                                          ],
+                                                        ),
                                                       );
                                                     },
                                                   );
@@ -778,7 +926,6 @@ class _OngoingRideTrackingState extends State<OngoingRideTracking> {
                                           ],
                                         ),
                                         Spacer(),
-
                                         SizedBox(
                                           height: size.height * 0.025,
                                         ),
@@ -787,7 +934,7 @@ class _OngoingRideTrackingState extends State<OngoingRideTracking> {
                                               MainAxisAlignment.start,
                                           children: [
                                             SizedBox(
-                                              height: size.height * 0.06,
+                                              height: size.height * 0.069,
                                               width: size.width * 0.28,
                                               child: Text(
                                                 'Drop Location :',
@@ -799,7 +946,7 @@ class _OngoingRideTrackingState extends State<OngoingRideTracking> {
                                               ),
                                             ),
                                             SizedBox(
-                                              height: size.height * 0.06,
+                                              height: size.height * 0.065,
                                               width: size.width * 0.45,
                                               child: Center(
                                                 child: Align(
@@ -838,111 +985,128 @@ class _OngoingRideTrackingState extends State<OngoingRideTracking> {
                                                     ),
                                                   ),
                                                 ),
-                                                onPressed: () async {
-                                                  await showDialog(
+                                                onPressed: () {
+                                                  showDialog(
                                                     context: context,
                                                     builder:
                                                         (BuildContext context) {
-                                                      return AlertDialog(
-                                                        title: Text(
-                                                            "Start Your Ride"),
-                                                        content: Text(
-                                                            "Enjoy your journey All The Best!"),
-                                                        actions: [
-                                                          ElevatedButton(
-                                                            child: SizedBox(
-                                                              width:
-                                                                  size.width *
-                                                                      0.21,
+                                                      return SizedBox(
+                                                        height:
+                                                            size.height * 0.1,
+                                                        width:
+                                                            size.width * 0.21,
+                                                        child: AlertDialog(
+                                                          title: Text(
+                                                              "Start Your Ride"),
+                                                          content: Text(
+                                                              "Enjoy your journey All The Best!"),
+                                                          actions: [
+                                                            ElevatedButton(
+                                                              child: SizedBox(
+                                                                width:
+                                                                    size.width *
+                                                                        0.21,
+                                                                child: Text(
+                                                                  "   Cancel   ",
+                                                                  style:
+                                                                      TextStyle(
+                                                                    color: Colors
+                                                                        .white,
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                              style: ElevatedButton
+                                                                  .styleFrom(
+                                                                      primary:
+                                                                          Colors
+                                                                              .red,
+                                                                      shape:
+                                                                          RoundedRectangleBorder(
+                                                                        borderRadius:
+                                                                            BorderRadius.circular(10),
+                                                                      ),
+                                                                      textStyle: TextStyle(
+                                                                          fontSize:
+                                                                              15,
+                                                                          color: Colors
+                                                                              .white,
+                                                                          fontWeight:
+                                                                              FontWeight.bold)),
+                                                              onPressed: () {
+                                                                Navigator.of(
+                                                                        context)
+                                                                    .pop();
+                                                              },
+                                                            ),
+                                                            // Spacer(),
+                                                            ElevatedButton(
                                                               child: Text(
-                                                                "   Cancel   ",
+                                                                "Start Ride! ",
                                                                 style:
                                                                     TextStyle(
                                                                   color: Colors
                                                                       .white,
                                                                 ),
                                                               ),
-                                                            ),
-                                                            style: ElevatedButton
-                                                                .styleFrom(
-                                                                    primary:
-                                                                        Colors
-                                                                            .red,
-                                                                    shape:
-                                                                        RoundedRectangleBorder(
-                                                                      borderRadius:
-                                                                          BorderRadius.circular(
-                                                                              10),
-                                                                    ),
-                                                                    textStyle: TextStyle(
-                                                                        fontSize:
-                                                                            15,
-                                                                        color: Colors
-                                                                            .white,
-                                                                        fontWeight:
-                                                                            FontWeight.bold)),
-                                                            onPressed: () {
-                                                              Navigator.of(
-                                                                      context)
-                                                                  .pop();
-                                                            },
-                                                          ),
-                                                          Spacer(),
-                                                          ElevatedButton(
-                                                            child: Text(
-                                                              "Start Ride! ",
-                                                              style: TextStyle(
-                                                                color: Colors
-                                                                    .white,
-                                                              ),
-                                                            ),
-                                                            style: ElevatedButton
-                                                                .styleFrom(
-                                                                    primary: Colors
-                                                                        .green,
-                                                                    shape:
-                                                                        RoundedRectangleBorder(
-                                                                      borderRadius:
-                                                                          BorderRadius.circular(
-                                                                              10),
-                                                                    ),
-                                                                    textStyle: TextStyle(
-                                                                        fontSize:
-                                                                            15,
-                                                                        color: Colors
-                                                                            .white,
-                                                                        fontWeight:
-                                                                            FontWeight.bold)),
-                                                            onPressed:
-                                                                () async {
-                                                              // await _ongoingRideController
-                                                              //     .ongoingRideApi();
-                                                              // _ongoingRideController
-                                                              //     .onInit();
-                                                              // _ongoingRideController
-                                                              //     .update();
+                                                              style: ElevatedButton
+                                                                  .styleFrom(
+                                                                      primary:
+                                                                          Colors
+                                                                              .green,
+                                                                      shape:
+                                                                          RoundedRectangleBorder(
+                                                                        borderRadius:
+                                                                            BorderRadius.circular(10),
+                                                                      ),
+                                                                      textStyle: TextStyle(
+                                                                          fontSize:
+                                                                              15,
+                                                                          color: Colors
+                                                                              .white,
+                                                                          fontWeight:
+                                                                              FontWeight.bold)),
+                                                              onPressed: () {
+                                                                // await _ongoingRideController
+                                                                //     .ongoingRideApi();
+                                                                // _ongoingRideController
+                                                                //     .onInit();
+                                                                // _ongoingRideController
+                                                                //     .update();
 
-                                                              ///todo: open google map and reache to ride.........start..
+                                                                ///todo: open google map and reache to ride.........start..
+                                                                ///cmmenting custom code through url launcher...
 
-                                                              await MapUtils
-                                                                  .openMap(
-                                                                      userendlat,
-                                                                      userendlang);
-                                                              Navigator.of(
-                                                                      context)
-                                                                  .pop();
-                                                            },
-                                                          ),
-                                                        ],
+                                                                // MapUtils.openMap(
+                                                                //     userendlat,
+                                                                //     userendlang);
+
+                                                                ///todo: we are using urlmap launcher package 9 jan 2024...kumar prince
+
+                                                                MapsLauncher.launchCoordinates(
+                                                                    userendlat,
+                                                                    userendlang,
+                                                                    "${userendlocation}");
+
+                                                                ///    print("userstartlocation${userstartlocation}");
+                                                                //     print("userendlocation${userendlocation}");
+                                                                // Navigator.of(
+                                                                //         context)
+                                                                //     .pop();
+                                                              },
+                                                            ),
+                                                          ],
+                                                        ),
                                                       );
                                                     },
                                                   );
-                                                  await _ongoingRideController
-                                                      .ongoingRideApi();
-                                                  _ongoingRideController
-                                                      .onInit();
-                                                  _ongoingRideController
-                                                      .update();
+
+                                                  ///todo: ongpoing api commented....10 jan 2024...kumar prince...........
+                                                  //  _ongoingRideController
+                                                  //.ongoingRideApi();
+                                                  // _ongoingRideController
+                                                  //.onInit();
+                                                  // _ongoingRideController
+                                                  //.update();
                                                 },
                                                 style: ElevatedButton.styleFrom(
                                                   primary: Colors.red,
@@ -961,167 +1125,6 @@ class _OngoingRideTrackingState extends State<OngoingRideTracking> {
                                           ],
                                         ),
                                         Spacer(),
-                                        //wallet
-                                        ///neopop....button...both...
-                                        // Row(
-                                        //   children: [
-                                        //     ///payamoutnt.......mdeet user....
-                                        //     /////finalamtdriver
-                                        //     SizedBox(
-                                        //       height: size.height * 0.05,
-                                        //       width: size.width * 0.35,
-                                        //       child: NeoPopButton(
-                                        //         color: Colors.deepOrangeAccent,
-                                        //         bottomShadowColor: ColorUtils
-                                        //                 .getVerticalShadow(
-                                        //                     Colors.orange
-                                        //                         .shade300)
-                                        //             .toColor(),
-                                        //         rightShadowColor: ColorUtils
-                                        //                 .getHorizontalShadow(
-                                        //                     Colors.orange
-                                        //                         .shade300)
-                                        //             .toColor(),
-                                        //         //animationDuration: kButtonAnimationDuration,
-                                        //         depth: kButtonDepth,
-                                        //         onTapUp: () async {
-                                        //           ///todo: from here  lat id via share preference........................................
-                                        //
-                                        //           SharedPreferences prefs =
-                                        //               await SharedPreferences
-                                        //                   .getInstance();
-                                        //           await prefs.setString(
-                                        //               "StartLatuser",
-                                        //               "${_ongoingRideController.ongoingRide?.startLat ?? 0.0}");
-                                        //           await SharedPreferences
-                                        //               .getInstance();
-                                        //           prefs.setString(
-                                        //               "StartLanguser",
-                                        //               "${_ongoingRideController.ongoingRide?.startLong ?? 0.0}");
-                                        //           // print(
-                                        //           ///todo: open google map and reache to ride.........start..
-                                        //
-                                        //           MapUtils.openMap(
-                                        //               usersatartlat,
-                                        //               usersatartlang);
-                                        //
-                                        //           ///todo: open google map and reached ride.......end..
-                                        //         },
-                                        //         border: Border.all(
-                                        //           color:
-                                        //               Colors.deepOrangeAccent,
-                                        //           width: 3,
-                                        //         ),
-                                        //         child: Padding(
-                                        //           padding: const EdgeInsets
-                                        //                   .symmetric(
-                                        //               horizontal: 0,
-                                        //               vertical: 0),
-                                        //           child: Row(
-                                        //             mainAxisAlignment:
-                                        //                 MainAxisAlignment
-                                        //                     .center,
-                                        //             children: const [
-                                        //               Text("Meet User",
-                                        //                   style: TextStyle(
-                                        //                     color: Colors.white,
-                                        //                     fontSize: 17,
-                                        //                     fontWeight:
-                                        //                         FontWeight.bold,
-                                        //                   )),
-                                        //             ],
-                                        //           ),
-                                        //         ),
-                                        //       ),
-                                        //     ),
-                                        //     Spacer(),
-                                        //     SizedBox(
-                                        //       height: size.height * 0.05,
-                                        //       width: size.width * 0.35,
-                                        //       child: NeoPopButton(
-                                        //         color: Colors.indigoAccent,
-                                        //         bottomShadowColor: ColorUtils
-                                        //                 .getVerticalShadow(
-                                        //                     Colors.indigoAccent
-                                        //                         .shade200)
-                                        //             .toColor(),
-                                        //         rightShadowColor: ColorUtils
-                                        //                 .getHorizontalShadow(
-                                        //                     Colors.indigo
-                                        //                         .shade100)
-                                        //             .toColor(),
-                                        //         //animationDuration: kButtonAnimationDuration,
-                                        //         depth: kButtonDepth,
-                                        //         onTapUp: () async {
-                                        //           ///end lat...
-                                        //           SharedPreferences p =
-                                        //               await SharedPreferences
-                                        //                   .getInstance();
-                                        //           p.setString("endlat1",
-                                        //               "${_ongoingRideController.ongoingRide?.endLat ?? 0.0}");
-                                        //           var endLAtnew =
-                                        //               p.getString("endlat1");
-                                        //           print(
-                                        //               "endlattt:${endLAtnew}");
-                                        //
-                                        //           ///end lang...
-                                        //           SharedPreferences ps =
-                                        //               await SharedPreferences
-                                        //                   .getInstance();
-                                        //           ps.setString("endlang1",
-                                        //               "${_ongoingRideController.ongoingRide?.endLong ?? 0.0}");
-                                        //           var endLANGnew =
-                                        //               ps.getString("endlang1");
-                                        //           print(
-                                        //               "endlangt:${endLANGnew}");
-                                        //
-                                        //           SharedPreferences prefs =
-                                        //               await SharedPreferences
-                                        //                   .getInstance();
-                                        //           await prefs.setString(
-                                        //               "StartLatuser",
-                                        //               "${_ongoingRideController.ongoingRide?.startLat ?? 0.0}");
-                                        //           await SharedPreferences
-                                        //               .getInstance();
-                                        //           prefs.setString(
-                                        //               "StartLanguser",
-                                        //               "${_ongoingRideController.ongoingRide?.startLong ?? 0.0}");
-                                        //
-                                        //           ///todo: open google map and start ride.........start..
-                                        //
-                                        //           MapUtils.openMap(
-                                        //               userendlat, userendlang);
-                                        //
-                                        //           ///todo: open google map and start ride.......end..
-                                        //         },
-                                        //         border: Border.all(
-                                        //           color: Colors.indigoAccent,
-                                        //           width: 3,
-                                        //         ),
-                                        //         child: Padding(
-                                        //           padding: const EdgeInsets
-                                        //                   .symmetric(
-                                        //               horizontal: 0,
-                                        //               vertical: 0),
-                                        //           child: Row(
-                                        //             mainAxisAlignment:
-                                        //                 MainAxisAlignment
-                                        //                     .center,
-                                        //             children: const [
-                                        //               Text("Start Ride",
-                                        //                   style: TextStyle(
-                                        //                     color: Colors.white,
-                                        //                     fontSize: 17,
-                                        //                     fontWeight:
-                                        //                         FontWeight.bold,
-                                        //                   )),
-                                        //             ],
-                                        //           ),
-                                        //         ),
-                                        //       ),
-                                        //     ),
-                                        //   ],
-                                        // ),
                                       ],
                                     ),
                                   ),
@@ -1146,25 +1149,6 @@ class _OngoingRideTrackingState extends State<OngoingRideTracking> {
 
 ///
 
-// class MessageScreen1 extends StatefulWidget {
-//   final String id;
-//   const MessageScreen({Key? key, required this.id}) : super(key: key);
-//
-//   @override
-//   State<MessageScreen> createState() => _MessageScreenState();
-// }
-//
-// class _MessageScreenState extends State<MessageScreen> {
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(
-//         title: Text('Message Screen' + widget.id),
-//       ),
-//     );
-//   }
-// }
-
 ///todo:here google map function.......
 class MapUtils {
   MapUtils._();
@@ -1174,8 +1158,10 @@ class MapUtils {
   ) async {
     String googleMapUrl =
         "https://www.google.com/maps/search/?api=1&query=$latitude,$longitude";
-    if (await canLaunch(googleMapUrl)) {
+    if (await canLaunch(googleMapUrl) != null) {
       await launch(googleMapUrl);
+      // if (await canLaunch(googleMapUrl)) {
+      //   await launch(googleMapUrl);
     } else {
       throw 'Could not open the map';
     }

@@ -232,8 +232,8 @@ class _tracking_usersState extends State<tracking_users> {
                 compassEnabled: true,
                 onMapCreated: (controller) {
                   //method called when map is created
-                  setState(() async {
-                    await CameraPosition(target: startLocation);
+                  setState(() {
+                    CameraPosition(target: startLocation);
                     mapController = controller;
                     mapController2 = controller;
                   });

@@ -197,8 +197,14 @@ class _MyLocationState extends State<MyLocation> {
           zoom: 18.0,
         )),
       );
+
+      ///Todo:.............................todo:.............todo.....
+
       _getAddressFromLatLng(position);
+
+      ///Todo:.............................todo:..........todo........
     }).catchError((e) {
+      ///todo:...//.....//.....//.....//........//.......//............................
       debugPrint(e);
     });
   }
@@ -604,108 +610,125 @@ class _MyLocationState extends State<MyLocation> {
                                 await showDialog(
                                   context: context,
                                   builder: (BuildContext context) {
-                                    return AlertDialog(
-                                      title: Text("Complete Your last Ride"),
-                                      content: Text(
-                                          "You Want to finished your last ride?"),
-                                      actions: [
-                                        ElevatedButton(
-                                          child: SizedBox(
-                                            width: size.width * 0.21,
+                                    return SizedBox(
+                                      height: size.height * 0.1,
+                                      width: size.width * 0.21,
+                                      child: AlertDialog(
+                                        title: Text("Complete Your last Ride"),
+                                        content: Text(
+                                            "You Want to finished your last ride?"),
+                                        actions: [
+                                          ElevatedButton(
+                                            child: SizedBox(
+                                              width: size.width * 0.21,
+                                              child: Text(
+                                                "   Cancel   ",
+                                                style: TextStyle(
+                                                  color: Colors.white,
+                                                ),
+                                              ),
+                                            ),
+                                            style: ElevatedButton.styleFrom(
+                                                primary: Colors.red,
+                                                shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(10),
+                                                ),
+                                                textStyle: TextStyle(
+                                                    fontSize: 15,
+                                                    color: Colors.white,
+                                                    fontWeight:
+                                                        FontWeight.bold)),
+                                            onPressed: () {
+                                              Navigator.of(context).pop();
+                                            },
+                                          ),
+                                          //Spacer(),
+                                          ElevatedButton(
                                             child: Text(
-                                              "   Cancel   ",
+                                              "   Confirm   ",
                                               style: TextStyle(
                                                 color: Colors.white,
                                               ),
                                             ),
+                                            style: ElevatedButton.styleFrom(
+                                                primary: Colors.green,
+                                                shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(10),
+                                                ),
+                                                textStyle: TextStyle(
+                                                    fontSize: 15,
+                                                    color: Colors.white,
+                                                    fontWeight:
+                                                        FontWeight.bold)),
+                                            onPressed: () async {
+                                              CallLoader.loader();
+                                              await Future.delayed(
+                                                  Duration(milliseconds: 500));
+                                              CallLoader.hideLoader();
+                                              await _ongoingRideController
+                                                  .ongoingRideApi();
+                                              _ongoingRideController.onInit();
+                                              _ongoingRideController.update();
+
+                                              SharedPreferences prefs =
+                                                  await SharedPreferences
+                                                      .getInstance();
+                                              await prefs.setString(
+                                                  "DriverListId",
+                                                  "${_ongoingRideController.ongoingRide?.id ?? 0}");
+
+                                              ///todo: open google map and reache to ride.........start..
+                                              await CompleterideApi();
+                                              await postssDriverUpdateApi();
+
+                                              ///timeperiod.............start...
+                                              /// await _getCurrentPosition();
+                                              ///todo: current location.....time...period...
+                                              Timer.periodic(
+                                                  Duration(seconds: 10),
+                                                  (Timer t) =>
+                                                      _getCurrentPosition());
+
+                                              ///todo: time period for post update api...
+                                              Timer.periodic(
+                                                  Duration(seconds: 20),
+                                                  (Timer t) =>
+                                                      postssDriverUpdateApi());
+
+                                              ///timeperiod.............start...
+                                              ///
+                                              await Future.delayed(
+                                                  Duration(milliseconds: 200));
+
+                                              ///todo: navigate to home screen.........
+                                              accountService.getAccountData
+                                                  .then((accountData) {
+                                                Timer(
+                                                  const Duration(seconds: 1),
+                                                  () {
+                                                    Navigator.push(
+                                                        context,
+                                                        MaterialPageRoute(
+                                                            builder: (context) =>
+                                                                BottomNavBar()));
+
+                                                    //Get.to((page))
+                                                    ///
+                                                  },
+                                                );
+                                              });
+                                            },
                                           ),
-                                          style: ElevatedButton.styleFrom(
-                                              primary: Colors.red,
-                                              shape: RoundedRectangleBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(10),
-                                              ),
-                                              textStyle: TextStyle(
-                                                  fontSize: 15,
-                                                  color: Colors.white,
-                                                  fontWeight: FontWeight.bold)),
-                                          onPressed: () {
-                                            Navigator.of(context).pop();
-                                          },
-                                        ),
-                                        Spacer(),
-                                        ElevatedButton(
-                                          child: Text(
-                                            "   Confirm   ",
-                                            style: TextStyle(
-                                              color: Colors.white,
-                                            ),
-                                          ),
-                                          style: ElevatedButton.styleFrom(
-                                              primary: Colors.green,
-                                              shape: RoundedRectangleBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(10),
-                                              ),
-                                              textStyle: TextStyle(
-                                                  fontSize: 15,
-                                                  color: Colors.white,
-                                                  fontWeight: FontWeight.bold)),
-                                          onPressed: () async {
-                                            CallLoader.loader();
-                                            await Future.delayed(
-                                                Duration(milliseconds: 500));
-                                            CallLoader.hideLoader();
-                                            await _ongoingRideController
-                                                .ongoingRideApi();
-                                            _ongoingRideController.onInit();
-                                            _ongoingRideController.update();
-
-                                            SharedPreferences prefs =
-                                                await SharedPreferences
-                                                    .getInstance();
-                                            await prefs.setString(
-                                                "DriverListId",
-                                                "${_ongoingRideController.ongoingRide?.id ?? 0}");
-
-                                            ///todo: open google map and reache to ride.........start..
-                                            await CompleterideApi();
-                                            await postssDriverUpdateApi();
-
-                                            ///timeperiod.............start...
-                                            Timer.periodic(
-                                                Duration(seconds: 20),
-                                                (Timer t) =>
-                                                    postssDriverUpdateApi());
-
-                                            ///timeperiod.............start...
-
-                                            Navigator.of(context).pop();
-                                          },
-                                        ),
-                                      ],
+                                        ],
+                                      ),
                                     );
                                   },
                                 );
 
                                 //postDriverUpdateApi();
                                 // CallLoader.hideLoader();
-                                accountService.getAccountData
-                                    .then((accountData) {
-                                  Timer(
-                                    const Duration(seconds: 1),
-                                    () {
-                                      Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  BottomNavBar()));
-
-                                      //Get.to((page))
-                                      ///
-                                    },
-                                  );
-                                });
                               },
                               child: Container(
                                 height: size.height * 0.05,
@@ -763,11 +786,11 @@ class _MyLocationState extends State<MyLocation> {
 
                                 await postssDriverUpdateApi();
 
-                                Timer.periodic(Duration(seconds: 6),
+                                Timer.periodic(Duration(seconds: 10),
                                     (Timer t) => _getCurrentPosition());
 
                                 ///timeperiod.............start...
-                                Timer.periodic(Duration(seconds: 10),
+                                Timer.periodic(Duration(seconds: 20),
                                     (Timer t) => postssDriverUpdateApi());
 
                                 ///timeperiod.............start...

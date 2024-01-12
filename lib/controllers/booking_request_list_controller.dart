@@ -31,23 +31,23 @@ class DriverRequestListController extends GetxController {
 
     getDriverRequestList = await ApiProvider.DriverRequestBookingApi();
 
-    if (getDriverRequestList?.userListForBookingAmbulance == null) {
-      Timer(
-        const Duration(seconds: 1),
-        () {
-          //Get.snackbar("Fail", "${medicinecheckoutModel?.data}");
-          //Get.to(() => MedicineCart());
-          //Get.to((page))
-          ///
-        },
-      );
-      isLoading(true);
-      getDriverRequestList = await ApiProvider.DriverRequestBookingApi();
-      //Get.to(() => TotalPrice());
-
-      //foundProducts.value = medicinelistmodel!.data;
-      //Get.to(()=>Container());
-    }
+    // if (getDriverRequestList?.userListForBookingAmbulance == null) {
+    //   Timer(
+    //     const Duration(seconds: 1),
+    //     () {
+    //       //Get.snackbar("Fail", "${medicinecheckoutModel?.data}");
+    //       //Get.to(() => MedicineCart());
+    //       //Get.to((page))
+    //       ///
+    //     },
+    //   );
+    //   isLoading(true);
+    //   getDriverRequestList = await ApiProvider.DriverRequestBookingApi();
+    //   //Get.to(() => TotalPrice());
+    //
+    //   //foundProducts.value = medicinelistmodel!.data;
+    //   //Get.to(()=>Container());
+    // }
     if (getDriverRequestList?.userListForBookingAmbulance != null) {
       //Get.to(() => TotalPrice());
       isLoading(false);
@@ -77,9 +77,12 @@ class DriverRequestListController extends GetxController {
       CallLoader.hideLoader();
       accountService.getAccountData.then((accountData) {
         Timer(
-          const Duration(milliseconds: 300),
+          const Duration(milliseconds: 500),
           () {
-            /// Get.to(DriverHomePage());
+            onInit();
+            //rejectbookingdriverApi();
+            ///  Get.to(DriverHomePage());
+            ///  8 dec 2023
             // _viewhealthchkpreviewController.healthreviewratingApi();
             //_viewhealthchkpreviewController.update();
             // Get.snackbar(
@@ -109,7 +112,7 @@ class DriverRequestListController extends GetxController {
       CallLoader.hideLoader();
       accountService.getAccountData.then((accountData) {
         Timer(
-          const Duration(milliseconds: 300),
+          const Duration(milliseconds: 500),
           () {
             onInit();
             //rejectbookingdriverApi();

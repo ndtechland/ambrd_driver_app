@@ -1,6 +1,8 @@
 import 'dart:async';
 
 import 'package:ambrd_driver_app/controllers/booking_request_list_controller.dart';
+import 'package:ambrd_driver_app/controllers/edit_bank_controller/edit_bank_detail_controller.dart';
+import 'package:ambrd_driver_app/controllers/get_profile_controller.dart';
 import 'package:ambrd_driver_app/controllers/home_controllers.dart';
 import 'package:ambrd_driver_app/controllers/swith_toogle_controller/toogle_switch_controller.dart';
 import 'package:ambrd_driver_app/services/account_service_forautologin.dart';
@@ -22,6 +24,9 @@ class SplashController extends GetxController
   HomeController _homePageController = Get.put(HomeController());
   DriverRequestListController _driverRequestListController =
       Get.put(DriverRequestListController());
+  GetProfileController _getProfileController = Get.put(GetProfileController());
+  EditbankdetailController _editbankdetailController =
+      Get.put(EditbankdetailController());
 
   SwitchX tooglecontroller = Get.put(SwitchX());
 
@@ -41,6 +46,8 @@ class SplashController extends GetxController
             await _homePageController.sliderBannerApi();
             await _driverRequestListController.driverRequestListApi();
             _driverRequestListController.onInit();
+            _getProfileController.editProfileApi();
+            _editbankdetailController.getBankProfileApi();
             //tooglecontroller.ToogleStatusApi();
             _homePageController.onInit();
 
@@ -81,6 +88,8 @@ class SplashController extends GetxController
               );
               //CallLoader.hideLoader();
             });
+            _getProfileController.editProfileApi();
+            _editbankdetailController.getBankProfileApi();
             await _homePageController.AllServicesApi();
             await _homePageController.sliderBannerApi();
             _homePageController.onInit();
