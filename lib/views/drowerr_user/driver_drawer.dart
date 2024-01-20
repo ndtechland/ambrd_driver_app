@@ -4,6 +4,7 @@ import 'package:ambrd_driver_app/controllers/get_profile_controller.dart';
 import 'package:ambrd_driver_app/controllers/otp_controller_new_correct/otp_new_controller.dart';
 import 'package:ambrd_driver_app/controllers/update_profile_controller.dart';
 import 'package:ambrd_driver_app/views/botttom_navigation_bar/bottom_nav_bar_controller.dart';
+import 'package:ambrd_driver_app/views/botttom_navigation_bar/bottom_navbar.dart';
 import 'package:ambrd_driver_app/views/drowerr_user/page_drower/about_us.dart';
 import 'package:ambrd_driver_app/views/drowerr_user/page_drower/edit_bank.dart';
 import 'package:ambrd_driver_app/views/drowerr_user/page_drower/edit_profile.dart';
@@ -113,7 +114,7 @@ class MainAmbrbdriverDrawer extends StatelessWidget {
                 _navcontroller.tabindex(0);
 
                 ///Get.to(() => MyAppTestingUrl());
-                //Get.to(() => AllProducts());
+                Get.to(() => BottomNavBar());
                 //Get.offNamed('/NavBar');
               },
             ),
@@ -144,10 +145,13 @@ class MainAmbrbdriverDrawer extends StatelessWidget {
               onTap: () async {
                 Get.back();
                 // print(Get.currentRoute);
-
-                await Get.to(ProfilePagess());
                 await _getProfileController.editProfileApi();
                 _getProfileController.onInit();
+                _getProfileController.update();
+
+                await Get.to(ProfilePagess());
+                // await _getProfileController.editProfileApi();
+                // _getProfileController.onInit();
 
                 ///......
                 // _navController.tabindex(3);
@@ -454,6 +458,47 @@ class MainAmbrbdriverDrawer extends StatelessWidget {
               },
             ),
 
+            ListTile(
+              leading: Icon(
+                Icons.delete_forever_outlined,
+                color: Colors.black,
+                size: size.height * 0.021,
+              ),
+              trailing: Icon(
+                Icons.arrow_forward_ios_sharp,
+                color: Colors.black,
+                size: 11,
+              ),
+              contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 10),
+              dense: true,
+              visualDensity: VisualDensity(horizontal: 0, vertical: -2),
+              title: Text(
+                'Delete Account',
+                style: TextStyle(fontSize: 10, fontWeight: FontWeight.w600),
+              ),
+              onTap: () {
+                Get.defaultDialog(
+                  title: "Welcome To Ambrd",
+                  middleText: "You content goes here...",
+                  content: getContent(),
+                  barrierDismissible: true,
+                  radius: 20.0,
+                  confirm: Padding(
+                    padding: const EdgeInsets.all(12.0),
+                    child: confirmBtn(),
+                  ),
+                  cancel: Padding(
+                    padding: const EdgeInsets.all(12.0),
+                    child: cancelBtn(),
+                  ),
+                );
+
+                //Get.to(() => CupponsPage());
+                // Navigator.push(context,
+                //     MaterialPageRoute(builder: (context) => Wollet()));
+              }, //PersonalDetails
+            ),
+
             /// wallet
             // ListTile(
             //   //horizontalTitleGap: 2.h,
@@ -541,6 +586,54 @@ class MainAmbrbdriverDrawer extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+
+  Widget confirmBtn() {
+    return ElevatedButton(
+        onPressed: () {
+          Get.back();
+        },
+        style: ElevatedButton.styleFrom(
+            primary: Colors.red,
+            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+            textStyle: TextStyle(fontSize: 10, fontWeight: FontWeight.bold)),
+        child: Text("Confirm"));
+  }
+
+  Widget cancelBtn() {
+    return ElevatedButton(
+        onPressed: () {
+          Get.back();
+        },
+        style: ElevatedButton.styleFrom(
+            primary: Colors.green,
+            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+            textStyle: TextStyle(fontSize: 10, fontWeight: FontWeight.bold)),
+        child: Text("Cancel"));
+  }
+
+  Widget getContent() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          "If Yow want to remove your account,",
+          style: TextStyle(fontWeight: FontWeight.w600, fontSize: 12),
+        ),
+        Text(
+          "Then you please click confirm button",
+          style: TextStyle(fontWeight: FontWeight.w600, fontSize: 12),
+        ),
+        Text(
+          "Your data will erase if you press confirm.",
+          style: TextStyle(fontWeight: FontWeight.w600, fontSize: 12),
+        ),
+        Text(
+          "If you don't want to delete press cancel",
+          style: TextStyle(fontWeight: FontWeight.w600, fontSize: 12),
+        ),
+      ],
     );
   }
 }

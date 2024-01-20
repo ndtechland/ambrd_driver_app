@@ -22,19 +22,19 @@ class _WebViewPswebsiteState extends State<WebViewPswebsite> {
         }
         return true;
       },
-      child: SafeArea(
-        child: Scaffold(
-          appBar: AppBar(
-            elevation: 0,
-            title: const Text('Ambrd APP'),
-            backgroundColor: Colors.blue,
-            centerTitle: true,
-          ),
-          body: Stack(
+      child: Scaffold(
+        appBar: AppBar(
+          elevation: 0,
+          title: const Text('Ambrd APP'),
+          backgroundColor: Colors.blue,
+          centerTitle: true,
+        ),
+        body: SafeArea(
+          child: Stack(
             children: [
               InAppWebView(
                 initialUrlRequest:
-                    URLRequest(url: Uri.parse("http://ambrd.in/")),
+                    URLRequest(url: Uri.parse("https://ambrd.in/")),
                 onWebViewCreated: (InAppWebViewController controller) {
                   inAppWebViewController = controller;
                 },

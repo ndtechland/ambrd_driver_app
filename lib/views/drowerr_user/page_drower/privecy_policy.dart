@@ -1,3 +1,4 @@
+import 'package:ambrd_driver_app/constantsss/app_theme/app_color.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 
@@ -22,19 +23,19 @@ class _privecy_policyState extends State<privecy_policy> {
         }
         return true;
       },
-      child: SafeArea(
-        child: Scaffold(
-          appBar: AppBar(
-            elevation: 0,
-            title: const Text('Privacy Policy'),
-            backgroundColor: Colors.cyan,
-            centerTitle: true,
-          ),
-          body: Stack(
+      child: Scaffold(
+        appBar: AppBar(
+          elevation: 0,
+          title: const Text('Privacy Policy'),
+          backgroundColor: MyTheme.ambapp,
+          centerTitle: true,
+        ),
+        body: SafeArea(
+          child: Stack(
             children: [
               InAppWebView(
                 initialUrlRequest:
-                    URLRequest(url: Uri.parse("http://ambrd.in/privacy")),
+                    URLRequest(url: Uri.parse("https://ambrd.in/privacy")),
                 onWebViewCreated: (InAppWebViewController controller) {
                   inAppWebViewController = controller;
                 },

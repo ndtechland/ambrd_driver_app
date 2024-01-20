@@ -32,7 +32,7 @@ class OtpVerifyController extends GetxController {
 
   ///this is the api call....
 
-  void callOtpApi(String otp) async {
+  Future<void> callOtpApi(String otp) async {
     http.Response r = await ApiProvider.verifyOTP(
         _loginMobileController.MobileOrEmail.text, otp);
     if (r.statusCode == 200) {

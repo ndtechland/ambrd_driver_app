@@ -10,7 +10,6 @@ import '../../widget/circular_loader.dart';
 
 class EditbankdetailController extends GetxController {
   RxBool isLoading = false.obs;
-
   final GlobalKey<FormState> editbankdetailFormKey = GlobalKey<FormState>();
 
   TextEditingController AccountNumber = TextEditingController();
@@ -56,7 +55,7 @@ class EditbankdetailController extends GetxController {
   Future<void> getBankProfileApi() async {
     isLoading(true);
     getbankdetail = await ApiProvider.geBankkApi();
-    if (getbankdetail!.holderName != null) {
+    if (getbankdetail?.mobileNumber != null) {
       //onInit();
       //print("ookoddee43434${getProfileDetail!.pinCode}");
 

@@ -7,8 +7,28 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:get_storage/get_storage.dart';
+//
+// sendDate() {
+//   print('princeeee');
+// }
 
 @pragma('vm:entry-point')
+//const task = 'firstTask';
+// Mandatory if the App is obfuscated or using Flutter 3.1+
+///
+// void callbackDispatcher() {
+//   Workmanager().executeTask((taskname, inputData) {
+//     switch (taskname) {
+//       case 'firstTask':
+//         sendDate();
+//         break;
+//       default:
+//     }
+//     //print("Native called background task: $taskname"); //simpleTask will be emitted here.
+//     return Future.value(true);
+//   });
+// }
+
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp();
 }
@@ -23,13 +43,25 @@ class MyHttpOverrides extends HttpOverrides {
 }
 
 Future<void> main() async {
+  ///workmanaget...start..
+  //WidgetsFlutterBinding.ensureInitialized();
+
+  // await Workmanager().initialize(
+  //     callbackDispatcher, // The top level function, aka callbackDispatcher
+  //     isInDebugMode:
+  //         true // If enabled it will post a notification whenever the task is running. Handy for debugging tasks
+  //     );
+  //await Workmanager().registerOneOffTask("task-identifier", "simpleTask");
+
+  ///workmanaget...end..
   await GetStorage.init();
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 
   ///i created new class name is firebase api kumar prince extra its not needed
-  await FirebaseApi().initNotifications();
+  // await FirebaseApi().initNotifications();
+  FirebaseApi().initNotifications();
 
   ///HttpOverrides.global = MyHttpOverrides();
   //WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
