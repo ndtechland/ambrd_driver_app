@@ -3,6 +3,7 @@ import 'dart:convert';
 
 import 'package:ambrd_driver_app/controllers/booking_request_list_controller.dart';
 import 'package:ambrd_driver_app/controllers/ongoing_ride_controller.dart';
+import 'package:ambrd_driver_app/services/api_provider.dart';
 import 'package:ambrd_driver_app/views/drowerr_user/booking_driver_history.dart';
 import 'package:ambrd_driver_app/views/drowerr_user/driver_drawer.dart';
 import 'package:ambrd_driver_app/views/drowerr_user/page_drower/payment_history.dart';
@@ -22,6 +23,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_carousel_slider/carousel_slider.dart';
 import 'package:flutter_carousel_slider/carousel_slider_indicators.dart';
 import 'package:flutter_carousel_slider/carousel_slider_transforms.dart';
+import 'package:geocoding/geocoding.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
@@ -32,6 +35,8 @@ import '../../constantsss/app_theme/app_color.dart';
 import '../../controllers/home_controllers.dart';
 import '../../controllers/swith_toogle_controller/toogle_switch_controller.dart';
 
+const task = 'firstTask';
+
 class HomeScreen extends StatefulWidget {
   HomeScreen({Key? key}) : super(key: key);
 
@@ -40,6 +45,88 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+
+  String? _currentAddress;
+  Position? _currentPosition;
+  StreamSubscription? periodicSub;
+
+  Future<bool> _handleLocationPermission() async {
+    bool serviceEnabled;
+    LocationPermission permission;
+
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text(
+              'Location services are disabled. Please enable the services')));
+      return false;
+    }
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Location permissions are denied')));
+        return false;
+      }
+    }
+    if (permission == LocationPermission.deniedForever) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text(
+              'Location permissions are permanently denied, we cannot request permissions.')));
+      return false;
+    }
+
+    return true;
+  }
+
+  ///todo: get location.......current.........
+  Future<void> _getCurrentPosition() async {
+    final hasPermission = await _handleLocationPermission();
+
+    if (!hasPermission) return;
+    await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high)
+        .then((Position position) {
+      // print('okokokerere');
+      setState(() => _currentPosition = position);
+      _getAddressFromLatLng(_currentPosition!);
+      //print('okokokererewqdwq');
+    }).catchError((e) {
+      debugPrint(e);
+    });
+  }
+
+  ///todo: get access current address.........................
+
+  Future<void> _getAddressFromLatLng(Position position) async {
+    await placemarkFromCoordinates(
+            _currentPosition!.latitude, _currentPosition!.longitude)
+        .then((List<Placemark> placemarks) {
+      Placemark place = placemarks[0];
+      setState(() {
+        _currentAddress =
+            '${place.street}, ${place.subLocality}, ${place.subAdministrativeArea}, ${place.postalCode}';
+      });
+    }).catchError((e) {
+      debugPrint(e);
+    });
+  }
+
+  ///todo:apiiii....driver update location...
+  Future<void> postssDriverUpdateApi2() async {
+    await placemarkFromCoordinates(
+        _currentPosition!.latitude, _currentPosition!.longitude);
+    http.Response r = await ApiProvider.GoogleupdatedriverApi(
+      _currentPosition?.latitude.toDouble(),
+      _currentPosition?.longitude.toDouble(),
+    );
+    if (r.statusCode == 200) {
+      //Get.snackbar('message', r.body);
+      var data = jsonDecode(r.body);
+    }
+  }
+
   NotificationServices notificationServices = NotificationServices();
 
   DriverRequestListController _driverRequestListController =
@@ -77,7 +164,55 @@ class _HomeScreenState extends State<HomeScreen> {
   ///implement firebase....27...jun..2023
   @override
   void initState() {
+    // Workmanager().registerPeriodicTask('uniqueName', 'taskName',
+    //     frequency: Duration(seconds: 3));
     super.initState();
+
+    // ///todo: workmanager 15 jan 2024.....
+    // var uniqueId = DateTime.now().second.toString();
+    // //var task1 = print('okrtyui');
+    // Workmanager().registerPeriodicTask(
+    //   uniqueId,
+    //   task,
+    //   // initialDelay: Duration(seconds: 10),
+    //   //  constraints:
+    //   //      Constraints(networkType: NetworkType.connected),
+    //   frequency: Duration(seconds: 5),
+    // );
+
+    ///todo: workmanager 15 jan 2024.....end....
+
+    ///todo: it is periodic function periodic
+    ///
+    periodicSub = new Stream.periodic(const Duration(seconds: 5))
+        //.take(6)
+        .listen((_) => _getCurrentPosition());
+
+    // const oneSec = Duration(seconds: 6);
+    // Timer.periodic(oneSec, (Timer t) => _getCurrentPosition()
+    //     // print('hiokookoko!')
+    //     );..
+
+    ///
+    ///
+    ///
+
+    // const tenSec = Duration(seconds: 10);
+    // Timer.periodic(tenSec, (Timer t) => postssDriverUpdateApi2()
+    //     // print('hiokookoko!')
+    //     );....
+
+    ///todo: it is periodic function STREAM periodic.....
+
+    periodicSub = new Stream.periodic(const Duration(seconds: 9))
+        //.take(6)
+        .listen((_) => postssDriverUpdateApi2());
+
+    //print('tick tookk')
+
+    ///todo: get current location.......
+    //_getCurrentPosition();
+    // _getAddressFromLatLng();
     //todo:to...................
     notificationServices.requestNotificationPermission();
     notificationServices.forgroundMessage();
@@ -96,6 +231,41 @@ class _HomeScreenState extends State<HomeScreen> {
       }
       // print('device token');
       // print(value);
+    });
+
+    ///todo: notification......
+    notificationServices.getDeviceToken().then((value) async {
+      ///todo: from here custom from backend start...
+      var prefs = GetStorage();
+      //prefs.write("AdminLogin_Id".toString(), json.decode(r.body)['data']['AdminLogin_Id']);
+      AdminLogin_Id = prefs.read("AdminLogin_Id").toString();
+      print('&&&&&&&&&&&&&&&&&&&&admin:${AdminLogin_Id}');
+
+      ///.............................................................................
+      DriverId = prefs.read("DriverId").toString();
+      print('&&&&&&&&&&&&&&&&&&&&&&driverrcredentials:${DriverId}');
+      var body = {
+        "AdminLoginId": "${AdminLogin_Id}",
+        "DeviceId": value.toString(),
+      };
+      print("userrrtokenupdateeeddbeforetttt${body}");
+      http.Response r = await http.post(
+        Uri.parse('https://admin.ambrd.in/api/CommonApi/UpdateDeviceId'),
+        body: body,
+      );
+
+      print(r.body);
+      if (r.statusCode == 200) {
+        print("userrrtokenupdatdricvfe3333${body}");
+        return r;
+      } else if (r.statusCode == 401) {
+        Get.snackbar('message', r.body);
+      } else {
+        Get.snackbar('Error', r.body);
+        return r;
+      }
+
+      ///todo end post api from backend...
     });
 
     /// 1. This method call when app in terminated state and you get a notification
@@ -151,15 +321,6 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  final List<String> productname = [
-    'Invoice',
-    'Add Technician',
-    'Profile',
-    'Complaint List',
-    'Customer Support',
-    'Add Services',
-  ];
-
   final List<String> productname2 = [
     'Booking List',
     'Ongoing Ride',
@@ -208,17 +369,40 @@ class _HomeScreenState extends State<HomeScreen> {
   // _launchURLBrowser() async {
   @override
   Widget build(BuildContext context) {
+    ///todo: define lat lang.....
+    var lat = "${_currentPosition?.latitude.toDouble() ?? ""}";
+    //_currentPosition?.latitude.toDouble();
+    var lang = "${_currentPosition?.longitude.toDouble() ?? ""}";
     // Instantiate Get Controller, *in* build()
 
     Size size = MediaQuery.of(context).size;
     int pageIndex = 0;
     GlobalKey<ScaffoldState> _key = GlobalKey();
 
+    ///todo:apiiii....driver update location...
+
+    // Future<void> postssDriverUpdateApi() async {
+    //   http.Response r = await ApiProvider.GoogleupdatedriverApi(
+    //     lat,
+    //     lang,
+    //   );
+    //   if (r.statusCode == 200) {
+    //     //Get.snackbar('message', r.body);
+    //     var data = jsonDecode(r.body);
+    //   }
+    // }
+
     ///var base = 'https://api.gyros.farm/Images/';
     return WillPopScope(
       onWillPop: () => showExitPopup(context),
       child: Scaffold(
-        key: _key,
+        ///todo: you can fix your drower....
+        /// drawerEnableOpenDragGesture: false,
+        drawer: MainAmbrbdriverDrawer(),
+
+        key: _scaffoldKey,
+
+        // key: _key,
         //backgroundColor: MyTheme.ambapp1,
         appBar: AppBar(
           elevation: 1,
@@ -252,61 +436,6 @@ class _HomeScreenState extends State<HomeScreen> {
                             notificationServices
                                 .getDeviceToken()
                                 .then((value) async {
-                              var data = {
-                                //this the particular device id.....
-                                'to':
-                                    //this is dummy token...
-                                    "ugug6t878",
-
-                                ///todo device token......
-                                // widget
-                                //     .driverlist
-                                //     ?.message?[
-                                //         index]
-                                //     .id
-                                //     .toString(),
-                                ///
-                                //'mytokeneOs6od2nTlqsaFZl8-6ckc:APA91bHzcTpftAHsg7obx0CqhrgY1dyTlSwB5fxeUiBvGtAzX_us6iT6Xp-vXA8rIURK45EehE25_uKiE5wRIUKCF-8Ck-UKir96zS-PGRrpxxOkwPPUKS4M5Em2ql1GmYPY9FVOC4FC'
-                                //'emW_j62UQnGX04QHLSiufM:APA91bHu2uM9C7g9QEc3io7yTVMqdNpdQE3n6vNmFwcKN6z-wq5U9S7Nyl79xJzP_Z-Ve9kjGIzMf4nnaNwSrz94Rcel0-4em9C_r7LvtmCBOWzU-VyPclHXdqyBc3Nrq7JROBqUUge9'
-                                //.toString(),
-
-                                ///this is same device token....
-                                //value.toString(),
-                                'notification': {
-                                  'title': 'Ambrd Driver',
-                                  'body': 'You have request for ambulance',
-                                  //"sound": "jetsons_doorbell.mp3"
-                                },
-                                'android': {
-                                  'notification': {
-                                    'notification_count': 23,
-                                  },
-                                },
-                                'data': {'type': 'msj', 'id': '123456'}
-                              };
-
-                              await http.post(
-                                  Uri.parse(
-                                      'https://fcm.googleapis.com/fcm/send'),
-                                  body: jsonEncode(data),
-                                  headers: {
-                                    'Content-Type':
-                                        'application/json; charset=UTF-8',
-                                    'Authorization':
-                                        //'key=d6JbNnFARI-J8D6eV4Akgs:APA91bF0C8EdU9riyRpt6LKPmRUyVFJZOICCRe7yvY2z6FntBvtG2Zrsa3MEklktvQmU7iTKy3we9r_oVHS4mRnhJBq_aNe9Rg8st2M-gDMR39xZV2IEgiFW9DsnDp4xw-h6aLVOvtkC'
-                                        'key=AAAAp6CyXz4:APA91bEKZ_ArxpUWyMYnP8Do3oYrgXFVdNm2jQk-i1DjKcR8duPeccS64TohP-OAqxL57-840qWe0oeYDBAOO68-aOO2z9EWIcBbUIsXc-3kA5usYMviDYc_wK6qMsQecvAdM54xfZsO'
-                                    // 'AAAAp6CyXz4:APA91bGPkLfnMIlQQJRVMqHmqSAghl0cL0MqtI2oJugrPTgBRO-Ps1VJh0TtQr9Hjx5WdAkRbzLLNhLIvWrUFhJHHFvwGyGwKyyNOVCmukeL3JDSgK2IoextNQ_3r5rM557EuiKwgEFE'
-                                    //'AAAASDFsCOM:APA91bGLHziX-gzIM6srTPyXPbXfg8I1TTj4qcbP3gaUxuY9blzHBvT8qpeB4DYjaj6G6ql3wiLmqd4UKHyEiDL1aJXTQKfoPH8oG5kmEfsMs3Uj5053I8fl69qylMMB-qikCH0warBc'
-                                  }).then((value) {
-                                if (kDebugMode) {
-                                  print(value.body.toString());
-                                }
-                              }).onError((error, stackTrace) {
-                                if (kDebugMode) {
-                                  print(error);
-                                }
-                              });
-
                               ///todo: from here custom from backend start...
                               var prefs = GetStorage();
 
@@ -327,7 +456,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               print("userrrtokenupdateeeddbeforetttt${body}");
                               http.Response r = await http.post(
                                 Uri.parse(
-                                    'http://admin.ambrd.in/api/CommonApi/UpdateDeviceId'),
+                                    'https://admin.ambrd.in/api/CommonApi/UpdateDeviceId'),
                                 body: body,
                               );
 
@@ -388,10 +517,10 @@ class _HomeScreenState extends State<HomeScreen> {
                 icon: Icon(Icons.more_vert, color: Colors.white),
                 itemBuilder: (context) {
                   return [
-                    const PopupMenuItem<int>(
-                      value: 0,
-                      child: Text("Update Location"),
-                    ),
+                    // const PopupMenuItem<int>(
+                    //   value: 0,
+                    //   child: Text("Update Location"),
+                    // ),
                     const PopupMenuItem<int>(
                       value: 2,
                       child: Text("Complete Ride"),
@@ -399,116 +528,104 @@ class _HomeScreenState extends State<HomeScreen> {
                   ];
                 },
                 onSelected: (value) async {
-                  if (value == 0) {
-                    CircularProgressIndicator();
-                    print('princee notification');
-                    await _ongoingRideController.ongoingRideApi();
-                    _ongoingRideController.update();
-                    _ongoingRideController.onInit();
+                  // if (value == 0) {
+                  //   print('princee notification');
+                  //   _ongoingRideController.ongoingRideApi();
+                  //   _ongoingRideController.update();
+                  //   _ongoingRideController.onInit();
+                  //   // CallLoader.loader();
+                  //   // await Future.delayed(Duration(milliseconds: 700));
+                  //   // CallLoader.hideLoader();
+                  //
+                  //   ///todo: call post update lat lang api in flutter.....
+                  //   periodicSub =
+                  //       new Stream.periodic(const Duration(seconds: 10))
+                  //           //.take(6)
+                  //           .listen((_) => postssDriverUpdateApi()
+                  //               //print('tick tookk')
+                  //               );
+                  //   // await postssDriverUpdateApi();
+                  //
+                  //   ///todo: end call post update lat lang api in flutter.....
+                  //   //CircularProgressIndicator();
+                  //
+                  //   notificationServices.getDeviceToken().then((value) async {
+                  //     ///todo: from here custom from backend start...
+                  //     var prefs = GetStorage();
+                  //
+                  //     //prefs.write("AdminLogin_Id".toString(), json.decode(r.body)['data']['AdminLogin_Id']);
+                  //     AdminLogin_Id = prefs.read("AdminLogin_Id").toString();
+                  //     print('&&&&&&&&&&&&&&&&&&&&admin:${AdminLogin_Id}');
+                  //
+                  //     ///.............................................................................
+                  //     DriverId = prefs.read("DriverId").toString();
+                  //     print(
+                  //         '&&&&&&&&&&&&&&&&&&&&&&driverrcredentials:${DriverId}');
+                  //     var body = {
+                  //       "AdminLoginId": "${AdminLogin_Id}",
+                  //       "DeviceId": value.toString(),
+                  //     };
+                  //     print("userrrtokenupdateeeddbeforetttt${body}");
+                  //     http.Response r = await http.post(
+                  //       Uri.parse(
+                  //           'http://admin.ambrd.in/api/CommonApi/UpdateDeviceId'),
+                  //       body: body,
+                  //     );
+                  //     print(r.body);
+                  //     if (r.statusCode == 200) {
+                  //       print("userrrtokenupdatdricvfe3333${body}");
+                  //       return r;
+                  //     } else if (r.statusCode == 401) {
+                  //       Get.snackbar('message', r.body);
+                  //     } else {
+                  //       Get.snackbar('Error', r.body);
+                  //       return r;
+                  //     }
+                  //
+                  //     ///todo end post api from backend...
+                  //   });
+                  //
+                  //   ///end....
+                  //   ///
+                  //
+                  //   ///
+                  //
+                  //   // const oneSec = Duration(seconds: 1);
+                  //   // Timer.periodic(oneSec, (Timer t) => print('hi!'));
+                  //   ///
+                  //
+                  //   // periodicSub =
+                  //   //     new Stream.periodic(const Duration(milliseconds: 500))
+                  //   //         .take(10)
+                  //   //         .listen((_) => print('tick'));
+                  //
+                  //   ///todo: location page.......navigation....
+                  //   ///await Get.to(MyLocation());
+                  //
+                  //   ///print("My account menu is selected.");
+                  // }
+                  if (value == 2) {
+                    // ///todo: workmanager 15 jan 2024.....
+                    // var uniqueId = DateTime.now().second.toString();
+                    // //var task1 = print('okrtyui');
+                    // await Workmanager().registerPeriodicTask(
+                    //   uniqueId,
+                    //   task,
+                    //   // initialDelay: Duration(seconds: 10),
+                    //   //  constraints:
+                    //   //      Constraints(networkType: NetworkType.connected),
+                    //   frequency: Duration(seconds: 5),
+                    // );
+                    //
+                    // ///todo: workmanager 15 jan 2024.....end....
 
-                    notificationServices.getDeviceToken().then((value) async {
-                      var data = {
-                        //this the particular device id.....
-                        'to':
-                            //this is dummy token...
-                            "ugug6t878",
-
-                        ///todo device token......
-                        // widget
-                        //     .driverlist
-                        //     ?.message?[
-                        //         index]
-                        //     .id
-                        //     .toString(),
-                        ///
-                        //'mytokeneOs6od2nTlqsaFZl8-6ckc:APA91bHzcTpftAHsg7obx0CqhrgY1dyTlSwB5fxeUiBvGtAzX_us6iT6Xp-vXA8rIURK45EehE25_uKiE5wRIUKCF-8Ck-UKir96zS-PGRrpxxOkwPPUKS4M5Em2ql1GmYPY9FVOC4FC'
-                        //'emW_j62UQnGX04QHLSiufM:APA91bHu2uM9C7g9QEc3io7yTVMqdNpdQE3n6vNmFwcKN6z-wq5U9S7Nyl79xJzP_Z-Ve9kjGIzMf4nnaNwSrz94Rcel0-4em9C_r7LvtmCBOWzU-VyPclHXdqyBc3Nrq7JROBqUUge9'
-                        //.toString(),
-
-                        ///this is same device token....
-                        //value.toString(),
-                        'notification': {
-                          'title': 'Ambrd Driver',
-                          'body': 'You have request for ambulance',
-                          //"sound": "jetsons_doorbell.mp3"
-                        },
-                        'android': {
-                          'notification': {
-                            'notification_count': 23,
-                          },
-                        },
-                        'data': {'type': 'msj', 'id': '123456'}
-                      };
-
-                      await http.post(
-                          Uri.parse('https://fcm.googleapis.com/fcm/send'),
-                          body: jsonEncode(data),
-                          headers: {
-                            'Content-Type': 'application/json; charset=UTF-8',
-                            'Authorization':
-                                //'key=d6JbNnFARI-J8D6eV4Akgs:APA91bF0C8EdU9riyRpt6LKPmRUyVFJZOICCRe7yvY2z6FntBvtG2Zrsa3MEklktvQmU7iTKy3we9r_oVHS4mRnhJBq_aNe9Rg8st2M-gDMR39xZV2IEgiFW9DsnDp4xw-h6aLVOvtkC'
-                                'key=AAAAp6CyXz4:APA91bEKZ_ArxpUWyMYnP8Do3oYrgXFVdNm2jQk-i1DjKcR8duPeccS64TohP-OAqxL57-840qWe0oeYDBAOO68-aOO2z9EWIcBbUIsXc-3kA5usYMviDYc_wK6qMsQecvAdM54xfZsO'
-                            // 'AAAAp6CyXz4:APA91bGPkLfnMIlQQJRVMqHmqSAghl0cL0MqtI2oJugrPTgBRO-Ps1VJh0TtQr9Hjx5WdAkRbzLLNhLIvWrUFhJHHFvwGyGwKyyNOVCmukeL3JDSgK2IoextNQ_3r5rM557EuiKwgEFE'
-                            //'AAAASDFsCOM:APA91bGLHziX-gzIM6srTPyXPbXfg8I1TTj4qcbP3gaUxuY9blzHBvT8qpeB4DYjaj6G6ql3wiLmqd4UKHyEiDL1aJXTQKfoPH8oG5kmEfsMs3Uj5053I8fl69qylMMB-qikCH0warBc'
-                          }).then((value) {
-                        if (kDebugMode) {
-                          print(value.body.toString());
-                        }
-                      }).onError((error, stackTrace) {
-                        if (kDebugMode) {
-                          print(error);
-                        }
-                      });
-
-                      ///todo: from here custom from backend start...
-                      var prefs = GetStorage();
-
-                      //prefs.write("AdminLogin_Id".toString(), json.decode(r.body)['data']['AdminLogin_Id']);
-                      AdminLogin_Id = prefs.read("AdminLogin_Id").toString();
-                      print('&&&&&&&&&&&&&&&&&&&&admin:${AdminLogin_Id}');
-
-                      ///.............................................................................
-                      DriverId = prefs.read("DriverId").toString();
-                      print(
-                          '&&&&&&&&&&&&&&&&&&&&&&driverrcredentials:${DriverId}');
-                      var body = {
-                        "AdminLoginId": "${AdminLogin_Id}",
-                        "DeviceId": value.toString(),
-                      };
-                      print("userrrtokenupdateeeddbeforetttt${body}");
-                      http.Response r = await http.post(
-                        Uri.parse(
-                            'http://admin.ambrd.in/api/CommonApi/UpdateDeviceId'),
-                        body: body,
-                      );
-                      print(r.body);
-                      if (r.statusCode == 200) {
-                        print("userrrtokenupdatdricvfe3333${body}");
-                        return r;
-                      } else if (r.statusCode == 401) {
-                        Get.snackbar('message', r.body);
-                      } else {
-                        Get.snackbar('Error', r.body);
-                        return r;
-                      }
-
-                      ///todo end post api from backend...
-                    });
-
-                    ///end....
-                    ///
-                    await Get.to(MyLocation());
-
-                    ///print("My account menu is selected.");
-                  } else if (value == 2) {
                     //CircularProgressIndicator();
                     CallLoader.loader();
                     await Future.delayed(Duration(milliseconds: 500));
                     CallLoader.hideLoader();
-
-                    await _ongoingRideController.ongoingRideApi();
+                    _ongoingRideController.ongoingRideApi();
                     _ongoingRideController.update();
-                    _ongoingRideController.onInit();
+                    //_ongoingRideController.onInit();
                     await Get.to(MyLocation());
 
                     // _homePageController.logout();
@@ -516,24 +633,35 @@ class _HomeScreenState extends State<HomeScreen> {
                   }
                 }),
           ],
+
+          /// void openDrawer();
           // actions: [
           //   IconButton(onPressed: (){
           //     _homePageController.logout();
           //   },
           //     icon: Icon(Icons.logout),color: Colors.black,)
           // ],
-          leading: InkWell(
-              onTap: () {
-                /// Get.to(LoginEmailPage());
-                _key.currentState!.openDrawer();
-              },
-              child: Icon(
-                Icons.menu,
-                color: Colors.white,
-              )),
+          ///....16jan 2024...changed
+          // leading: GestureDetector(
+          //     onTap: () {
+          //       /// Get.to(LoginEmailPage());
+          //       _key.currentState!.openDrawer();
+          //     },
+          //     child: Icon(
+          //       Icons.menu,
+          //       color: Colors.white,
+          //     )),
+          ///...
+          leading: Builder(
+            builder: (context) => // Ensure Scaffold is in context
+                IconButton(
+                    icon: Icon(Icons.menu),
+                    onPressed: () => Scaffold.of(context).openDrawer()),
+          ),
+
+          ///drawer: MainAmbrbdriverDrawer(),
         ),
 
-        drawer: MainAmbrbdriverDrawer(),
         //MainDrawer(),
         body: SafeArea(
           child: Container(
@@ -542,6 +670,10 @@ class _HomeScreenState extends State<HomeScreen> {
             color: MyTheme.ambapp3,
             child: Column(
               children: [
+                ///Todo: you can print your address......
+                // Text('LAT: ${_currentPosition?.latitude ?? ""}'),
+                // Text('LNG: ${_currentPosition?.longitude ?? ""}'),
+                // Text('ADDRESS: ${_currentAddress ?? ""}'),
                 Container(
                   height: size.height * 0.25,
                   width: size.width,
@@ -587,38 +719,13 @@ class _HomeScreenState extends State<HomeScreen> {
                               //_homePageController.toggle(index);
                               if (index == 0) {
                                 /// periodicTimer()
-                                await _driverRequestListController
+                                _driverRequestListController
                                     .driverRequestListApi();
                                 _driverRequestListController.onInit();
                                 CallLoader.loader();
-                                await Future.delayed(
-                                    Duration(milliseconds: 500));
+                                Future.delayed(Duration(milliseconds: 500));
                                 CallLoader.hideLoader();
                                 await Get.to(() => MessageScreen(id: "123456"));
-                                // await accountService.getAccountData
-                                //     .then((accountData) {
-                                //   Timer(
-                                //     const Duration(milliseconds: 100),
-                                //     () {
-                                //       await Get.to(
-                                //           () => BookingListUser(id: "123456"));
-                                //
-                                //       ///  Get.to(DriverHomePage());
-                                //       ///  8 dec 2023
-                                //       // _viewhealthchkpreviewController.healthreviewratingApi();
-                                //       //_viewhealthchkpreviewController.update();
-                                //       // Get.snackbar(
-                                //       //     'Add review Successfully', "Review Submitted. Thank-you."
-                                //       //   // "${r.body}"
-                                //       // );
-                                //       //Get.to(() => CheckupSchedulePage());
-                                //       //Get.to((page))
-                                //       ///
-                                //     },
-                                //   );
-                                //});
-                                //Get.to(() => BestSeller());
-                                //Get.to(() => WaterTracking());
                               } else if (index == 1) {
                                 await _ongoingRideController.ongoingRideApi();
                                 _ongoingRideController.onInit();
@@ -841,7 +948,7 @@ class Mycrusial extends StatelessWidget {
   final bool _isPlaying = true;
 
   ///final img = 'https://ambrdapi.ndinfotech.com/Images/';
-  final img = 'http://admin.ambrd.in/Images/';
+  final img = 'https://admin.ambrd.in/Images/';
 
   //get _sliderKey => null;
 
@@ -853,73 +960,135 @@ class Mycrusial extends StatelessWidget {
     Size size = MediaQuery.of(context).size;
     //........
     return Scaffold(
-      body: Obx(
-        () => (_homePageController.isLoading.value)
-            ? Center(child: CircularProgressIndicator())
-            : _homePageController.getsliderbaner?.banner == null
-                ? Center(
-                    child: Text('No Image'),
-                  )
-                : Padding(
-                    padding: const EdgeInsets.all(4.0),
-                    child: Container(
-                      height: size.height * 0.28,
-                      width: size.width,
-                      decoration: BoxDecoration(
+        body: Obx(
+      () => (_homePageController.isLoading.value)
+          ? Center(child: CircularProgressIndicator())
+          : _homePageController.getsliderbaner?.banner == null
+              ? Center(
+                  child: Text('No Image'),
+
+                  ///..........///..........///..........///.........
+                )
+              : Padding(
+                  padding: const EdgeInsets.all(4.0),
+                  child: Container(
+                    height: size.height * 0.28,
+                    width: size.width,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Center(
+                      child: Material(
+                        color: MyTheme.ambapp,
                         borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: Center(
-                        child: Material(
-                          color: MyTheme.ambapp,
-                          borderRadius: BorderRadius.circular(10),
-                          elevation: 0,
-                          child: CarouselSlider.builder(
-                            key: _sliderKey,
-                            unlimitedMode: true,
-                            autoSliderTransitionTime: Duration(seconds: 1),
-                            slideBuilder: (index) {
-                              var items =
-                                  _homePageController.getsliderbaner?.banner;
-                              return Padding(
-                                padding: const EdgeInsets.all(7.0),
-                                child: Material(
-                                  elevation: 12,
-                                  borderRadius: BorderRadius.circular(10),
-                                  child: Container(
-                                    height: size.height * 38,
-                                    width: size.width,
-                                    alignment: Alignment.center,
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(10),
-                                      border: Border.all(
-                                          color: Colors.white, width: 3),
-                                      image: DecorationImage(
-                                          image: NetworkImage(
-                                              '$img${items?[index].bannerImage}' ??
-                                                  ''),
-                                          fit: BoxFit.fill),
-                                    ),
+                        elevation: 0,
+                        child: CarouselSlider.builder(
+                          key: _sliderKey,
+                          unlimitedMode: true,
+                          autoSliderTransitionTime: Duration(seconds: 1),
+                          slideBuilder: (index) {
+                            var items =
+                                _homePageController.getsliderbaner?.banner;
+                            return Padding(
+                              padding: const EdgeInsets.all(7.0),
+                              child: Material(
+                                elevation: 12,
+                                borderRadius: BorderRadius.circular(10),
+                                child: Container(
+                                  height: size.height * 38,
+                                  width: size.width,
+                                  alignment: Alignment.center,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10),
+                                    border: Border.all(
+                                        color: Colors.white, width: 3),
+                                    image: DecorationImage(
+                                        image: NetworkImage(
+                                            '$img${items?[index].bannerImage}' ??
+                                                ''),
+                                        fit: BoxFit.fill),
                                   ),
                                 ),
-                              );
-                            },
-                            slideTransform: DefaultTransform(),
-                            slideIndicator: CircularSlideIndicator(
-                              indicatorBorderWidth: 2,
-                              indicatorRadius: 4,
-                              itemSpacing: 15,
-                              currentIndicatorColor: Colors.white,
-                              padding: EdgeInsets.only(bottom: 0),
-                            ),
-                            itemCount: _homePageController
-                                .getsliderbaner!.banner.length,
-                            enableAutoSlider: true,
+                              ),
+                            );
+                          },
+                          slideTransform: DefaultTransform(),
+                          slideIndicator: CircularSlideIndicator(
+                            indicatorBorderWidth: 2,
+                            indicatorRadius: 4,
+                            itemSpacing: 15,
+                            currentIndicatorColor: Colors.white,
+                            padding: EdgeInsets.only(bottom: 0),
                           ),
+                          itemCount:
+                              _homePageController.getsliderbaner!.banner.length,
+                          enableAutoSlider: true,
                         ),
                       ),
                     ),
                   ),
-      ),
-    );
+                ),
+    ));
   }
 }
+
+///
+// sendDate() {
+//   OngoingRideController _ongoingRideController =
+//       Get.put(OngoingRideController());
+//
+//   print('princeeee344343');
+//   postssDriverUpdateApi3();
+//
+//   // _getCurrentPosition();
+//
+//   // CallLoader.loader();
+//   // await Future.delayed(Duration(milliseconds: 500));
+//   // CallLoader.hideLoader();
+//
+//   _ongoingRideController.ongoingRideApi();
+//   _ongoingRideController.update();
+//   _ongoingRideController.onInit();
+// }
+
+///....
+///todo:apiiii....driver update location...
+// void postssDriverUpdateApi3() async {
+//   Position? _currentPosition;
+//
+//   await placemarkFromCoordinates(
+//       _currentPosition!.latitude, _currentPosition!.longitude);
+//   http.Response r = await ApiProvider.GoogleupdatedriverApi(
+//     _currentPosition?.latitude.toDouble(),
+//     _currentPosition!.longitude.toDouble(),
+//   );
+//   if (r.statusCode == 200) {
+//     print("workmanagerwdwd");
+//     //Get.snackbar('message', r.body);
+//     var data = jsonDecode(r.body);
+//   }
+// }
+
+///
+// void callbackDispatcher() {
+//   OngoingRideController _ongoingRideController =
+//       Get.put(OngoingRideController());
+//   Workmanager().executeTask((taskname, inputData) {
+//     switch (taskname) {
+//       case 'firstTask':
+//
+//         /// sendDate();
+//
+//         /// print('princeeee344343');
+//         postssDriverUpdateApi3();
+//
+//         _ongoingRideController.ongoingRideApi();
+//         _ongoingRideController.update();
+//         _ongoingRideController.onInit();
+//         break;
+//       default:
+//     }
+//     //print("Native called background task: $taskname"); //simpleTask will be emitted here.
+//     return Future.value(true);
+//   });
+// }

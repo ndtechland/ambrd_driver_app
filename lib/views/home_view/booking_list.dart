@@ -395,32 +395,32 @@ class _MessageScreenState extends State<MessageScreen> {
                                                               ),
                                                             ),
                                                             //Spacer(),
-                                                            SizedBox(
-                                                              width:
-                                                                  size.width *
-                                                                      0.3,
-                                                              child: Text(
-                                                                'Passengers:${item?[index].noOfPassengers}',
-
-                                                                //"12/01/2031",
-                                                                //"${_doctorHomepageController.founddoctoraptProducts2?[index].appointmentdate}",
-                                                                maxLines: 1,
-                                                                overflow:
-                                                                    TextOverflow
-                                                                        .ellipsis,
-                                                                style:
-                                                                    TextStyle(
-                                                                  fontSize:
-                                                                      size.height *
-                                                                          0.015,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .w900,
-                                                                  color: Colors
-                                                                      .black,
-                                                                ),
-                                                              ),
-                                                            ),
+                                                            // SizedBox(
+                                                            //   width:
+                                                            //       size.width *
+                                                            //           0.3,
+                                                            //   child: Text(
+                                                            //     'Passengers:${item?[index].noOfPassengers}',
+                                                            //
+                                                            //     //"12/01/2031",
+                                                            //     //"${_doctorHomepageController.founddoctoraptProducts2?[index].appointmentdate}",
+                                                            //     maxLines: 1,
+                                                            //     overflow:
+                                                            //         TextOverflow
+                                                            //             .ellipsis,
+                                                            //     style:
+                                                            //         TextStyle(
+                                                            //       fontSize:
+                                                            //           size.height *
+                                                            //               0.015,
+                                                            //       fontWeight:
+                                                            //           FontWeight
+                                                            //               .w900,
+                                                            //       color: Colors
+                                                            //           .black,
+                                                            //     ),
+                                                            //   ),
+                                                            // ),
                                                           ],
                                                         ),
                                                       ),
@@ -435,204 +435,204 @@ class _MessageScreenState extends State<MessageScreen> {
                                                               MainAxisAlignment
                                                                   .spaceAround,
                                                           children: [
-                                                            Padding(
-                                                              padding: EdgeInsets
-                                                                  .symmetric(
-                                                                      horizontal:
-                                                                          size.width *
-                                                                              0.006),
-                                                              child:
-                                                                  ElevatedButton(
-                                                                onPressed:
-                                                                    () async {
-                                                                  Get.dialog(
-                                                                    Column(
-                                                                      mainAxisAlignment:
-                                                                          MainAxisAlignment
-                                                                              .center,
-                                                                      children: [
-                                                                        Padding(
-                                                                          padding:
-                                                                              const EdgeInsets.symmetric(horizontal: 40),
-                                                                          child:
-                                                                              Container(
-                                                                            decoration:
-                                                                                const BoxDecoration(
-                                                                              color: Colors.white,
-                                                                              borderRadius: BorderRadius.all(
-                                                                                Radius.circular(20),
-                                                                              ),
-                                                                            ),
-                                                                            child:
-                                                                                Padding(
-                                                                              padding: const EdgeInsets.all(20.0),
-                                                                              child: Material(
-                                                                                child: Column(
-                                                                                  children: [
-                                                                                    const SizedBox(height: 10),
-                                                                                    Text(
-                                                                                      "You Want to give an offer your price ?",
-                                                                                      textAlign: TextAlign.center,
-                                                                                      style: TextStyle(
-                                                                                        fontSize: 16,
-                                                                                        color: Colors.cyan.shade700,
-                                                                                        fontWeight: FontWeight.w800,
-                                                                                      ),
-                                                                                    ),
-                                                                                    const SizedBox(height: 15),
-                                                                                    const Text(
-                                                                                      "Give a offer price",
-                                                                                      textAlign: TextAlign.center,
-                                                                                    ),
-
-                                                                                    const SizedBox(height: 20),
-                                                                                    //Buttons
-                                                                                    Row(
-                                                                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                                                      children: [
-                                                                                        Expanded(
-                                                                                          child: ElevatedButton(
-                                                                                            style: ElevatedButton.styleFrom(
-                                                                                              minimumSize: const Size(0, 45),
-                                                                                              primary: Colors.red,
-                                                                                              onPrimary: const Color(0xFFFFFFFF),
-                                                                                              shape: RoundedRectangleBorder(
-                                                                                                borderRadius: BorderRadius.circular(8),
-                                                                                              ),
-                                                                                            ),
-                                                                                            onPressed: () {
-                                                                                              // Get.back();
-                                                                                            },
-                                                                                            child: const Text(
-                                                                                              '-10',
-                                                                                              style: TextStyle(
-                                                                                                fontSize: 20,
-                                                                                              ),
-                                                                                            ),
-                                                                                          ),
-                                                                                        ),
-                                                                                        Expanded(
-                                                                                            child: SizedBox(
-                                                                                          width: size.width * 0.1,
-                                                                                          child: Center(
-                                                                                            child: Text(
-                                                                                              '₹ 100',
-                                                                                              style: TextStyle(
-                                                                                                fontSize: size.height * 0.03,
-                                                                                              ),
-                                                                                            ),
-                                                                                          ),
-                                                                                        )),
-
-                                                                                        ///todo:...todo...........................
-                                                                                        // const SizedBox(
-                                                                                        //     width:
-                                                                                        //         10),
-                                                                                        Expanded(
-                                                                                          child: ElevatedButton(
-                                                                                            style: ElevatedButton.styleFrom(
-                                                                                              minimumSize: const Size(0, 45),
-                                                                                              primary: Colors.green.shade800,
-                                                                                              onPrimary: const Color(0xFFFFFFFF),
-                                                                                              shape: RoundedRectangleBorder(
-                                                                                                borderRadius: BorderRadius.circular(8),
-                                                                                              ),
-                                                                                            ),
-                                                                                            onPressed: () async {
-                                                                                              // await _callNumber(
-                                                                                              //     "${_doctorHomepageController.founddoctoraptProducts2?[index].mobileNumber}".toString());
-                                                                                              //Get.back();
-                                                                                            },
-                                                                                            child: const Text(
-                                                                                              '+10',
-                                                                                              style: TextStyle(
-                                                                                                fontSize: 20,
-                                                                                              ),
-                                                                                            ),
-                                                                                          ),
-                                                                                        ),
-                                                                                      ],
-                                                                                    ),
-                                                                                    const SizedBox(height: 20),
-
-                                                                                    ElevatedButton(
-                                                                                      style: ElevatedButton.styleFrom(
-                                                                                        minimumSize: const Size(0, 45),
-                                                                                        primary: Colors.indigo,
-                                                                                        onPrimary: const Color(0xFFFFFFFF),
-                                                                                        shape: RoundedRectangleBorder(
-                                                                                          borderRadius: BorderRadius.circular(8),
-                                                                                        ),
-                                                                                      ),
-                                                                                      onPressed: () {
-                                                                                        Get.back();
-                                                                                      },
-                                                                                      child: const Text(
-                                                                                        'Send',
-                                                                                        style: TextStyle(
-                                                                                          fontSize: 20,
-                                                                                        ),
-                                                                                      ),
-                                                                                    ),
-                                                                                  ],
-                                                                                ),
-                                                                              ),
-                                                                            ),
-                                                                          ),
-                                                                        ),
-                                                                      ],
-                                                                    ),
-                                                                  );
-                                                                },
-                                                                style:
-                                                                    ButtonStyle(
-                                                                  backgroundColor:
-                                                                      MaterialStateProperty.all(
-                                                                          Colors
-                                                                              .black38),
-
-                                                                  shadowColor:
-                                                                      MaterialStateProperty.all(
-                                                                          Colors
-                                                                              .black),
-
-                                                                  elevation:
-                                                                      MaterialStateProperty
-                                                                          .all(
-                                                                              12),
-
-                                                                  minimumSize:
-                                                                      MaterialStateProperty.all(
-                                                                          const Size(
-                                                                              50,
-                                                                              30)),
-
-                                                                  // fixedSize:
-                                                                  //     MaterialStateProperty
-                                                                  //         .all(
-                                                                  //             const Size(
-                                                                  //                 70,
-                                                                  //                 20)),
-                                                                  shape:
-                                                                      MaterialStateProperty
-                                                                          .all(
-                                                                    RoundedRectangleBorder(
-                                                                      borderRadius:
-                                                                          BorderRadius.circular(
-                                                                              30),
-                                                                    ),
-                                                                  ),
-                                                                ),
-                                                                child: Text(
-                                                                  'Offer Price',
-                                                                  style:
-                                                                      TextStyle(
-                                                                    fontSize:
-                                                                        10,
-                                                                  ),
-                                                                ),
-                                                              ),
-                                                            ),
+                                                            // Padding(
+                                                            //   padding: EdgeInsets
+                                                            //       .symmetric(
+                                                            //           horizontal:
+                                                            //               size.width *
+                                                            //                   0.006),
+                                                            //   child:
+                                                            //       ElevatedButton(
+                                                            //     onPressed:
+                                                            //         () async {
+                                                            //       Get.dialog(
+                                                            //         Column(
+                                                            //           mainAxisAlignment:
+                                                            //               MainAxisAlignment
+                                                            //                   .center,
+                                                            //           children: [
+                                                            //             Padding(
+                                                            //               padding:
+                                                            //                   const EdgeInsets.symmetric(horizontal: 40),
+                                                            //               child:
+                                                            //                   Container(
+                                                            //                 decoration:
+                                                            //                     const BoxDecoration(
+                                                            //                   color: Colors.white,
+                                                            //                   borderRadius: BorderRadius.all(
+                                                            //                     Radius.circular(20),
+                                                            //                   ),
+                                                            //                 ),
+                                                            //                 child:
+                                                            //                     Padding(
+                                                            //                   padding: const EdgeInsets.all(20.0),
+                                                            //                   child: Material(
+                                                            //                     child: Column(
+                                                            //                       children: [
+                                                            //                         const SizedBox(height: 10),
+                                                            //                         Text(
+                                                            //                           "You Want to give an offer your price ?",
+                                                            //                           textAlign: TextAlign.center,
+                                                            //                           style: TextStyle(
+                                                            //                             fontSize: 16,
+                                                            //                             color: Colors.cyan.shade700,
+                                                            //                             fontWeight: FontWeight.w800,
+                                                            //                           ),
+                                                            //                         ),
+                                                            //                         const SizedBox(height: 15),
+                                                            //                         const Text(
+                                                            //                           "Give a offer price",
+                                                            //                           textAlign: TextAlign.center,
+                                                            //                         ),
+                                                            //
+                                                            //                         const SizedBox(height: 20),
+                                                            //                         //Buttons
+                                                            //                         Row(
+                                                            //                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                            //                           children: [
+                                                            //                             Expanded(
+                                                            //                               child: ElevatedButton(
+                                                            //                                 style: ElevatedButton.styleFrom(
+                                                            //                                   minimumSize: const Size(0, 45),
+                                                            //                                   primary: Colors.red,
+                                                            //                                   onPrimary: const Color(0xFFFFFFFF),
+                                                            //                                   shape: RoundedRectangleBorder(
+                                                            //                                     borderRadius: BorderRadius.circular(8),
+                                                            //                                   ),
+                                                            //                                 ),
+                                                            //                                 onPressed: () {
+                                                            //                                   // Get.back();
+                                                            //                                 },
+                                                            //                                 child: const Text(
+                                                            //                                   '-10',
+                                                            //                                   style: TextStyle(
+                                                            //                                     fontSize: 20,
+                                                            //                                   ),
+                                                            //                                 ),
+                                                            //                               ),
+                                                            //                             ),
+                                                            //                             Expanded(
+                                                            //                                 child: SizedBox(
+                                                            //                               width: size.width * 0.1,
+                                                            //                               child: Center(
+                                                            //                                 child: Text(
+                                                            //                                   '₹ 100',
+                                                            //                                   style: TextStyle(
+                                                            //                                     fontSize: size.height * 0.03,
+                                                            //                                   ),
+                                                            //                                 ),
+                                                            //                               ),
+                                                            //                             )),
+                                                            //
+                                                            //                             ///todo:...todo...........................
+                                                            //                             // const SizedBox(
+                                                            //                             //     width:
+                                                            //                             //         10),
+                                                            //                             Expanded(
+                                                            //                               child: ElevatedButton(
+                                                            //                                 style: ElevatedButton.styleFrom(
+                                                            //                                   minimumSize: const Size(0, 45),
+                                                            //                                   primary: Colors.green.shade800,
+                                                            //                                   onPrimary: const Color(0xFFFFFFFF),
+                                                            //                                   shape: RoundedRectangleBorder(
+                                                            //                                     borderRadius: BorderRadius.circular(8),
+                                                            //                                   ),
+                                                            //                                 ),
+                                                            //                                 onPressed: () async {
+                                                            //                                   // await _callNumber(
+                                                            //                                   //     "${_doctorHomepageController.founddoctoraptProducts2?[index].mobileNumber}".toString());
+                                                            //                                   //Get.back();
+                                                            //                                 },
+                                                            //                                 child: const Text(
+                                                            //                                   '+10',
+                                                            //                                   style: TextStyle(
+                                                            //                                     fontSize: 20,
+                                                            //                                   ),
+                                                            //                                 ),
+                                                            //                               ),
+                                                            //                             ),
+                                                            //                           ],
+                                                            //                         ),
+                                                            //                         const SizedBox(height: 20),
+                                                            //
+                                                            //                         ElevatedButton(
+                                                            //                           style: ElevatedButton.styleFrom(
+                                                            //                             minimumSize: const Size(0, 45),
+                                                            //                             primary: Colors.indigo,
+                                                            //                             onPrimary: const Color(0xFFFFFFFF),
+                                                            //                             shape: RoundedRectangleBorder(
+                                                            //                               borderRadius: BorderRadius.circular(8),
+                                                            //                             ),
+                                                            //                           ),
+                                                            //                           onPressed: () {
+                                                            //                             Get.back();
+                                                            //                           },
+                                                            //                           child: const Text(
+                                                            //                             'Send',
+                                                            //                             style: TextStyle(
+                                                            //                               fontSize: 20,
+                                                            //                             ),
+                                                            //                           ),
+                                                            //                         ),
+                                                            //                       ],
+                                                            //                     ),
+                                                            //                   ),
+                                                            //                 ),
+                                                            //               ),
+                                                            //             ),
+                                                            //           ],
+                                                            //         ),
+                                                            //       );
+                                                            //     },
+                                                            //     style:
+                                                            //         ButtonStyle(
+                                                            //       backgroundColor:
+                                                            //           MaterialStateProperty.all(
+                                                            //               Colors
+                                                            //                   .black38),
+                                                            //
+                                                            //       shadowColor:
+                                                            //           MaterialStateProperty.all(
+                                                            //               Colors
+                                                            //                   .black),
+                                                            //
+                                                            //       elevation:
+                                                            //           MaterialStateProperty
+                                                            //               .all(
+                                                            //                   12),
+                                                            //
+                                                            //       minimumSize:
+                                                            //           MaterialStateProperty.all(
+                                                            //               const Size(
+                                                            //                   50,
+                                                            //                   30)),
+                                                            //
+                                                            //       // fixedSize:
+                                                            //       //     MaterialStateProperty
+                                                            //       //         .all(
+                                                            //       //             const Size(
+                                                            //       //                 70,
+                                                            //       //                 20)),
+                                                            //       shape:
+                                                            //           MaterialStateProperty
+                                                            //               .all(
+                                                            //         RoundedRectangleBorder(
+                                                            //           borderRadius:
+                                                            //               BorderRadius.circular(
+                                                            //                   30),
+                                                            //         ),
+                                                            //       ),
+                                                            //     ),
+                                                            //     child: Text(
+                                                            //       'Offer Price',
+                                                            //       style:
+                                                            //           TextStyle(
+                                                            //         fontSize:
+                                                            //             10,
+                                                            //       ),
+                                                            //     ),
+                                                            //   ),
+                                                            // ),
 
                                                             ///todo: reject booking.........
                                                             Padding(

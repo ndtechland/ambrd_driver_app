@@ -32,6 +32,19 @@ class SplashController extends GetxController
 
 //my
   final getStorage = GetStorage();
+
+  ///todo:apiiii....driver update location...
+  // Future<void> postssDriverUpdateApi() async {
+  //   http.Response r = await ApiProvider.GoogleupdatedriverApi(
+  //     lat,
+  //     lang,
+  //   );
+  //   if (r.statusCode == 200) {
+  //     //Get.snackbar('message', r.body);
+  //     var data = jsonDecode(r.body);
+  //   }
+  // }
+
   @override
   void onInit() {
     // animationInitilization();

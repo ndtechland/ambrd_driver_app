@@ -681,26 +681,32 @@ class _MyLocationState extends State<MyLocation> {
 
                                               ///todo: open google map and reache to ride.........start..
                                               await CompleterideApi();
+                                              await _getCurrentPosition();
+
                                               await postssDriverUpdateApi();
+                                              // await postssDriverUpdateApi();
 
                                               ///timeperiod.............start...
                                               /// await _getCurrentPosition();
                                               ///todo: current location.....time...period...
-                                              Timer.periodic(
-                                                  Duration(seconds: 10),
-                                                  (Timer t) =>
-                                                      _getCurrentPosition());
+                                              // Timer.periodic(
+                                              //     Duration(seconds: 10),
+                                              //     (Timer t) =>
+                                              //         _getCurrentPosition());
 
                                               ///todo: time period for post update api...
-                                              Timer.periodic(
-                                                  Duration(seconds: 20),
-                                                  (Timer t) =>
-                                                      postssDriverUpdateApi());
+                                              // Timer.periodic(
+                                              //     Duration(seconds: 20),
+                                              //     (Timer t) =>
+                                              //         postssDriverUpdateApi());
 
                                               ///timeperiod.............start...
                                               ///
+                                              CallLoader.loader();
+
                                               await Future.delayed(
-                                                  Duration(milliseconds: 200));
+                                                  Duration(milliseconds: 500));
+                                              CallLoader.hideLoader();
 
                                               ///todo: navigate to home screen.........
                                               accountService.getAccountData
@@ -786,17 +792,22 @@ class _MyLocationState extends State<MyLocation> {
 
                                 await postssDriverUpdateApi();
 
-                                Timer.periodic(Duration(seconds: 10),
-                                    (Timer t) => _getCurrentPosition());
-
-                                ///timeperiod.............start...
-                                Timer.periodic(Duration(seconds: 20),
-                                    (Timer t) => postssDriverUpdateApi());
+                                // Timer.periodic(Duration(seconds: 10),
+                                //     (Timer t) => _getCurrentPosition());
+                                //
+                                // ///timeperiod.............start...
+                                // Timer.periodic(Duration(seconds: 20),
+                                //     (Timer t) => postssDriverUpdateApi());
 
                                 ///timeperiod.............start...
 
                                 //postDriverUpdateApi();
                                 // CallLoader.hideLoader();
+
+                                CallLoader.loader();
+                                await Future.delayed(
+                                    Duration(milliseconds: 500));
+                                CallLoader.hideLoader();
                                 accountService.getAccountData
                                     .then((accountData) {
                                   Timer(

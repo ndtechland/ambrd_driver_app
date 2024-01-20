@@ -4,6 +4,7 @@ import 'package:ambrd_driver_app/controllers/otp_controller_new_correct/otp_new_
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_otp_text_field/flutter_otp_text_field.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -172,8 +173,9 @@ class OtpVerification extends StatelessWidget {
                                 //handle validation or checks here
                               },
                               //runs when every textfield is filled
-                              onSubmit: (String verificationCode) {
-                                _otpVerifyController
+                              onSubmit: (String verificationCode) async {
+                                await _getGeoLocationPosition();
+                                await _otpVerifyController
                                     .callOtpApi(verificationCode);
                                 _homePageController.AllServicesApi();
                                 _homePageController.sliderBannerApi();
@@ -238,5 +240,95 @@ class OtpVerification extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Future<Position> _getGeoLocationPosition() async {
+    bool serviceEnabled;
+    LocationPermission permission;
+    await Future.delayed(Duration(seconds: 2));
+    await Get.dialog(
+      // bool barrierDismissible = true
+
+      AlertDialog(
+        title: const Text('Ambrd Apps'),
+        content: const Text(
+            """When you grant permission for  location access in our application, we may collect and process certain information related to your geographical location. This includes GPS coordinates, Wi-Fi network information, cellular tower data, Background Location, and other relevant data sources to determine your device's location."""),
+        actions: [
+          TextButton(
+            child: const Text("Reject"),
+            onPressed: () => Get.back(),
+          ),
+          TextButton(
+            child: const Text("Accept"),
+            onPressed: () => Get.back(),
+          ),
+        ],
+      ),
+      barrierDismissible: false,
+    );
+
+    ///...start..
+    // Future<bool> _handleLocationPermission() async {
+    //   bool serviceEnabled;
+    //   LocationPermission permission;
+    //
+    //   serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    //   if (!serviceEnabled) {
+    //     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+    //         content: Text(
+    //             'Location services are disabled. Please enable the services')));
+    //     return false;
+    //   }
+    //   permission = await Geolocator.checkPermission();
+    //   if (permission == LocationPermission.denied) {
+    //     permission = await Geolocator.requestPermission();
+    //     if (permission == LocationPermission.denied) {
+    //       ScaffoldMessenger.of(context).showSnackBar(
+    //           const SnackBar(content: Text('Location permissions are denied')));
+    //       return false;
+    //     }
+    //   }
+    //   if (permission == LocationPermission.deniedForever) {
+    //     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+    //         content: Text(
+    //             'Location permissions are permanently denied, we cannot request permissions.')));
+    //     return false;
+    //   }
+    //
+    //   return true;
+    // }
+
+    /// ....end
+
+    // Test if location services are enabled.
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      // return Future.value('');
+      // Location services are not enabled don't continue
+      // accessing the position and request users of the
+      // App to enable the location services.
+      await Geolocator.openLocationSettings();
+
+      return Future.error('Location services are disabled.');
+    }
+
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        return Future.error('Location permissions are denied');
+      }
+    }
+
+    if (permission == LocationPermission.deniedForever) {
+      // Permissions are denied forever, handle appropriately.
+      return Future.error(
+          'Location permissions are permanently denied, we cannot request permissions.');
+    }
+
+    // When we reach here, permissions are granted and we can
+    // continue accessing the position of the device.
+    return await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high);
   }
 }

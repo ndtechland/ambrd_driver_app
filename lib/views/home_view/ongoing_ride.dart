@@ -129,7 +129,7 @@ class _OngoingRideTrackingState extends State<OngoingRideTracking> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    var base = 'http://test.pswellness.in/Images/';
+    //var base = 'http://test.pswellness.in/Images/';
 
     final ColorScheme colorScheme = Theme.of(context).colorScheme;
 
@@ -839,7 +839,7 @@ class _OngoingRideTrackingState extends State<OngoingRideTracking> {
                                                                         await http
                                                                             .post(
                                                                       Uri.parse(
-                                                                          'http://admin.ambrd.in/api/CommonApi/UpdateDeviceId'),
+                                                                          'https://admin.ambrd.in/api/CommonApi/UpdateDeviceId'),
                                                                       body:
                                                                           body,
                                                                     );

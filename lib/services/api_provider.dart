@@ -31,9 +31,9 @@ class ApiProvider {
 //  class ApiProvider {
   //static var baseUrl = 'https://ambrdapi.ndinfotech.com/api/';
 
-  static var baseUrl = 'http://admin.ambrd.in/api/';
+  static var baseUrl = 'https://admin.ambrd.in/api/';
 
-  final img = 'http://admin.ambrd.in/Images/';
+  final img = 'https://admin.ambrd.in/Images/';
 
   // static String token = '';
 //  static String Id = ''.toString();
@@ -590,7 +590,7 @@ class ApiProvider {
     var prefs = GetStorage();
     userId = prefs.read("userId").toString();
     print('&&&&&&&&&&&&&&&&&&&&&&userid:${userId}');
-    var url = '${baseUrl}DriverApi/DriverPaymentHistory?DriverId=1';
+    var url = '${baseUrl}DriverApi/DriverPaymentHistory?DriverId=$userId';
     //176
     try {
       http.Response r = await http.get(Uri.parse(url));
@@ -632,7 +632,7 @@ class ApiProvider {
     var prefs = GetStorage();
     userId = prefs.read("userId").toString();
     print('&&&&&&&&&&&&&&&&&&&&&&userid:${userId}');
-    var url = '${baseUrl}DriverApi/AmbulanceBookingRequest?DriverId=1';
+    var url = '${baseUrl}DriverApi/AmbulanceBookingRequest?DriverId=$userId';
     //176
     try {
       http.Response r = await http.get(Uri.parse(url));
@@ -721,15 +721,20 @@ class ApiProvider {
     var DriverListId = preferences.getString("DriverListId");
     print("DriverListId3434: ${DriverListId}");
 
+    // var prefs = GetStorage();
+
     var url = baseUrl + 'DriverApi/CompleteRide';
     var prefs = GetStorage();
     userId = prefs.read("userId").toString();
     print('&&&&&&&&&&&&&&&&&&&&&&xzxzuserid:${DriverListId}');
+    userId = prefs.read("userId").toString();
+    print('444&&&&xzxzuserid:${userId}');
 
     var body = {
       "Id":
           //"178",
           "${DriverListId}",
+      "DriverId": userId,
     };
     print(body);
     http.Response r = await http.post(
