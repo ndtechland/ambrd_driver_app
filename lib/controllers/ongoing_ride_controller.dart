@@ -13,19 +13,19 @@ class OngoingRideController extends GetxController {
     isLoading(true);
 
     ongoingRide = await ApiProvider.OngoingRideApiApi();
-    // if (ongoingRide?.patientName == null) {
-    //   Timer(
-    //     const Duration(seconds: 1),
-    //     () {
-    //       //Get.snackbar("Fail", "${medicinecheckoutModel?.data}");
-    //       //Get.to(() => MedicineCart());
-    //       //Get.to((page))
-    //       ///
-    //     },
-    //   );
-    //   isLoading(false);
-    //   ongoingRide = await ApiProvider.OngoingRideApiApi();
-    // }
+    if (ongoingRide?.patientName == null) {
+      Timer(
+        const Duration(seconds: 1),
+        () {
+          //Get.snackbar("Fail", "${medicinecheckoutModel?.data}");
+          //Get.to(() => MedicineCart());
+          //Get.to((page))
+          ///
+        },
+      );
+      isLoading(false);
+      ongoingRide = await ApiProvider.OngoingRideApiApi();
+    }
     if (ongoingRide?.patientName != null) {
       //Get.to(() => TotalPrice());
       isLoading(false);

@@ -11,7 +11,7 @@ class GetProfileController extends GetxController {
   GetProfileDetail? getProfileDetail;
   //crusial slider banner api............
 
-  Future<void> editProfileApi() async {
+  Future<void> getProfileApi() async {
     isLoading(true);
     getProfileDetail = await ApiProvider.geProfileApi();
     if (getProfileDetail?.driverName != null
@@ -24,7 +24,7 @@ class GetProfileController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    editProfileApi();
+    getProfileApi();
     // auto login
     //name = getStorage.read("name");
   }

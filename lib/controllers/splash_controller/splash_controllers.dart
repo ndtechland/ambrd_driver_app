@@ -59,7 +59,7 @@ class SplashController extends GetxController
             await _homePageController.sliderBannerApi();
             await _driverRequestListController.driverRequestListApi();
             _driverRequestListController.onInit();
-            _getProfileController.editProfileApi();
+            _getProfileController.getProfileApi();
             _editbankdetailController.getBankProfileApi();
             //tooglecontroller.ToogleStatusApi();
             _homePageController.onInit();
@@ -86,7 +86,7 @@ class SplashController extends GetxController
             accountService.getAccountData.then((accountData) {
               CallLoader.loader();
               Timer(
-                const Duration(seconds: 3),
+                const Duration(seconds: 0),
                 () {
                   // Get.to(
                   //  MapView());
@@ -101,16 +101,21 @@ class SplashController extends GetxController
               );
               //CallLoader.hideLoader();
             });
-            _getProfileController.editProfileApi();
+            _getProfileController.getProfileApi();
             _editbankdetailController.getBankProfileApi();
             await _homePageController.AllServicesApi();
             await _homePageController.sliderBannerApi();
-            _homePageController.onInit();
+
+            ///_homePageController.onInit();
             await _driverRequestListController.driverRequestListApi();
             _driverRequestListController.onInit();
             await tooglecontroller.ToogleStatusApi();
+            await Future.delayed(Duration(milliseconds: 300));
+            CallLoader.hideLoader();
             await _navController.tabindex(0);
             await Get.to(BottomNavBar());
+
+            //await CallLoader.hideLoader();
 
             // await _homePageController.AllServicesApi();
             //await _homePageController.sliderBannerApi();

@@ -1,4 +1,5 @@
 import 'package:ambrd_driver_app/constantsss/app_theme/app_color.dart';
+import 'package:ambrd_driver_app/controllers/get_profile_controller.dart';
 import 'package:ambrd_driver_app/controllers/update_profile_controller.dart';
 import 'package:ambrd_driver_app/models/city_model.dart';
 import 'package:ambrd_driver_app/models/state_models.dart';
@@ -19,6 +20,7 @@ class EditProfilePage extends StatelessWidget {
   EditprofileController _editprofileController =
       Get.put(EditprofileController());
 
+  GetProfileController _getProfileController = Get.put(GetProfileController());
   // SignUpController _signUpController = Get.put(SignUpController());
 
   String dropdownValue = list.first;
@@ -139,11 +141,16 @@ class EditProfilePage extends StatelessWidget {
                     // padding: EdgeInsets.symmetric(horizontal: size.width * 0.01),
                     child: Obx(
                       () => DropdownButtonFormField<StateModel>(
-                          value: _editprofileController.selectedState.value,
+                          value:
+                              //_getProfileController
+                              _editprofileController.selectedState.value,
                           decoration: InputDecoration(
                             filled: true,
                             fillColor: MyTheme.ambapp12,
-                            hintText: 'Select State',
+                            hintText:
+                                "${_getProfileController.getProfileDetail?.stateName.toString()}",
+                            // 'Select State',
+
                             contentPadding: const EdgeInsets.only(
                                 left: 14.0, bottom: 4.0, top: 16.0),
                             focusedBorder: OutlineInputBorder(
@@ -167,13 +174,26 @@ class EditProfilePage extends StatelessWidget {
                             //enabledBorder: InputBorder.none,
                             // border: InputBorder.none,
                           ),
-                          hint: Text('Select State'),
+                          hint: Text(
+                            "${_getProfileController.getProfileDetail?.stateName.toString()}",
+                            style: TextStyle(
+                              color: Colors.black,
+                            ),
+                          ),
                           items: _editprofileController.states
                               .map((StateModel state) {
                             return DropdownMenuItem(
                               value: state,
                               child: Text(
                                 state.stateName,
+
+                                //       if (state.stateName == null)
+                                //       {
+                                //       state.stateName,
+                                //       }else {
+                                //
+                                //
+                                // }
                                 style: TextStyle(
                                   fontWeight: FontWeight.w600,
                                   fontSize: size.height * 0.015,
@@ -281,7 +301,12 @@ class EditProfilePage extends StatelessWidget {
                             //enabledBorder: InputBorder.none,
                             // border: InputBorder.none,
                           ),
-                          hint: Text('Selected City'),
+                          hint: Text(
+                            "${_getProfileController.getProfileDetail?.cityName.toString()}",
+                            style: TextStyle(
+                              color: Colors.black,
+                            ),
+                          ),
                           items: _editprofileController.cities.map((City city) {
                             return DropdownMenuItem(
                               value: city,

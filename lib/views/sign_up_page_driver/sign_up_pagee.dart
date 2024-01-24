@@ -517,9 +517,9 @@ class SignUpPage extends StatelessWidget {
                         keyboardType: TextInputType.streetAddress,
                         //obscureText: true,
                         controller: _signUpController.Location,
-                        validator: (value) {
-                          return _signUpController.validateAddress(value!);
-                        },
+                        // validator: (value) {
+                        //   return _signUpController.validateAddress(value!);
+                        // },
                       ),
                     ),
                   ),
@@ -978,8 +978,22 @@ class SignUpPage extends StatelessWidget {
                       ),
                     ),
                   ),
+
                   SizedBox(
                     height: size.height * 0.015,
+                  ),
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      'Gender (optional)',
+                      style: TextStyle(
+                        fontSize: size.width * 0.035,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: size.height * 0.01,
                   ),
 
                   ///gender...
@@ -1065,7 +1079,7 @@ class SignUpPage extends StatelessWidget {
                   Align(
                     alignment: Alignment.centerLeft,
                     child: Text(
-                      'Date of Birth.',
+                      'Date of Birth.(optional)',
                       style: TextStyle(
                         fontSize: size.width * 0.035,
                         fontWeight: FontWeight.w700,

@@ -57,6 +57,7 @@ class MainAmbrbdriverDrawer extends StatelessWidget {
 
     Size size = MediaQuery.of(context).size;
     return SafeArea(
+      //bottom: true,
       child: Drawer(
         backgroundColor: Colors.white,
         child: ListView(
@@ -145,7 +146,9 @@ class MainAmbrbdriverDrawer extends StatelessWidget {
               onTap: () async {
                 Get.back();
                 // print(Get.currentRoute);
-                await _getProfileController.editProfileApi();
+                await _getProfileController.getProfileApi();
+
+                // await _getProfileController.editProfileApi();
                 _getProfileController.onInit();
                 _getProfileController.update();
 
@@ -184,7 +187,9 @@ class MainAmbrbdriverDrawer extends StatelessWidget {
                   ? Colors.grey[300]
                   : null,
               onTap: () async {
-                await _getProfileController.editProfileApi();
+                await _getProfileController.getProfileApi();
+
+                //await _getProfileController.editProfileApi();
                 // _getProfileController.onInit();
                 // await _editprofileController.getStateApi();
                 print(Get.currentRoute);

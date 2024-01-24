@@ -1,4 +1,5 @@
 import 'package:ambrd_driver_app/controllers/booking_request_list_controller.dart';
+import 'package:ambrd_driver_app/controllers/get_profile_controller.dart';
 import 'package:ambrd_driver_app/controllers/home_controllers.dart';
 import 'package:ambrd_driver_app/controllers/login_driver_mobile_controller/login_mobile_controllers.dart';
 import 'package:ambrd_driver_app/controllers/swith_toogle_controller/toogle_switch_controller.dart';
@@ -7,6 +8,7 @@ import 'package:ambrd_driver_app/services/account_service_forautologin.dart';
 import 'package:ambrd_driver_app/services/api_provider.dart';
 import 'package:ambrd_driver_app/views/botttom_navigation_bar/bottom_nav_bar_controller.dart';
 import 'package:ambrd_driver_app/views/botttom_navigation_bar/bottom_navbar.dart';
+import 'package:ambrd_driver_app/widget/circular_loader.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
@@ -22,6 +24,8 @@ class OtpVerifyController extends GetxController {
   SwitchX tooglecontroller = Get.put(SwitchX());
   DriverRequestListController _driverRequestListController =
       Get.put(DriverRequestListController());
+
+  GetProfileController _getProfileController = Get.put(GetProfileController());
 
   HomeController _homePageController = Get.put(HomeController());
 
@@ -41,20 +45,28 @@ class OtpVerifyController extends GetxController {
       print("ACCOUNT ${accountData.toJson()}");
       await accountService.setAccountData(accountData);
       //Get.to(() => DetailsProfile());
-      await _homePageController.AllServicesApi();
-      await _homePageController.sliderBannerApi();
+      _homePageController.AllServicesApi();
+      _homePageController.sliderBannerApi();
       _homePageController.onInit();
 
       //await _homePageController.AllServicesApi();
       //await _homePageController.sliderBannerApi();
-      await _driverRequestListController.driverRequestListApi();
+      _driverRequestListController.driverRequestListApi();
       _driverRequestListController.onInit();
       tooglecontroller.ToogleStatusApi();
 
-      _homePageController.onInit();
-      await _navController.tabindex(0);
+      _getProfileController.getProfileApi();
+      _getProfileController.onInit();
+      _getProfileController.update();
+
+      //_homePageController.onInit();
+
+      CallLoader.loader();
+      await Future.delayed(Duration(milliseconds: 1000));
+      CallLoader.hideLoader();
 
       await Get.to(() => BottomNavBar());
+      _navController.tabindex(0);
     }
   }
 

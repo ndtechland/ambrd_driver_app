@@ -184,7 +184,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
     ///todo: it is periodic function periodic
     ///
-    periodicSub = new Stream.periodic(const Duration(seconds: 5))
+    periodicSub = new Stream.periodic(const Duration(seconds: 10))
         //.take(6)
         .listen((_) => _getCurrentPosition());
 
@@ -204,7 +204,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
     ///todo: it is periodic function STREAM periodic.....
 
-    periodicSub = new Stream.periodic(const Duration(seconds: 9))
+    periodicSub = new Stream.periodic(const Duration(seconds: 12))
         //.take(6)
         .listen((_) => postssDriverUpdateApi2());
 
@@ -985,7 +985,7 @@ class Mycrusial extends StatelessWidget {
                         child: CarouselSlider.builder(
                           key: _sliderKey,
                           unlimitedMode: true,
-                          autoSliderTransitionTime: Duration(seconds: 1),
+                          autoSliderTransitionTime: Duration(milliseconds: 700),
                           slideBuilder: (index) {
                             var items =
                                 _homePageController.getsliderbaner?.banner;

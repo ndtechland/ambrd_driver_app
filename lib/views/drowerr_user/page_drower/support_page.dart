@@ -97,16 +97,17 @@ class SupportViewAmbrdComman extends StatelessWidget {
                   height: size.height * 0.22,
                   width: size.width * 0.75,
                   decoration: BoxDecoration(
-                      //color: Colors.,
-                      borderRadius: BorderRadius.only(
-                        topRight: Radius.circular(20),
-                      ),
-                      image: DecorationImage(
-                          image: AssetImage(
-                            '',
-                            //'lib/assets/background_stack_png/contactus.png',
-                          ),
-                          fit: BoxFit.cover)),
+                    //color: Colors.,
+                    borderRadius: BorderRadius.only(
+                      topRight: Radius.circular(20),
+                    ),
+                    // image: DecorationImage(
+                    //     image: AssetImage(
+                    //       '',
+                    //       //'lib/assets/background_stack_png/contactus.png',
+                    //     ),
+                    //     fit: BoxFit.cover)
+                  ),
                 ),
               ),
             ),

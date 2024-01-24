@@ -1,6 +1,9 @@
 import 'package:ambrd_driver_app/constantsss/app_theme/app_color.dart';
 import 'package:ambrd_driver_app/controllers/home_controllers.dart';
+import 'package:ambrd_driver_app/controllers/login_driver_mobile_controller/login_mobile_controllers.dart';
 import 'package:ambrd_driver_app/controllers/otp_controller_new_correct/otp_new_controller.dart';
+import 'package:ambrd_driver_app/views/login_view_driver/login_page.dart';
+import 'package:ambrd_driver_app/widget/circular_loader.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_otp_text_field/flutter_otp_text_field.dart';
@@ -18,6 +21,8 @@ class OtpVerification extends StatelessWidget {
 
   //LoginMobileController loginMobileController = Get.find();
   OtpVerifyController _otpVerifyController = Get.put(OtpVerifyController());
+  LoginMobileController _loginMobileController =
+      Get.put(LoginMobileController());
   bool firstbox = false;
   //get otp => null;
 
@@ -173,13 +178,32 @@ class OtpVerification extends StatelessWidget {
                                 //handle validation or checks here
                               },
                               //runs when every textfield is filled
-                              onSubmit: (String verificationCode) async {
-                                await _getGeoLocationPosition();
+                              onSubmit: (String verificationCode)
+                                  //async
+                                  async {
+                                //  await
+                                // await _otpVerifyController
+                                //     .callOtpApi(verificationCode);
+                                // CallLoader.loader();
+                                // await Future.delayed(
+                                //     Duration(milliseconds: 500));
+                                // CallLoader.hideLoader();
+                                await _getGeoLocationPosition(verificationCode);
                                 await _otpVerifyController
                                     .callOtpApi(verificationCode);
+
                                 _homePageController.AllServicesApi();
                                 _homePageController.sliderBannerApi();
                                 _homePageController.onInit();
+
+                                // CallLoader.loader();
+                                // await Future.delayed(
+                                //     Duration(milliseconds: 1000));
+                                // CallLoader.hideLoader();
+                                ///
+
+                                //await Get.to(() => BottomNavBar());
+                                // await _navController.tabindex(0);
 
                                 /* showDialog(
                                     context: context,
@@ -198,8 +222,18 @@ class OtpVerification extends StatelessWidget {
                           height: 20,
                         ),
                         InkWell(
-                          onTap: () {
-                            Get.back();
+                          onTap: () async {
+                            _loginMobileController.onInit();
+                            // _loginMobileController.dispose();
+                            // _loginMobileController.onClose();
+                            //MobileOrEmail
+                            _loginMobileController.MobileOrEmail.clear();
+
+                            CallLoader.loader();
+                            await Future.delayed(Duration(milliseconds: 1000));
+                            CallLoader.hideLoader();
+                            await Get.to(LoginScreen());
+                            // Get.back();
                             //_otpVerifyController.callOtpApi(verificationCode);
                           },
                           child: Container(
@@ -242,7 +276,7 @@ class OtpVerification extends StatelessWidget {
     );
   }
 
-  Future<Position> _getGeoLocationPosition() async {
+  Future<Position> _getGeoLocationPosition(String verificationCode) async {
     bool serviceEnabled;
     LocationPermission permission;
     await Future.delayed(Duration(seconds: 2));
@@ -316,11 +350,15 @@ class OtpVerification extends StatelessWidget {
     if (permission == LocationPermission.denied) {
       permission = await Geolocator.requestPermission();
       if (permission == LocationPermission.denied) {
+        ///todo:ok........20 jan 2024...prince
+        await _otpVerifyController.callOtpApi(verificationCode);
         return Future.error('Location permissions are denied');
       }
     }
 
     if (permission == LocationPermission.deniedForever) {
+      ///todo:ok........20 jan 2024...prince
+      await _otpVerifyController.callOtpApi(verificationCode);
       // Permissions are denied forever, handle appropriately.
       return Future.error(
           'Location permissions are permanently denied, we cannot request permissions.');

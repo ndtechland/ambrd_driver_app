@@ -21,6 +21,8 @@ class GetProfileDetail {
   String? cityName;
   String? driverImage;
   DateTime? dob;
+  num? stateMasterId;
+  num? cityMasterId;
 
   GetProfileDetail({
     this.id,
@@ -33,6 +35,8 @@ class GetProfileDetail {
     this.cityName,
     this.driverImage,
     this.dob,
+    this.stateMasterId,
+    this.cityMasterId,
   });
 
   factory GetProfileDetail.fromJson(Map<String, dynamic> json) =>
@@ -47,6 +51,8 @@ class GetProfileDetail {
         cityName: json["CityName"],
         driverImage: json["DriverImage"],
         dob: json["DOB"] == null ? null : DateTime.parse(json["DOB"]),
+        stateMasterId: json["StateMaster_Id"],
+        cityMasterId: json["CityMaster_Id"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -60,5 +66,7 @@ class GetProfileDetail {
         "CityName": cityName,
         "DriverImage": driverImage,
         "DOB": dob?.toIso8601String(),
+        "StateMaster_Id": stateMasterId,
+        "CityMaster_Id": cityMasterId,
       };
 }
